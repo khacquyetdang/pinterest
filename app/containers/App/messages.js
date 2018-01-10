@@ -29,8 +29,7 @@ export default defineMessages({
   },
   createaccount: {
     id: 'khacquyetdang.containers.App.createaccount',
-    defaultMessage: 'Créer votre compte',
-    
+    defaultMessage: 'Créer votre compte',    
   }
 
 });

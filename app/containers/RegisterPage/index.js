@@ -21,6 +21,7 @@ import messages from './messages';
 import messagesApp from '../App/messages';
 import styled from 'styled-components';
 import './styles.scss';
+import 'bootstrap-social/bootstrap-social.css';
 
 const RowWrapper = styled.div`
   padding: 4em;
@@ -39,40 +40,56 @@ export class RegisterPage extends React.Component { // eslint-disable-line react
         <div className="container">
           <form>
             <Row>
-              <Col  className="registerContainer" md={6}  mdOffset={3} sm={12}>
-              <FormGroup>
-                <ControlLabel><FormattedMessage {...messagesApp.email} /></ControlLabel>
-                <InputGroup>
-                  <InputGroup.Addon>
-                    <Glyphicon glyph="user" />
-                  </InputGroup.Addon>
-                  <FormControl type="email">
-                  </FormControl>
-                </InputGroup>
-              </FormGroup>
-              <FormGroup>
-                <ControlLabel><FormattedMessage {...messagesApp.password} /></ControlLabel>
-                <InputGroup>
-                  <InputGroup.Addon>
-                    <Glyphicon glyph="lock" />
-                  </InputGroup.Addon>
-                  <FormControl type="email"
-                  >
-                  </FormControl>
-                </InputGroup>
-              </FormGroup>
-              <FormGroup>
-                <ControlLabel><FormattedMessage {...messagesApp.confirmpassword} /></ControlLabel>
-                <InputGroup>
-                  <InputGroup.Addon>
-                    <Glyphicon glyph="lock" />
-                  </InputGroup.Addon>
-                  <FormControl type="email" required>
-                  </FormControl>
-                </InputGroup>
-              </FormGroup>
-              <Button bsStyle="success" bsSize="large" block> {formatMessage(messagesApp.createaccount)}</Button>
+              <Col className="registerContainer" md={6} mdOffset={3} sm={12}>
+                <FormGroup>
+                  <ControlLabel><FormattedMessage {...messagesApp.email} /></ControlLabel>
+                  <InputGroup>
+                    <InputGroup.Addon>
+                      <Glyphicon glyph="user" />
+                    </InputGroup.Addon>
+                    <FormControl type="email">
+                    </FormControl>
+                  </InputGroup>
+                </FormGroup>
+                <FormGroup>
+                  <ControlLabel><FormattedMessage {...messagesApp.password} /></ControlLabel>
+                  <InputGroup>
+                    <InputGroup.Addon>
+                      <Glyphicon glyph="lock" />
+                    </InputGroup.Addon>
+                    <FormControl type="email"
+                    >
+                    </FormControl>
+                  </InputGroup>
+                </FormGroup>
+                <FormGroup>
+                  <ControlLabel><FormattedMessage {...messagesApp.confirmpassword} /></ControlLabel>
+                  <InputGroup>
+                    <InputGroup.Addon>
+                      <Glyphicon glyph="lock" />
+                    </InputGroup.Addon>
+                    <FormControl type="email" required>
+                    </FormControl>
+                  </InputGroup>
+                </FormGroup>
+                <Button bsSize="large" block> {formatMessage(messagesApp.createaccount)}</Button>
+                <br />
+                <Row>
+                  <Col md={6}>
+                    <button className="btn btn-lg btn-block btn-social btn-facebook">
+                      <span className="fa fa-facebook"></span>
+                      Facebook
+                    </button>
+                  </Col>
+                  <Col md={6}>
+                    <button className="btn btn-lg btn-block btn-social btn-twitter">
+                      <span className="fa fa-twitter"></span>
+                      Twitter
+                  </button>
+                  </Col>
+                </Row>
               </Col>
+
             </Row>
           </form>
         </div>
