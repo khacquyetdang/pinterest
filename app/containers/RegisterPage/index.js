@@ -47,8 +47,7 @@ export class RegisterPage extends React.Component { // eslint-disable-line react
                     <InputGroup.Addon>
                       <Glyphicon glyph="user" />
                     </InputGroup.Addon>
-                    <FormControl type="email">
-                    </FormControl>
+                    <FormControl type="email" required/>
                   </InputGroup>
                 </FormGroup>
                 <FormGroup>
@@ -57,9 +56,7 @@ export class RegisterPage extends React.Component { // eslint-disable-line react
                     <InputGroup.Addon>
                       <Glyphicon glyph="lock" />
                     </InputGroup.Addon>
-                    <FormControl type="email"
-                    >
-                    </FormControl>
+                    <FormControl type="password" required/>
                   </InputGroup>
                 </FormGroup>
                 <FormGroup>
@@ -68,24 +65,23 @@ export class RegisterPage extends React.Component { // eslint-disable-line react
                     <InputGroup.Addon>
                       <Glyphicon glyph="lock" />
                     </InputGroup.Addon>
-                    <FormControl type="email" required>
-                    </FormControl>
+                    <FormControl type="password" required />
                   </InputGroup>
                 </FormGroup>
-                <Button bsSize="large" block> {formatMessage(messagesApp.createaccount)}</Button>
+                <Button bsSize="large" block type="submit"> {formatMessage(messagesApp.createaccount)}</Button>
                 <br />
                 <Row>
                   <Col md={6}>
-                    <button className="btn btn-lg btn-block btn-social btn-facebook">
+                    <Button bsStyle="" bsSize="large" className="btn-social btn-facebook" block>
                       <span className="fa fa-facebook"></span>
                       Facebook
-                    </button>
+                    </Button>
                   </Col>
                   <Col md={6}>
-                    <button className="btn btn-lg btn-block btn-social btn-twitter">
+                    <Button bsStyle="" bsSize="large" className="btn-social btn-twitter" block>
                       <span className="fa fa-twitter"></span>
                       Twitter
-                  </button>
+                  </Button>
                   </Col>
                 </Row>
               </Col>
