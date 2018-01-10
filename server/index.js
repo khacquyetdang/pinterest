@@ -12,7 +12,34 @@ const resolve = require('path').resolve;
 const app = express();
 
 // If you need a backend, e.g. an API, add your custom backend-specific middleware here
-// app.use('/api', myApi);
+var myApi = function (req, res, next) {
+  switch (req.method){
+        case 'GET':
+            switch (req.url) {
+                case '/hello':
+                    res.send('hello get');
+                    break;
+                default:
+                    res.send('invalid get');
+                    break;
+            }
+            break;
+        case 'POST':
+          switch (req.url) {
+                case '/hello':
+                    res.send('hello post');
+                    break;
+                default:
+                    res.send('invalid post');
+                    break;
+            }
+            break;
+        default:
+            res.send('invalid method');
+            break;
+    }
+};
+app.use('/api', myApi);
 
 // In production we need to pass these values in instead of relying on webpack
 setup(app, {

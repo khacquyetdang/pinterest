@@ -9,39 +9,57 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import styled from 'styled-components';
-import { Switch, Route } from 'react-router-dom';
-
+import uuidv1 from 'uuid/v1';
+import { FormattedMessage } from 'react-intl';
+import RegisterPage from '../RegisterPage/Loadable';
+import { LinkContainer } from 'react-router-bootstrap';
+import { HashRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import { Navbar, Nav, NavItem } from 'react-bootstrap';
 import HomePage from 'containers/HomePage/Loadable';
 import FeaturePage from 'containers/FeaturePage/Loadable';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
 import Header from 'components/Header';
 import Footer from 'components/Footer';
+import messages from './messages';
 
-const AppWrapper = styled.div`
-  max-width: calc(768px + 16px * 2);
-  margin: 0 auto;
-  display: flex;
-  min-height: 100%;
-  padding: 0 16px;
-  flex-direction: column;
-`;
 
 export default function App() {
   return (
-    <AppWrapper>
+    <div>
       <Helmet
         titleTemplate="%s - React.js Boilerplate"
         defaultTitle="React.js Boilerplate"
       >
         <meta name="description" content="A React.js Boilerplate application" />
       </Helmet>
-      <Header />
-      <Switch>
-        <Route exact path="/" component={HomePage} />
-        <Route path="/features" component={FeaturePage} />
-        <Route path="" component={NotFoundPage} />
-      </Switch>
-      <Footer />
-    </AppWrapper>
+      <Router>
+        <div>
+          <Navbar collapseOnSelect>
+            <Navbar.Header>
+              <Navbar.Brand>
+                <Link to="/"> Pinterest clone </Link>
+              </Navbar.Brand>
+              <Navbar.Toggle />
+            </Navbar.Header>
+            <Navbar.Collapse>
+              <Nav pullRight>
+                <LinkContainer to="/register">
+                  <NavItem eventKey={uuidv1()}>
+                    <FormattedMessage {...messages.register} />
+                  </NavItem>
+                </LinkContainer >
+              </Nav>
+            </Navbar.Collapse>
+          </Navbar>
+          <Switch>
+            <Route exact path="/" component={HomePage} />
+            <Route path="/register" component={RegisterPage} />
+            <Route path="/features" component={FeaturePage} />
+            <Route path="" component={NotFoundPage} />
+          </Switch>
+          <Footer />
+        </div>
+      </Router>
+    </div>
   );
 }

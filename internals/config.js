@@ -28,6 +28,10 @@ const ReactBoilerplate = {
         'ip',
         'minimist',
         'sanitize.css',
+        'fs',
+        'osenv',
+        'tls',
+        'net'
       ],
 
       /**
