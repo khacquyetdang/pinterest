@@ -26,6 +26,11 @@ export default defineMessages({
   confirmpassword: {
     id: 'khacquyetdang.containers.App.confirmpassword',
     defaultMessage: 'Confirmer votre mot de passe',
+  },
+  createaccount: {
+    id: 'khacquyetdang.containers.App.createaccount',
+    defaultMessage: 'Créer votre compte',
+    
   }
 
 });

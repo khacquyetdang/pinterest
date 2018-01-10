@@ -11,7 +11,7 @@ import { Helmet } from 'react-helmet';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-import { Row, Col, FormGroup, FormControl, ControlLabel, Glyphicon, InputGroup } from 'react-bootstrap';
+import { Row, Col, FormGroup, FormControl, ControlLabel, Glyphicon, InputGroup, Button } from 'react-bootstrap';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 import makeSelectRegisterPage from './selectors';
@@ -38,8 +38,8 @@ export class RegisterPage extends React.Component { // eslint-disable-line react
         </Helmet>
         <div className="container">
           <form>
-            <Row className="registerContainer">
-              <Col md={6}  mdOffset={3} sm={12}>
+            <Row>
+              <Col  className="registerContainer" md={6}  mdOffset={3} sm={12}>
               <FormGroup>
                 <ControlLabel><FormattedMessage {...messagesApp.email} /></ControlLabel>
                 <InputGroup>
@@ -67,10 +67,11 @@ export class RegisterPage extends React.Component { // eslint-disable-line react
                   <InputGroup.Addon>
                     <Glyphicon glyph="lock" />
                   </InputGroup.Addon>
-                  <FormControl type="email">
+                  <FormControl type="email" required>
                   </FormControl>
                 </InputGroup>
               </FormGroup>
+              <Button bsStyle="success" bsSize="large" block> {formatMessage(messagesApp.createaccount)}</Button>
               </Col>
             </Row>
           </form>

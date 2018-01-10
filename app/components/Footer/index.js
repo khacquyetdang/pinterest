@@ -8,22 +8,24 @@ import messages from './messages';
 
 function Footer() {
   return (
-    <Wrapper>
-      <section>
-        <FormattedMessage {...messages.licenseMessage} />
-      </section>
-      <section>
-        <LocaleToggle />
-      </section>
-      <section>
-        <FormattedMessage
-          {...messages.authorMessage}
-          values={{
-            author: <A href="https://twitter.com/mxstbr">Max Stoiber</A>,
-          }}
-        />
-      </section>
-    </Wrapper>
+    <div className="container">
+      <Wrapper>
+        <section>
+          <FormattedMessage {...messages.licenseMessage} />
+        </section>
+        <section>
+          <LocaleToggle />
+        </section>
+        <section>
+          <FormattedMessage
+            {...messages.authorMessage}
+            values={{
+              author: <A href="https://twitter.com/mxstbr">Khac Quyet DANG</A>,
+            }}
+          />
+        </section>
+      </Wrapper>
+    </div>
   );
 }
 
