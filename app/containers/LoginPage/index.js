@@ -37,8 +37,8 @@ export class LoginPage extends React.Component { // eslint-disable-line react/pr
                 <div className="card-group">
                   <div className="card">
                     <div className="card-body">
-                      <h1>Login</h1>
-                      <p className="text-muted">Sign In to your account</p>
+                      <h1><FormattedMessage {...messages.login} /></h1>
+                      <p className="text-muted"><FormattedMessage {...messages.connect_to_account} /></p>
                       <InputGroup className="mb-3">
                         <InputGroup.Addon>
                           <Glyphicon glyph="user" />
