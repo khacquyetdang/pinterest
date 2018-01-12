@@ -30,55 +30,57 @@ export class LoginPage extends React.Component { // eslint-disable-line react/pr
           <title>LoginPage</title>
           <meta name="description" content="Description of LoginPage" />
         </Helmet>
-        <div className="container flex-row align-items-center">
-          <Row className="justify-content-center">
-            <Col md={8} mdOffset={2} sm={12}>
-              <div className="card-group">
-                <div className="card">
-                  <div className="card-body">
-                    <h1>Login</h1>
-                    <p className="text-muted">Sign In to your account</p>
-                    <InputGroup className="mb-3">
-                      <InputGroup.Addon>
-                        <Glyphicon glyph="user" />
-                      </InputGroup.Addon>
-                      <FormControl type="email" required
-                        inputRef={(email) => { this.email = email; }}
-                      />
-                    </InputGroup>
-                    <InputGroup className="mb-3">
-                      <InputGroup.Addon>
-                        <Glyphicon glyph="lock" />
-                      </InputGroup.Addon>
-                      <FormControl type="password" placeholder="Password"
-                        required />
-                    </InputGroup>
-                    <Row>
-                      <Col sm={6} >
-                        <Button bsStyle="primary"><FormattedMessage {...messagesApp.login} /></Button>
-                      </Col>
-                      <Col sm={6}>
-                        <Button bsStyle="link"><FormattedMessage {...messagesApp.forgotpassword} /></Button>
-                      </Col>
-                    </Row>
+        <div className="containerfullheight">
+          <div className="container flex-row align-items-center">
+            <Row className="justify-content-center">
+              <Col md={8} mdOffset={2} sm={12}>
+                <div className="card-group">
+                  <div className="card">
+                    <div className="card-body">
+                      <h1>Login</h1>
+                      <p className="text-muted">Sign In to your account</p>
+                      <InputGroup className="mb-3">
+                        <InputGroup.Addon>
+                          <Glyphicon glyph="user" />
+                        </InputGroup.Addon>
+                        <FormControl type="email" required
+                          inputRef={(email) => { this.email = email; }}
+                        />
+                      </InputGroup>
+                      <InputGroup className="mb-3">
+                        <InputGroup.Addon>
+                          <Glyphicon glyph="lock" />
+                        </InputGroup.Addon>
+                        <FormControl type="password" placeholder="Password"
+                          required />
+                      </InputGroup>
+                      <Row>
+                        <Col sm={6} >
+                          <Button bsStyle="primary"><FormattedMessage {...messagesApp.login} /></Button>
+                        </Col>
+                        <Col sm={6}>
+                          <Button bsStyle="link"><FormattedMessage {...messagesApp.forgotpassword} /></Button>
+                        </Col>
+                      </Row>
+                    </div>
                   </div>
-                </div>
-                <div className="card text-white bg-primary">
-                  <div className="card-body">
-                    <div className="text-center">
-                      <div>
-                        <h2><FormattedMessage {...messagesApp.register} /></h2>
-                        <h3>
-                          <p><FormattedMessage {...messages.not_register_yet} /></p>
-                        </h3>
-                        <Button bsStyle="primary" className="active mt-3"><FormattedMessage {...messages.register_now} /> !</Button>
+                  <div className="card text-white bg-primary">
+                    <div className="card-body">
+                      <div className="text-center">
+                        <div>
+                          <h2><FormattedMessage {...messagesApp.register} /></h2>
+                          <h3>
+                            <p><FormattedMessage {...messages.not_register_yet} /></p>
+                          </h3>
+                          <Button bsStyle="primary" className="active mt-3"><FormattedMessage {...messages.register_now} /> !</Button>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </Col>
-          </Row>
+              </Col>
+            </Row>
+          </div>
         </div>
       </div>
     );
