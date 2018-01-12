@@ -7,29 +7,33 @@ import { defineMessages } from 'react-intl';
 
 export default defineMessages({
   about: {
-    id: 'khacquyetdang.containers.App.about',
+    id: 'app.containers.App.about',
     defaultMessage: 'A propos',
   },
   register: {
-    id: 'khacquyetdang.containers.App.register',
+    id: 'app.containers.App.register',
     defaultMessage: 'S\'inscrire',
   },
   email: {
-    id: 'khacquyetdang.containers.App.email',
+    id: 'app.containers.App.email',
     defaultMessage: 'Votre email',
   },
   password: {
-    id: 'khacquyetdang.containers.App.password',
+    id: 'app.containers.App.password',
     defaultMessage: 'Votre mot de passe',
   }
   ,
   confirmpassword: {
-    id: 'khacquyetdang.containers.App.confirmpassword',
+    id: 'app.containers.App.confirmpassword',
     defaultMessage: 'Confirmer votre mot de passe',
   },
   createaccount: {
-    id: 'khacquyetdang.containers.App.createaccount',
+    id: 'app.containers.App.createaccount',
     defaultMessage: 'Créer votre compte',    
-  }
+  },
+  login: {
+    id: 'app.containers.App.login',
+    defaultMessage: 'Se connecter',
+  },
 
 });

@@ -72,7 +72,10 @@ exports.postSignup = (req, res, next) => {
 
   if (errors) {
     return res.status(HttpStatus.BAD_REQUEST).send({
-      error_form: errors
+      error: {
+        form: errors,
+        body: req.body
+      }
     });
   }
 
@@ -84,18 +87,24 @@ exports.postSignup = (req, res, next) => {
   User.findOne({ email: req.body.email }, (err, existingUser) => {
     if (err) {
       return res.status(HttpStatus.CONFLICT).send({
-        error: err
+        error: {
+          msg: err
+        }
       });
     }
     if (existingUser) {
       return res.status(HttpStatus.CONFLICT).send({
-        error: 'Account with that email address already exists.'
+        error: {
+          msg: 'Account with that email address already exists.'
+        }
       });
     }
     user.save((err) => {
       if (err) {
         return res.status(HttpStatus.CONFLICT).send({
-          error: err
+          error: {
+            msg: err
+          }
         });
       }
       return res.status(HttpStatus.OK).send({
