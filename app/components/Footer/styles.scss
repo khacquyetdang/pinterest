@@ -7,33 +7,37 @@ $mq-tablet-landscape	: 1024px !default;
 $mq-desktop				: 1382px !default;
 
 // Everything larger than a landscape tablet
+.footer {
+    border-top: 1px solid #666;
+}
 footer {
     display: flex;
     justify-content: space-between;
-    border-top: 1px solid #666;  
 }
 
 @include desktop-and-up {
-        .footer {
-            margin: 20px !important;    
-        }	
 
         footer {
+            margin: 10px;
+        }
+        .footer {
+            margin-top: 5px;
             position: absolute;
             bottom: 0;
             width: 100%;
-            padding: 1.5em 1em;
+            padding: 5px;
 
         }
 }
 @include mobile-only {
-        .footer {
+        footer {
             margin-top: 10px !important;    
         }	
 
-        footer {
+        .footer {
+            margin-top: 5px;
             position: relative;
             width: 100%;
-            padding: 0.5em 1em;
+            padding: 0.5em;
         } 
 }

@@ -167,14 +167,14 @@ export class RegisterPage extends React.Component { // eslint-disable-line react
                 <br />
                 <Row>
                   <Col md={6}>
-                    <button className="btn-lg btn-block btn-social btn-facebook"
+                    <button className="btn-lg btn-block btn-social btn-facebook mt-3"
                       disabled={currentlySending}>
                       <span className="fa fa-facebook"></span>
                       Facebook
                     </button>
                   </Col>
                   <Col md={6}>
-                    <button className="btn-social btn-lg btn-twitter btn-block"
+                    <button className="btn-social btn-lg btn-twitter btn-block mt-3"
                       disabled={currentlySending}>
                       <span className="fa fa-twitter"></span>
                       Twitter
