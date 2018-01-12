@@ -1,5 +1,39 @@
-.footer {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
+@import './../../constants';
+
+$mq-mobile-portrait		: 320px !default;
+$mq-mobile-landscape	: 480px !default;
+$mq-tablet-portrait		: 768px !default;
+$mq-tablet-landscape	: 1024px !default;
+$mq-desktop				: 1382px !default;
+
+// Everything larger than a landscape tablet
+footer {
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid #666;  
+}
+
+@include desktop-and-up {
+        .footer {
+            margin: 20px !important;    
+        }	
+
+        footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            padding: 1.5em 1em;
+
+        }
+}
+@include mobile-only {
+        .footer {
+            margin-top: 10px !important;    
+        }	
+
+        footer {
+            position: relative;
+            width: 100%;
+            padding: 0.5em 1em;
+        } 
 }
