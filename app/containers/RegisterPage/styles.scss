@@ -1,9 +1,15 @@
 @import '../App/styles.scss';
-
 .registerContainer {
     background-color: white;
     border: 1px solid #c2cfd6;
-    padding: 30px;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    padding: 20px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+@include mobile-only {
+    .registerContainer {
+        padding: 15px;
+        margin: 15px;
+    }
 }
