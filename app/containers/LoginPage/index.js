@@ -56,10 +56,10 @@ export class LoginPage extends React.Component { // eslint-disable-line react/pr
                       </InputGroup>
                       <Row>
                         <Col sm={6} >
-                          <Button bsStyle="primary"><FormattedMessage {...messagesApp.login} /></Button>
+                          <Button bsStyle="primary" className="mt-3" block><FormattedMessage {...messagesApp.login} /></Button>
                         </Col>
                         <Col sm={6}>
-                          <Button bsStyle="link"><FormattedMessage {...messagesApp.forgotpassword} /></Button>
+                          <Button bsStyle="link" className="mt-3" block><FormattedMessage {...messagesApp.forgotpassword} /></Button>
                         </Col>
                       </Row>
                     </div>
