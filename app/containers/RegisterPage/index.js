@@ -28,6 +28,7 @@ import SmallLoadingIndicator from 'components/SmallLoadingIndicator';
 import { registerRequest } from './actions';
 import { REGISTER_RESET } from './constants';
 import Error from 'components/Error';
+
 const RowWrapper = styled.div`
   padding: 4em;
   background: papayawhip;

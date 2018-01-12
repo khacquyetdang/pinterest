@@ -1,6 +1,15 @@
-import { injectGlobal } from 'styled-components';
+import styled, { injectGlobal } from 'styled-components';
 
 /* eslint no-unused-expressions: 0 */
+export const Card = styled.div`
+background-color: white;
+border: 1px solid #c2cfd6;
+padding: 20px;
+margin-top: 10px;
+margin-bottom: 10px;
+display: inline-block;
+`;
+
 injectGlobal`
   html,
   body {

@@ -2,7 +2,8 @@
 
 const express = require('express');
 const logger = require('./logger');
-
+var jwt = require('express-jwt')
+const HttpStatus = require('http-status-codes');
 const compression = require('compression');
 const session = require('express-session');
 const bodyParser = require('body-parser');
@@ -17,6 +18,7 @@ const expressValidator = require('express-validator');
 const expressStatusMonitor = require('express-status-monitor');
 //const sass = require('node-sass-middleware');
 const multer = require('multer');
+const jwtconfig = require('./controllers/config.json');
 
 /**
  * Load environment variables from .env file, where API keys and passwords are configured.
@@ -52,7 +54,7 @@ mongoose.connection.on('error', (err) => {
   process.exit();
 });
 
-app.use(expressStatusMonitor());
+//app.use(expressStatusMonitor());
 app.use(compression());
 
 app.use(bodyParser.json());
@@ -68,6 +70,13 @@ app.use(session({
     clear_interval: 3600
   })
 }));
+
+if (process.env.NODE_ENV === 'development') {
+  //app.use(logger('dev'));
+  //app.use(errorHandler())
+}
+
+/*
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -76,10 +85,61 @@ app.use(lusca.xssProtection(true));
 app.use((req, res, next) => {
   res.locals.user = req.user;
   next();
-});
+});*/
 
 // routing 
+
+var jwtCheck = jwt({
+  secret: jwtconfig.secret,
+  audience: jwtconfig.audience,
+  issuer: jwtconfig.issuer,
+  errorOnFailedAuth: false
+});
+
+// Check for scope
+function requireScope(scope) {
+  return function (req, res, next) {
+    var has_scopes = req.user.scope === scope;
+    if (!has_scopes) {
+      res.status(HttpStatus.UNAUTHORIZED)
+        .send({
+          error: {
+            msg: "Authentication needed, please login to access to this page"
+          }
+        });
+      return;
+    }
+    next();
+  };
+}
+
+app.use('/api/protected', jwtCheck, requireScope('full_access'));
+
+app.use(function (err, req, res, next) {
+  if (err.name === 'UnauthorizedError') {
+    res.status(HttpStatus.UNAUTHORIZED)
+      .send({
+        error: {
+          msg: "Authentication needed, please login to access to this page"
+        }
+      });
+    return;
+  } else {
+    next(err);
+  }
+});
+app.get('/api/protected/random-quote', function (req, res) {
+
+  res.status(200).send({
+    msg: "Work hard, play hard, success will come",
+    req: req.user
+  });
+});
+
+
 app.post('/api/signup', userController.postSignup);
+app.post('/api/login', userController.postLogin);
+
 /*app.post('/api/signup', function (req, res, next) {
   res.send('hello postvcefd');
 });*/

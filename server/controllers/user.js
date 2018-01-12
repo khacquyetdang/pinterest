@@ -3,13 +3,116 @@ const crypto = bluebird.promisifyAll(require('crypto'));
 const nodemailer = require('nodemailer');
 const passport = require('passport');
 const User = require('../models/User');
+const config = require('./config.json');
 const HttpStatus = require('http-status-codes');
+var jwt = require('jsonwebtoken');
+const _ = require('lodash');
+function createIdToken(user) {
+  return jwt.sign(_.omit(user, 'password'), config.secret, { expiresIn: 60 * 60 * 5 });
+}
+
+function createAccessToken(usermail) {
+  return jwt.sign({
+    iss: config.issuer,
+    aud: config.audience,
+    exp: Math.floor(Date.now() / 1000) + (60 * 60),
+    scope: 'full_access',
+    sub: "lalaland|gonto",
+    jti: genJti(), // unique identifier for the token
+    alg: 'HS256',
+    mail : usermail
+  }, config.secret);
+}
+
+// Generate Unique Identifier for the access token 
+function genJti() {
+  var jti = '';
+  var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  for (var i = 0; i < 16; i++) {
+    jti += possible.charAt(Math.floor(Math.random() * possible.length));
+  }
+  return jti;
+}
 
 /**
  * POST /login
  * Sign in using email and password.
  */
 exports.postLogin = (req, res, next) => {
+  req.assert('email', 'Email is not valid').isEmail();
+  req.assert('password', 'Password cannot be blank').notEmpty();
+  req.sanitize('email').normalizeEmail({ gmail_remove_dots: false });
+
+  const errors = req.validationErrors();
+
+  if (errors) {
+    return res.status(HttpStatus.BAD_REQUEST).send({
+      error: {
+        form: errors,
+      }
+    });
+  }
+  User.findOne({
+    email: req.body.email
+  }, (err, existingUser) => {
+    if (err) {
+      return res.status(HttpStatus.CONFLICT).send({
+        error: {
+          msg: err
+        }
+      });
+    }
+
+    if (existingUser) {
+      existingUser.comparePassword(req.body.password, (err, isMatch) => {
+        if (err) {
+          return res.status(HttpStatus.CONFLICT).send({
+            error: {
+              msg: err
+            }
+          });
+        }
+        if (isMatch) {
+
+          var access_token = createAccessToken(existingUser.email);
+          var id_token = createIdToken({
+            email: existingUser.email
+          });
+          existingUser.jwttokens.push({
+            id_token: id_token,
+            access_token: access_token,
+            enabled : true
+          });
+          existingUser.save(function(err) {
+            if (err) {
+              return res.status(HttpStatus.CONFLICT).send({
+                error: {
+                  msg : err
+                }
+              });                  
+            }
+            return res.status(HttpStatus.OK).send({
+              id_token: id_token,
+              access_token: access_token
+            });  
+          });
+        }
+        else {
+          return res.status(HttpStatus.CONFLICT).send({
+            error: {
+              msg: "Password is not match"
+            }
+          });
+        }
+      });
+    }
+  });
+}
+/**
+ * POST /login
+ * Sign in using email and password.
+ */
+exports.postLoginSession = (req, res, next) => {
   req.assert('email', 'Email is not valid').isEmail();
   req.assert('password', 'Password cannot be blank').notEmpty();
   req.sanitize('email').normalizeEmail({ gmail_remove_dots: false });
@@ -74,7 +177,6 @@ exports.postSignup = (req, res, next) => {
     return res.status(HttpStatus.BAD_REQUEST).send({
       error: {
         form: errors,
-        body: req.body
       }
     });
   }

@@ -17,6 +17,7 @@ import { HashRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import { Navbar, Nav, NavItem } from 'react-bootstrap';
 import HomePage from 'containers/HomePage/Loadable';
 import FeaturePage from 'containers/FeaturePage/Loadable';
+import LoginPage from 'containers/LoginPage/Loadable';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
 import Header from 'components/Header';
 import Footer from 'components/Footer';
@@ -47,6 +48,12 @@ export default function App() {
                     <FormattedMessage {...messages.register} />
                   </NavItem>
                 </LinkContainer >
+                <LinkContainer to="/login">
+                  <NavItem eventKey={uuidv1()}>
+                    <FormattedMessage {...messages.login} />
+                  </NavItem>
+                </LinkContainer >
+
               </Nav>
             </Navbar.Collapse>
           </Navbar>
@@ -54,6 +61,7 @@ export default function App() {
             <Route exact path="/" component={HomePage} />
             <Route path="/register" component={RegisterPage} />
             <Route path="/features" component={FeaturePage} />
+            <Route path="/login" component={LoginPage} />
             <Route path="" component={NotFoundPage} />
           </Switch>
           <Footer />

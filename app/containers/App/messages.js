@@ -14,6 +14,10 @@ export default defineMessages({
     id: 'app.containers.App.register',
     defaultMessage: 'S\'inscrire',
   },
+  login: {
+    id: 'app.containers.App.login',
+    defaultMessage: 'Se connecter',
+  },
   email: {
     id: 'app.containers.App.email',
     defaultMessage: 'Votre email',
@@ -21,8 +25,11 @@ export default defineMessages({
   password: {
     id: 'app.containers.App.password',
     defaultMessage: 'Votre mot de passe',
-  }
-  ,
+  },
+  forgotpassword: {
+    id: 'app.containers.App.forgotpassword',
+    defaultMessage: 'Mot de passe oublié?',    
+  },
   confirmpassword: {
     id: 'app.containers.App.confirmpassword',
     defaultMessage: 'Confirmer votre mot de passe',
