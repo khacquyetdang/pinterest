@@ -64,6 +64,7 @@ export class RegisterPage extends React.Component { // eslint-disable-line react
       email: this.email.value,
     }));
   }
+  
   onInputChange = () => {
     this.props.dispatch({
       type: REGISTER_RESET

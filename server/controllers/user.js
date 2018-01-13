@@ -62,8 +62,15 @@ exports.postLogin = (req, res, next) => {
         }
       });
     }
-
-    if (existingUser) {
+    
+    if (!existingUser) {
+      return res.status(HttpStatus.CONFLICT).send({
+        error: {
+          msg: "User is not registered yet"
+        }
+      });
+    }
+    else {
       existingUser.comparePassword(req.body.password, (err, isMatch) => {
         if (err) {
           return res.status(HttpStatus.CONFLICT).send({
