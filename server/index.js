@@ -98,7 +98,16 @@ var jwtCheck = jwt({
 
 // Check for scope
 function requireScope(scope) {
-  return function (req, res, next) {
+  return function (err, req, res, next) {
+    if (err.name === 'UnauthorizedError') {
+      return res.status(HttpStatus.UNAUTHORIZED)
+        .send({
+          error: {
+            msg: "Authentication needed, please login to access to this page1"
+          }
+        });
+    }
+
     var has_scopes = req.user.scope === scope;
     if (!has_scopes) {
       res.status(HttpStatus.UNAUTHORIZED)
@@ -113,8 +122,6 @@ function requireScope(scope) {
   };
 }
 
-app.use('/api/protected', jwtCheck, requireScope('full_access'));
-
 app.use(function (err, req, res, next) {
   if (err.name === 'UnauthorizedError') {
     res.status(HttpStatus.UNAUTHORIZED)
@@ -123,11 +130,13 @@ app.use(function (err, req, res, next) {
           msg: "Authentication needed, please login to access to this page"
         }
       });
-    return;
-  } else {
-    next(err);
   }
 });
+
+
+app.use('/api/protected', jwtCheck, requireScope('full_access'));
+
+
 app.get('/api/protected/random-quote', function (req, res) {
 
   res.status(200).send({

@@ -13,9 +13,9 @@
 import { fromJS } from 'immutable';
 
 import {
-  LOAD_REPOS_SUCCESS,
-  LOAD_REPOS,
-  LOAD_REPOS_ERROR,
+  LOGOUT_ERROR,
+  LOGOUT_REQUEST,
+  LOGOUT_SUCCESS,
   SET_AUTH
 } from './constants';
 
@@ -32,17 +32,14 @@ const initialState = fromJS({
 
 function appReducer(state = initialState, action) {
   switch (action.type) {
-    case LOAD_REPOS:
+    case LOGOUT_REQUEST:
       return state
-        .set('loading', true)
-        .set('error', false)
-        .setIn(['userData', 'repositories'], false);
-    case LOAD_REPOS_SUCCESS:
+        .set('loading', true);
+    case LOGOUT_SUCCESS:
       return state
-        .setIn(['userData', 'repositories'], action.repos)
-        .set('loading', false)
-        .set('currentUser', action.username);
-    case LOAD_REPOS_ERROR:
+        .set('error', null)
+        .set('loading', false);
+    case LOGOUT_ERROR:
       return state
         .set('error', action.error)
         .set('loading', false);

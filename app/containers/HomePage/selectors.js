@@ -1,17 +1,25 @@
-/**
- * Homepage selectors
- */
-
 import { createSelector } from 'reselect';
 
-const selectHome = (state) => state.get('home');
+/**
+ * Direct selector to the homePage state domain
+ */
+const selectHomePageDomain = (state) => state.get('homePage');
 
-const makeSelectUsername = () => createSelector(
-  selectHome,
-  (homeState) => homeState.get('username')
+/**
+ * Other specific selectors
+ */
+
+
+/**
+ * Default selector used by HomePage
+ */
+
+const makeSelectHomePage = () => createSelector(
+  selectHomePageDomain,
+  (substate) => substate.toJS()
 );
 
+export default makeSelectHomePage;
 export {
-  selectHome,
-  makeSelectUsername,
+  selectHomePageDomain,
 };

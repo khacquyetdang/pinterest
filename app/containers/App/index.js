@@ -35,6 +35,7 @@ import saga from './saga';
 import messages from './messages';
 import { setAuth, logoutRequest } from './actions';
 import { loadLocalStorage } from 'localStorage';
+import { showProgressLog } from 'utils/Logger';
 export class App extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   componentDidMount() {

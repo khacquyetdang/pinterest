@@ -14,32 +14,32 @@ import { setAuth } from './actions';
 export function* fetchLogout(action) {
   // Select username from store
   try {
-    var dataLogout = action.data;
 
     var options = {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
         'content-type': 'application/json; charset=utf-8',
-        'Authorization' : 'Bearer ' + action.data.access_token 
+        'Authorization': 'Bearer ' + action.access_token
       },
       mode: 'cors',
     }
-    options.body = JSON.stringify(dataLogin);
 
     const response = yield call(request, logoutUrl, options);
     showProgressLog(logoutUrl, response, "logoutSaga");
-    if (response) {
-      updateLocalStorage(
-        {
-          access_token: null
-        }
-      );
-      yield put({ type: LOGOUT_SUCCESS });
-      yield put(setAuth(null));
+    if (!response) {
+      yield put({ type: LOGOUT_ERROR, error: "Unknow error" });
+    }
+    else if (response && response.error) {
+      if (response.error.msg && response.error.msg.startsWith("Authentication needed")) {
+        yield put({ type: LOGOUT_SUCCESS });
+        yield put(setAuth(null));
+      }
+      yield put({ type: LOGOUT_ERROR, error: response.error });
     }
     else {
-      yield put({ type: LOGOUT_ERROR, error: response.error || 'Erreur' });
+      yield put({ type: LOGOUT_SUCCESS });
+      yield put(setAuth(null));
     }
   } catch (err) {
     yield put({ type: LOGOUT_ERROR, error: { msg: err } });
