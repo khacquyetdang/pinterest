@@ -20,7 +20,7 @@ function createAccessToken(usermail) {
     sub: "lalaland|gonto",
     jti: genJti(), // unique identifier for the token
     alg: 'HS256',
-    mail : usermail
+    mail: usermail
   }, config.secret);
 }
 
@@ -62,7 +62,7 @@ exports.postLogin = (req, res, next) => {
         }
       });
     }
-    
+
     if (!existingUser) {
       return res.status(HttpStatus.CONFLICT).send({
         error: {
@@ -88,20 +88,20 @@ exports.postLogin = (req, res, next) => {
           existingUser.jwttokens.push({
             id_token: id_token,
             access_token: access_token,
-            enabled : true
+            enabled: true
           });
-          existingUser.save(function(err) {
+          existingUser.save(function (err) {
             if (err) {
               return res.status(HttpStatus.CONFLICT).send({
                 error: {
-                  msg : err
+                  msg: err
                 }
-              });                  
+              });
             }
             return res.status(HttpStatus.OK).send({
               id_token: id_token,
               access_token: access_token
-            });  
+            });
           });
         }
         else {
@@ -150,9 +150,78 @@ exports.postLoginSession = (req, res, next) => {
  * Log out.
  */
 exports.logout = (req, res) => {
+
+  const getToken = function fromHeaderOrQuerystring(req) {
+    if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
+      return req.headers.authorization.split(' ')[1];
+    } else if (req.query && req.query.token) {
+      return req.query.token;
+    }
+    return null;
+  }
+
+  /*
   req.logout();
-  res.redirect('/');
-};
+  res.redirect('/');*/
+
+  User.findOne({
+    email: req.user.mail
+  }, (err, existingUser) => {
+    if (err) {
+      return res.status(HttpStatus.CONFLICT).send({
+        error: {
+          msg: err
+        }
+      });
+    }
+
+    if (!existingUser) {
+      return res.status(HttpStatus.CONFLICT).send({
+        error: {
+          msg: "User is not registered yet"
+        }
+      });
+    }
+    else {
+      var access_token = getToken(req);
+      var jwttokensFilter = existingUser.jwttokens.filter(jwttoken => {
+        return (jwttoken.access_token === access_token && !jwttoken.enabled);
+      });
+      if (jwttokensFilter.length >= 1) {
+        return res.status(HttpStatus.OK).send({
+          msg: "already logout"
+        });
+      };
+
+      console.log(jwttokensFilter);
+
+      var jwttokens = existingUser.jwttokens.map(jwttoken => {
+        if (jwttoken.access_token === access_token) {
+          jwttoken.enabled = false;
+        }
+        return jwttoken;
+      });
+      existingUser.jwttokens = jwttokens;
+      existingUser.save(function (err) {
+        if (err) {
+          return res.status(HttpStatus.CONFLICT).send({
+            error: {
+              msg: err
+            }
+          });
+        }
+        return res.status(HttpStatus.OK).send(
+          {
+            msg: "OK",
+            jwttokensFilter: jwttokensFilter,
+            jwttokens: jwttokens,
+            access_token: access_token
+          }
+        );
+      });
+    }
+  });
+}
 
 /**
  * GET /signup

@@ -27,6 +27,8 @@ import SmallLoadingIndicator from 'components/SmallLoadingIndicator';
 import { loginRequest } from './actions';
 import { LOGIN_RESET } from './constants';
 import Error from 'components/Error';
+import makeSelectApp from '../App/selectors';
+import { Redirect } from 'react-router-dom';
 
 //import Modal from 'react-modal';
 
@@ -50,8 +52,13 @@ export class LoginPage extends React.Component { // eslint-disable-line react/pr
       }));
     }
   }
-  
+
   render() {
+
+    if (this.props.app.access_token)
+    {
+      return <Redirect to={{pathname: '/', state: {from: this.props.location}}} />;
+    }
     const { formatMessage } = this.props.intl;
 
     var error = this.props.loginpage.error;
@@ -161,6 +168,7 @@ LoginPage.propTypes = {
 
 const mapStateToProps = createStructuredSelector({
   loginpage: makeSelectLoginPage(),
+  app : makeSelectApp(),
 });
 
 function mapDispatchToProps(dispatch) {

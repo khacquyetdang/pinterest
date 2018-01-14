@@ -9,8 +9,8 @@
  * export const YOUR_ACTION_CONSTANT = 'yourproject/YourContainer/YOUR_ACTION_CONSTANT';
  */
 
-export const LOAD_REPOS = 'pinterest/App/LOAD_REPOS';
-export const LOAD_REPOS_SUCCESS = 'pinterest/App/LOAD_REPOS_SUCCESS';
-export const LOAD_REPOS_ERROR = 'pinterest/App/LOAD_REPOS_ERROR';
 export const SET_AUTH = 'pinterest/App/SET_AUTH';
 export const DEFAULT_LOCALE = 'en';
+export const LOGOUT_REQUEST = 'pinterest/APP/LOGOUT_REQUEST'; 
+export const LOGOUT_SUCCESS = 'pinterest/APP/LOGOUT_SUCCESS'; 
+export const LOGOUT_ERROR = 'pinterest/APP/LOGOUT_ERROR'; 

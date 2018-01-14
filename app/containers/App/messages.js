@@ -42,5 +42,9 @@ export default defineMessages({
     id: 'app.containers.App.login',
     defaultMessage: 'Se connecter',
   },
+  logout: {
+    id: 'app.containers.App.login',
+    defaultMessage: 'Se déconnecter',
+  },
 
 });
