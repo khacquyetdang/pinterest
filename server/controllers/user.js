@@ -185,39 +185,49 @@ exports.logout = (req, res) => {
     else {
       var access_token = getToken(req);
       var jwttokens = existingUser.jwttokens;
-      User.find({ _id: existingUser._id, "jwttokens.access_token": access_token, "jwttokens.enabled": false }).count(function (err, results) {
-
-        if (err) {
-          return res.status(HttpStatus.OK).send({
-            msg: err
-          });
-        };
-        if (results >= 1) {
-          return res.status(HttpStatus.OK).send({
-            msg: "already logout "
-          });
-        }
-        //existingUser.jwttokens = jwttokens;
-        User.update({ _id: existingUser._id, "jwttokens.access_token": access_token }, {
-          $set:
-            { "jwttokens.$.enabled": false }
-        }, function (err) {
-          if (err) {
-            return res.status(HttpStatus.CONFLICT).send({
-              error: {
-                msg: err
+      User.findOne(
+        { _id: existingUser._id },
+        {
+          "jwttokens": {
+            $elemMatch:
+              {
+                access_token: access_token, enabled: false
               }
+          }
+        }, function (err, userWithTokens) {
+
+          if (err) {
+            return res.status(HttpStatus.OK).send({
+              msg: err
+            });
+          };
+          if (userWithTokens.jwttokens.length >= 1) {
+            return res.status(HttpStatus.OK).send({
+              msg: "already logout",
+              access_token: access_token
             });
           }
-          return res.status(HttpStatus.OK).send(
-            {
-              msg: "OK",
-              jwttokens: jwttokens,
-              access_token: access_token
+          //existingUser.jwttokens = jwttokens;
+          User.update({ _id: existingUser._id, "jwttokens.access_token": access_token }, {
+            $set:
+              { "jwttokens.$.enabled": false }
+          }, function (err) {
+            if (err) {
+              return res.status(HttpStatus.CONFLICT).send({
+                error: {
+                  msg: err
+                }
+              });
             }
-          );
+            return res.status(HttpStatus.OK).send(
+              {
+                msg: "OK",
+                jwttokens: jwttokens,
+                access_token: access_token
+              }
+            );
+          });
         });
-      });
     }
   });
 }

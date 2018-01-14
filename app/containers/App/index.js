@@ -26,6 +26,7 @@ import NotFoundPage from 'containers/NotFoundPage/Loadable';
 import Header from 'components/Header';
 import Footer from 'components/Footer';
 
+import Spinner from 'components/Spinner';
 
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
@@ -74,6 +75,7 @@ export class App extends React.Component { // eslint-disable-line react/prefer-s
               <Navbar.Collapse>
                 <Nav pullRight>
                   {isLogin ? <NavItem eventKey={uuidv1()} onClick={this.onLogoutClick}>
+                    {this.props.app.loading_logout ? <Spinner /> : null }
                     <FormattedMessage {...messages.logout} />
                   </NavItem> : null}
                   {!isLogin ? <LinkContainer to="/register">

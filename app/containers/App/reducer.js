@@ -23,6 +23,7 @@ import {
 const initialState = fromJS({
   access_token: null,
   loading: false,
+  loading_logout : false,
   error: false,
   currentUser: false,
   userData: {
@@ -34,15 +35,15 @@ function appReducer(state = initialState, action) {
   switch (action.type) {
     case LOGOUT_REQUEST:
       return state
-        .set('loading', true);
+        .set('loading_logout', true);
     case LOGOUT_SUCCESS:
       return state
         .set('error', null)
-        .set('loading', false);
+        .set('loading_logout', false);
     case LOGOUT_ERROR:
       return state
         .set('error', action.error)
-        .set('loading', false);
+        .set('loading_logout', false);
     case SET_AUTH:
       return state
         .set('access_token', action.access_token);
