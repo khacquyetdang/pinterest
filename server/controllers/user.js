@@ -115,6 +115,7 @@ exports.postLogin = (req, res, next) => {
     }
   });
 }
+
 /**
  * POST /login
  * Sign in using email and password.

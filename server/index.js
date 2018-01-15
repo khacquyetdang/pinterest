@@ -1,6 +1,7 @@
 /* eslint consistent-return:0 */
 
 const express = require('express');
+var i18n = require("i18n");
 const logger = require('./logger');
 var jwt = require('express-jwt')
 const HttpStatus = require('http-status-codes');
@@ -54,6 +55,17 @@ mongoose.connection.on('error', (err) => {
   process.exit();
 });
 
+
+// minimal config
+i18n.configure({
+  locales: ['en', 'fr'],
+  directory: __dirname + '/locales',
+  defaultLocale: 'fr',
+  autoReload: true,
+  queryParameter: 'lang',
+  register: global
+});
+
 //app.use(expressStatusMonitor());
 app.use(compression());
 
@@ -88,6 +100,7 @@ app.use((req, res, next) => {
 });*/
 
 // routing 
+app.use(i18n.init);
 
 var jwtCheck = jwt({
   secret: jwtconfig.secret,
@@ -135,6 +148,21 @@ app.use(function (err, req, res, next) {
 
 
 app.use('/api/protected', jwtCheck, requireScope('full_access'));
+
+
+app.get('/api/hello', function (req, res) {
+
+  res.status(200).send({
+    msg: __("Hello"),
+  });
+});
+app.post('/api/hello', function (req, res) {
+
+  res.status(200).send({
+    msg: __("Hello"),
+  });
+});
+
 
 
 app.get('/api/protected/random-quote', function (req, res) {
