@@ -8,24 +8,22 @@ import './styles.scss';
 
 function Footer() {
   return (
-    <div className="footer">
-        <footer>
-          <section>
-            <FormattedMessage {...messages.licenseMessage} />
-          </section>
-          <section>
-            <LocaleToggle />
-          </section>
-          <section>
-            <FormattedMessage
-              {...messages.authorMessage}
-              values={{
-                author: <A href="https://github.com/khacquyetdang" target="_blank">Khac Quyet DANG</A>,
-              }}
-            />
-          </section>
-        </footer>
-    </div>
+    <footer>
+      <section>
+        <FormattedMessage {...messages.licenseMessage} />
+      </section>
+      <section>
+        <LocaleToggle />
+      </section>
+      <section>
+        <FormattedMessage
+          {...messages.authorMessage}
+          values={{
+            author: <A href="https://github.com/khacquyetdang" target="_blank">Khac Quyet DANG</A>,
+          }}
+        />
+      </section>
+    </footer>
   );
 }
 

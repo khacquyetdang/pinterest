@@ -177,6 +177,8 @@ app.get('/api/protected/random-quote', function (req, res) {
 app.post('/api/signup', userController.postSignup);
 app.post('/api/login', userController.postLogin);
 app.post('/api/photo', jwtCheck, requireScope('full_access'), photoController.add);
+app.get('/api/photo', photoController.get);
+
 app.get('/api/logout', jwtCheck, requireScope('full_access'), userController.logout);
 /*app.post('/api/signup', function (req, res, next) {
   res.send('hello postvcefd');

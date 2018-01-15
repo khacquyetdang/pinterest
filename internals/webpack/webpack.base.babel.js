@@ -20,7 +20,7 @@ module.exports = (options) => ({
   module: {
     rules: [
       {
-        test: /\.js$/, // Transform all .js files required somewhere with Babel
+        test: /\.jsx?$/, // Transform all .js files required somewhere with Babel
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
@@ -34,6 +34,10 @@ module.exports = (options) => ({
         test: /\.s?css$/,
         exclude: /node_modules/,
         use: ['style-loader', 'css-loader', 'sass-loader'],
+      },
+      {
+        test: /masonry|imagesloaded|fizzy\-ui\-utils|desandro\-|outlayer|get\-size|doc\-ready|eventie|eventemitter/,
+        loader: 'imports-loader?define=>false&this=>window'
       },
       {
         // Preprocess 3rd party .css files located in node_modules
@@ -94,7 +98,7 @@ module.exports = (options) => ({
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV),
-        API_BASE_URL : JSON.stringify(process.env.API_BASE_URL)
+        API_BASE_URL: JSON.stringify(process.env.API_BASE_URL)
       },
     }),
     new webpack.NamedModulesPlugin(),
@@ -102,7 +106,7 @@ module.exports = (options) => ({
   node: {
     fs: 'empty',
     child_process: 'empty',
-    net : 'empty',
+    net: 'empty',
     tls: 'empty'
   },
   resolve: {

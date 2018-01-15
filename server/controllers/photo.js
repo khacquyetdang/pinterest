@@ -71,3 +71,26 @@ exports.add = (req, res) => {
 
     });
 }
+
+
+/**
+ * GET /add
+ * get photos.
+ */
+exports.get = (req, res) => {
+    
+    Photo.find({}, function (err, photos) {
+        if (err) {
+            return res.status(HttpStatus.CONFLICT).send({
+                error: {
+                    msg: err
+                }
+            });
+        }
+
+        return res.status(HttpStatus.OK).send({
+            photos: photos
+        });
+
+    });
+}

@@ -11,7 +11,9 @@ function parseJSON(response) {
   if (response.status === 204 || response.status === 205 || response.status === 500) {
     return null;
   }
-  return response.json();
+  var responseJson = response.json();
+  responseJson.status = response.status;
+  return responseJson;
 }
 
 /**

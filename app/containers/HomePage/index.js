@@ -15,11 +15,19 @@ import { compose } from 'redux';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 import makeSelectHomePage from './selectors';
+import { makeSelectLocale } from './../LanguageProvider/selectors';
+import LoadingIndicator from 'components/LoadingIndicator';
+import Gallery from 'components/Gallery';
+
 import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';
+import { getPhotoRequest } from './actions';
 
 export class HomePage extends React.Component { // eslint-disable-line react/prefer-stateless-function
+  componentDidMount() {
+    this.props.dispatch(getPhotoRequest(this.props.locale));
+  }
   render() {
     return (
       <div>
@@ -27,7 +35,10 @@ export class HomePage extends React.Component { // eslint-disable-line react/pre
           <title>HomePage</title>
           <meta name="description" content="Description of HomePage" />
         </Helmet>
-        <FormattedMessage {...messages.header} />
+        <div className="container">
+          { this.props.homepage.loading ? <LoadingIndicator /> : null }
+          <Gallery elements={this.props.homepage.photos} />
+        </div>
       </div>
     );
   }
@@ -39,6 +50,7 @@ HomePage.propTypes = {
 
 const mapStateToProps = createStructuredSelector({
   homepage: makeSelectHomePage(),
+  locale: makeSelectLocale()
 });
 
 function mapDispatchToProps(dispatch) {
