@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 var ObjectId = mongoose.Schema.Types.ObjectId;
 const photoSchema = new mongoose.Schema({
   owner: ObjectId,
-  likeCount: int,
+  likeCount: Number,
   likes: Array,
   url : String,
   description: String,

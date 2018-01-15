@@ -1,3 +1,8 @@
 {
-    "Hello" : "Hello world"
+    "Hello" : "Hello world",
+    "Authentication needed, please login to access to this page" : "Authentication needed, please login to access to this page",
+    "User is not registered yet": "User is not registered yet",
+    "Photo url is not valid": "L'URL de photo n'est pas valide",
+    "Description cannot be blank": "Description cannot be blank",
+    "The photo is added" : "The photo is added"
 }

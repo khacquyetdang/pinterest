@@ -16,10 +16,18 @@ const _ = require('lodash');
  * Add a photo.
  */
 exports.add = (req, res) => {
-    req.assert('url', 'Photo url is not valid').isURL();
-    req.assert('description', 'Password cannot be blank').notEmpty();
-    req.sanitize('email').normalizeEmail({ gmail_remove_dots: false });
+    req.assert('url', __('Photo url is not valid')).isURL();
+    req.assert('description', __('Description cannot be blank')).notEmpty();
 
+    const errors = req.validationErrors();
+
+    if (errors) {
+        return res.status(HttpStatus.BAD_REQUEST).send({
+            error: {
+                form: errors,
+            }
+        });
+    }
 
     User.findOne({
         email: req.user.mail
@@ -35,56 +43,31 @@ exports.add = (req, res) => {
         if (!existingUser) {
             return res.status(HttpStatus.CONFLICT).send({
                 error: {
-                    msg: "User is not registered yet"
+                    msg: __("User is not registered yet")
                 }
             });
         }
-        else {
-            var access_token = getToken(req);
-            var jwttokens = existingUser.jwttokens;
-            User.findOne(
-                { _id: existingUser._id },
-                {
-                    "jwttokens": {
-                        $elemMatch:
-                            {
-                                access_token: access_token, enabled: false
-                            }
-                    }
-                }, function (err, userWithTokens) {
+        const photo = new Photo({
+            owner: existingUser.id,
+            url: req.body.url,
+            description: req.body.description,
+            likeCount: 0,
+            likes: [],
+        });
 
-                    if (err) {
-                        return res.status(HttpStatus.OK).send({
-                            msg: err
-                        });
-                    };
-                    if (userWithTokens.jwttokens.length >= 1) {
-                        return res.status(HttpStatus.OK).send({
-                            msg: "already logout",
-                            access_token: access_token
-                        });
+        photo.save(err => {
+            if (err) {
+                return res.status(HttpStatus.CONFLICT).send({
+                    error: {
+                        msg: err
                     }
-                    //existingUser.jwttokens = jwttokens;
-                    User.update({ _id: existingUser._id, "jwttokens.access_token": access_token }, {
-                        $set:
-                            { "jwttokens.$.enabled": false }
-                    }, function (err) {
-                        if (err) {
-                            return res.status(HttpStatus.CONFLICT).send({
-                                error: {
-                                    msg: err
-                                }
-                            });
-                        }
-                        return res.status(HttpStatus.OK).send(
-                            {
-                                msg: "OK",
-                                jwttokens: jwttokens,
-                                access_token: access_token
-                            }
-                        );
-                    });
                 });
-        }
+            }
+            return res.status(HttpStatus.OK).send({
+                msg: __("The photo is added")
+            });
+
+        });
+
     });
 }

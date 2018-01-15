@@ -27,7 +27,7 @@ const jwtconfig = require('./controllers/config.json');
 dotenv.load({ path: '.env.developpement' });
 
 const userController = require('./controllers/user');
-
+const photoController = require('./controllers/photo');
 
 /**
  * API keys and Passport configuration.
@@ -116,7 +116,7 @@ function requireScope(scope) {
       return res.status(HttpStatus.UNAUTHORIZED)
         .send({
           error: {
-            msg: "Authentication needed, please login to access to this page1"
+            msg: __("Authentication needed, please login to access to this page")
           }
         });
     }
@@ -126,7 +126,7 @@ function requireScope(scope) {
       res.status(HttpStatus.UNAUTHORIZED)
         .send({
           error: {
-            msg: "Authentication needed, please login to access to this page"
+            msg: __("Authentication needed, please login to access to this page")
           }
         });
       return;
@@ -140,7 +140,7 @@ app.use(function (err, req, res, next) {
     res.status(HttpStatus.UNAUTHORIZED)
       .send({
         error: {
-          msg: "Authentication needed, please login to access to this page"
+          msg: __("Authentication needed, please login to access to this page")
         }
       });
   }
@@ -176,6 +176,7 @@ app.get('/api/protected/random-quote', function (req, res) {
 
 app.post('/api/signup', userController.postSignup);
 app.post('/api/login', userController.postLogin);
+app.post('/api/photo', jwtCheck, requireScope('full_access'), photoController.add);
 app.get('/api/logout', jwtCheck, requireScope('full_access'), userController.logout);
 /*app.post('/api/signup', function (req, res, next) {
   res.send('hello postvcefd');
