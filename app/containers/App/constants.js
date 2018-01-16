@@ -14,3 +14,6 @@ export const DEFAULT_LOCALE = 'en';
 export const LOGOUT_REQUEST = 'pinterest/APP/LOGOUT_REQUEST'; 
 export const LOGOUT_SUCCESS = 'pinterest/APP/LOGOUT_SUCCESS'; 
 export const LOGOUT_ERROR = 'pinterest/APP/LOGOUT_ERROR'; 
+
+export const SHOW_NOTIFICATION = 'app/APP/SHOW_NOTIFICATION';
+export const CLEAR_NOTIFICATION = 'app/APP/CLEAR_NOTIFICATION';

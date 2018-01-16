@@ -16,6 +16,8 @@ import {
   LOGOUT_ERROR,
   LOGOUT_REQUEST,
   LOGOUT_SUCCESS,
+  SHOW_NOTIFICATION,
+  CLEAR_NOTIFICATION,
   SET_AUTH
 } from './constants';
 
@@ -23,7 +25,9 @@ import {
 const initialState = fromJS({
   access_token: null,
   loading: false,
-  loading_logout : false,
+  loading_logout: false,
+  shownotif: false,
+  notifmessage: '',
   error: false,
   currentUser: false,
   userData: {
@@ -47,6 +51,16 @@ function appReducer(state = initialState, action) {
     case SET_AUTH:
       return state
         .set('access_token', action.access_token);
+    case SHOW_NOTIFICATION:
+      {
+        return state.set('shownotif', true)
+          .set('notifmessage', action.message);
+      }
+    case CLEAR_NOTIFICATION:
+      {
+        return state.set('shownotif', false)
+          .set('notifmessage', '');
+      }
     default:
       return state;
   }

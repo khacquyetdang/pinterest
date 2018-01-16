@@ -14,7 +14,7 @@ import { Helmet } from 'react-helmet';
 import { createStructuredSelector } from 'reselect';
 import styled from 'styled-components';
 import uuidv1 from 'uuid/v1';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import RegisterPage from '../RegisterPage/Loadable';
 import { LinkContainer } from 'react-router-bootstrap';
 import { HashRouter as Router, Switch, Route, Link } from 'react-router-dom';
@@ -23,7 +23,9 @@ import HomePage from 'containers/HomePage/Loadable';
 import FeaturePage from 'containers/FeaturePage/Loadable';
 import LoginPage from 'containers/LoginPage/Loadable';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
+import DashBoard from 'containers/DashBoard/Loadable';
 import Header from 'components/Header';
+import PrivateRoute from 'components/PrivateRoute/index';
 import Footer from 'components/Footer';
 
 import Spinner from 'components/Spinner';
@@ -34,9 +36,12 @@ import makeSelectApp from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';
+import { CLEAR_NOTIFICATION } from './constants';
+//import { Notification } from 'react-notification';
 import { setAuth, logoutRequest } from './actions';
 import { loadLocalStorage } from 'localStorage';
 import { showProgressLog } from 'utils/Logger';
+
 export class App extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   componentDidMount() {
@@ -53,6 +58,29 @@ export class App extends React.Component { // eslint-disable-line react/prefer-s
     this.props.dispatch(logoutRequest(this.props.app.access_token));
   }
 
+  toggleNotification = () => {
+    this.props.dispatch({ type: CLEAR_NOTIFICATION });
+  }
+
+  renderNotification = () => {
+    const { formatMessage } = this.props.intl;
+
+    if (this.props.app.shownotif) {
+      return <Notification
+        isActive={this.props.app.shownotif}
+        activeBarStyle={{ left: "50%" }}
+        message={this.props.app.notifmessage}
+        action={formatMessage(messages.dissmiss)}
+        autoDismiss={5}
+        level="success"
+        onDismiss={this.toggleNotification}
+        onClick={this.toggleNotification}
+      />;
+    }
+
+    return null;
+  }
+
   render() {
     var isLogin = this.checkPrivateRoute();
     return (
@@ -63,6 +91,9 @@ export class App extends React.Component { // eslint-disable-line react/prefer-s
         >
           <meta name="description" content="A React.js Boilerplate application" />
         </Helmet>
+        {
+          // this.renderNotification()
+        }
         <Router>
           <div>
             <Navbar collapseOnSelect>
@@ -73,11 +104,20 @@ export class App extends React.Component { // eslint-disable-line react/prefer-s
                 <Navbar.Toggle />
               </Navbar.Header>
               <Navbar.Collapse>
+                <Nav>
+                  {isLogin ? <LinkContainer to="/dashboard">
+                    <NavItem eventKey={uuidv1()}>
+                      <FormattedMessage {...messages.dashboard} />
+                    </NavItem>
+                  </LinkContainer> : null}
+                </Nav>
+
                 <Nav pullRight>
-                  {isLogin ? <NavItem eventKey={uuidv1()} onClick={this.onLogoutClick}>
-                    {this.props.app.loading_logout ? <Spinner /> : null }
-                    <FormattedMessage {...messages.logout} />
-                  </NavItem> : null}
+                  {isLogin ?
+                    <NavItem eventKey={uuidv1()} onClick={this.onLogoutClick}>
+                      {this.props.app.loading_logout ? <Spinner /> : null}
+                      <FormattedMessage {...messages.logout} />
+                    </NavItem> : null}
                   {!isLogin ? <LinkContainer to="/register">
                     <NavItem eventKey={uuidv1()}>
                       <FormattedMessage {...messages.register} />
@@ -97,6 +137,12 @@ export class App extends React.Component { // eslint-disable-line react/prefer-s
               <Route path="/register" component={RegisterPage} />
               <Route path="/features" component={FeaturePage} />
               <Route path="/login" component={LoginPage} />
+              {
+                //<Route path="/dashboard" component={DashBoard} />
+              }
+
+              <PrivateRoute authenticated={isLogin} path="/dashboard" component={DashBoard} />
+
               <Route path="" component={NotFoundPage} />
             </Switch>
             <Footer />
@@ -130,4 +176,5 @@ export default compose(
   withReducer,
   withSaga,
   withConnect,
+  injectIntl
 )(App);

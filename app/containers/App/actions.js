@@ -18,6 +18,7 @@
 import {
   SET_AUTH,
   LOGOUT_REQUEST,
+  SHOW_NOTIFICATION
 } from './constants';
 
 
@@ -42,3 +43,8 @@ export function logoutRequest(access_token) {
     access_token
   }
 };
+
+export function showNotif (message)
+{
+  return {type: SHOW_NOTIFICATION, message: message};  
+}

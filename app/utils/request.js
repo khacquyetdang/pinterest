@@ -13,7 +13,10 @@ function parseJSON(response) {
   }
   var responseJson = response.json();
   responseJson.status = response.status;
-  return responseJson;
+  return response.json().then(function (data) {
+    data.status = response.status;
+    return data;
+  });
 }
 
 /**
@@ -43,6 +46,6 @@ function checkStatus(response) {
  */
 export default function request(url, options) {
   return fetch(url, options)
-   // .then(checkStatus)
-   .then(parseJSON);
+    // .then(checkStatus)    
+    .then(parseJSON);
 }

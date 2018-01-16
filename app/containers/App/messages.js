@@ -47,4 +47,28 @@ export default defineMessages({
     defaultMessage: 'Se déconnecter',
   },
 
+  addPhoto: {
+    id: 'app.containers.App.addPhoto',
+    defaultMessage: 'Ajouter une photo',
+  },
+  dashboard: {
+    id: 'app.containers.App.addPhoto',
+    defaultMessage: 'Mon tableau de board',
+  },
+
+  valid: {
+    id: 'app.containers.App.valid',
+    defaultMessage: 'Valider',
+  },
+
+  cancel: {
+    id: 'app.containers.App.cancel',
+    defaultMessage: 'Annuler',
+  },
+
+  dissmiss: {
+    id: 'app.containers.App.dissmiss',
+    defaultMessage: 'Ok',    
+  }
+
 });

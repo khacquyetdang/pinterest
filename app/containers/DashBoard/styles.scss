@@ -1,0 +1,19 @@
+.photoContainer {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+    align-self: center;
+    min-height: 200px;
+    max-height: 300px;
+    border: solid 2px rgba(teal, 0.5);
+    padding: 5px;
+    margin-bottom: 10px;
+}
+
+.photoContainer img {
+    max-height: 100%;
+    max-width: 100%;
+}
