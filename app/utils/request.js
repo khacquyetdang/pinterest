@@ -5,19 +5,18 @@ import 'whatwg-fetch';
  *
  * @param  {object} response A response from a network request
  *
- * @return {object}          The parsed JSON from the request
+ * @return {object}          The parsed JSON, status from the response
  */
 function parseJSON(response) {
-  if (response.status === 204 || response.status === 205 || response.status === 500) {
-    return null;
-  }
-  var responseJson = response.json();
-  responseJson.status = response.status;
-  return response.json().then(function (data) {
-    data.status = response.status;
-    return data;
-  });
+  return new Promise((resolve) => response.json()
+    .then(function (json) {
+      json.status = response.status;
+      resolve(
+        json
+      )
+    }));
 }
+
 
 /**
  * Checks if a network request came back fine, and throws an error if not

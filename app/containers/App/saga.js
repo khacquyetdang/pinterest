@@ -10,7 +10,7 @@ import { loadLocalStorage, updateLocalStorage } from 'localStorage';
 import { push } from 'react-router-redux';
 import { logoutUrl } from 'config';
 import { setAuth } from './actions';
-
+import HttpStatus from 'http-status-codes';
 export function* fetchLogout(action) {
   // Select username from store
   try {
@@ -24,27 +24,45 @@ export function* fetchLogout(action) {
       },
       mode: 'cors',
     }
-
+    
     const response = yield call(request, logoutUrl, options);
     showProgressLog(logoutUrl, response, "logoutSaga");
     if (!response) {
       yield put({ type: LOGOUT_ERROR, error: "Unknow error" });
+      yield put({
+        type: SHOW_NOTIFICATION
+        , message: "Network error"
+      });
+    }
+    // already logout
+    else if (response && response.status === HttpStatus.UNAUTHORIZED) {
+      yield put({ type : "LOGOUT"});
     }
     else if (response && response.error) {
-      if (response.error.msg && response.error.msg.startsWith("Authentication needed")) {
-        yield put({ type: LOGOUT_SUCCESS });
-        yield put(setAuth(null));
-      }
       yield put({ type: LOGOUT_ERROR, error: response.error });
     }
     else {
-      yield put({ type: LOGOUT_SUCCESS });
-      yield put(setAuth(null));
+      yield put({ type : "LOGOUT"});
     }
   } catch (err) {
     yield put({ type: LOGOUT_ERROR, error: { msg: err } });
+    yield put({ type: SHOW_NOTIFICATION, message: err });
     //showProgressLog(err);
   }
+}
+
+export function *logout() {
+  updateLocalStorage(
+    {
+      access_token: null
+    }
+  );
+  yield put({ type: LOGOUT_SUCCESS });
+  yield put(setAuth(null));
+  yield put({
+    type: SHOW_NOTIFICATION
+    , message: "Vous êtes déconnecté du site"
+  });
 }
 
 export function* goToPage(context, action) {
@@ -63,5 +81,6 @@ export default function* appFlow(context) {
   // It returns task descriptor (just like fork) so we can continue execution
   // It will be cancelled automatically on component unmount
   yield takeEvery(LOGOUT_REQUEST, fetchLogout);
+  yield takeEvery("LOGOUT", logout)
   yield takeEvery('GO_TO_PAGE', goToPage, context);
 }

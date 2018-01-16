@@ -92,7 +92,7 @@ export class App extends React.Component { // eslint-disable-line react/prefer-s
           <meta name="description" content="A React.js Boilerplate application" />
         </Helmet>
         {
-          // this.renderNotification()
+           this.renderNotification()
         }
         <Router>
           <div>
