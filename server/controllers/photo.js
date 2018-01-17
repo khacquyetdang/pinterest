@@ -77,8 +77,47 @@ exports.add = (req, res) => {
  * GET /add
  * get photos.
  */
+exports.myphoto = (req, res) => {
+    User.findOne({
+        email: req.user.mail
+    }, (err, existingUser) => {
+        if (err) {
+            return res.status(HttpStatus.CONFLICT).send({
+                error: {
+                    msg: err
+                }
+            });
+        }
+        if (!existingUser) {
+            return res.status(HttpStatus.CONFLICT).send({
+                error: {
+                    msg: __("User is not registered yet")
+                }
+            });
+        }
+
+        Photo.find({owner: existingUser.id}, function (err, photos) {
+            if (err) {
+                return res.status(HttpStatus.CONFLICT).send({
+                    error: {
+                        msg: err
+                    }
+                });
+            }
+
+            return res.status(HttpStatus.OK).send({
+                photos: photos
+            });
+
+        });
+    });
+}
+/**
+ * GET /add
+ * get photos.
+ */
 exports.get = (req, res) => {
-    
+
     Photo.find({}, function (err, photos) {
         if (err) {
             return res.status(HttpStatus.CONFLICT).send({

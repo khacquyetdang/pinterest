@@ -147,36 +147,13 @@ app.use(function (err, req, res, next) {
 });
 
 
-app.use('/api/protected', jwtCheck, requireScope('full_access'));
-
-
-app.get('/api/hello', function (req, res) {
-
-  res.status(200).send({
-    msg: __("Hello"),
-  });
-});
-app.post('/api/hello', function (req, res) {
-
-  res.status(200).send({
-    msg: __("Hello"),
-  });
-});
-
-
-
-app.get('/api/protected/random-quote', function (req, res) {
-
-  res.status(200).send({
-    msg: "Work hard, play hard, success will come",
-    req: req.user
-  });
-});
 
 
 app.post('/api/signup', userController.postSignup);
 app.post('/api/login', userController.postLogin);
 app.post('/api/photo', jwtCheck, requireScope('full_access'), photoController.add);
+app.get('/api/myphoto', jwtCheck, requireScope('full_access'), photoController.myphoto);
+
 app.get('/api/photo', photoController.get);
 
 app.get('/api/logout', jwtCheck, requireScope('full_access'), userController.logout);

@@ -22,10 +22,12 @@ import saga from './saga';
 import messages from './messages';
 import messagesApp from './../App/messages';
 import DefaultImage from 'images/icon-default.png';
-import { SHOW_MODAL, HIDE_MODAL, CLEAR_PHOTO_ERROR } from './constants';
+import { SHOW_MODAL, HIDE_MODAL, CLEAR_PHOTO_ERROR, GET_PHOTOS_REQUEST } from './constants';
 import { CLEAR_NOTIFICATION } from '../App/constants';
 import Error from 'components/Error';
 import { addPhotoRequest } from './actions';
+import LoadingIndicator from 'components/LoadingIndicator';
+import Gallery from 'components/Gallery';
 import './styles.scss';
 
 export class DashBoard extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -35,9 +37,12 @@ export class DashBoard extends React.Component { // eslint-disable-line react/pr
       imgUrl: ""
     };
   }
-
+  componentDidMount() {
+    this.props.dispatch({ type: GET_PHOTOS_REQUEST });
+  }
   handleClose = () => {
-    this.props.dispatch({ type: HIDE_MODAL });
+    if (!this.props.dashboard.loading)
+      this.props.dispatch({ type: HIDE_MODAL });
   }
 
   handleShow = () => {
@@ -93,6 +98,10 @@ export class DashBoard extends React.Component { // eslint-disable-line react/pr
               ><FormattedMessage {...messages.addPhoto} /></Button>
             </Col>
           </Row>
+          <br />
+          {this.props.dashboard.loading ? <LoadingIndicator /> : null}
+          <Gallery elements={this.props.dashboard.photos} />
+
           <Modal show={this.props.dashboard.showModal} onHide={this.handleClose}>
             <form ref={(form) => { this.form = form }}
               onSubmit={this.onFormSubmit}>
@@ -115,51 +124,51 @@ export class DashBoard extends React.Component { // eslint-disable-line react/pr
                   <FormControl type="url" inputRef={(imgUrl) => { this.imgUrl = imgUrl }} required
                     onChange={(event) => { this.setState({ imgUrl: event.target.value }) }}
                     disabled={this.props.dashboard.loading} />
-                  {errorUrl ? <Error> {errorUrl} </Error> : null }
+                  {errorUrl ? <Error> {errorUrl} </Error> : null}
                 </FormGroup>
-                    <FormGroup>
-                      <ControlLabel><FormattedMessage {...messages.description} /></ControlLabel>
-                      <FormControl
-                        type="textarea" inputRef={(descriptionInput) => { this.descriptionInput = descriptionInput }} required
-                        onChange={(event) => { this.props.dispatch({ type: CLEAR_PHOTO_ERROR }) }}
-                        disabled={this.props.dashboard.loading} />
-                    </FormGroup>
+                <FormGroup>
+                  <ControlLabel><FormattedMessage {...messages.description} /></ControlLabel>
+                  <FormControl
+                    type="textarea" inputRef={(descriptionInput) => { this.descriptionInput = descriptionInput }} required
+                    onChange={(event) => { this.props.dispatch({ type: CLEAR_PHOTO_ERROR }) }}
+                    disabled={this.props.dashboard.loading} />
+                </FormGroup>
 
               </Modal.Body>
 
               <Modal.Footer>
-                    <Button onClick={this.handleClose} disabled={this.props.dashboard.loading}><FormattedMessage {...messagesApp.cancel} /></Button>
-                    <Button bsStyle="primary" type="submit" disabled={this.props.dashboard.loading}>
-                      {this.props.dashboard.loading ? <Spinner /> : null}
-                      <FormattedMessage {...messagesApp.valid} />
-                    </Button>
-                  </Modal.Footer>
+                <Button onClick={this.handleClose} disabled={this.props.dashboard.loading}><FormattedMessage {...messagesApp.cancel} /></Button>
+                <Button bsStyle="primary" type="submit" disabled={this.props.dashboard.loading}>
+                  {this.props.dashboard.loading ? <Spinner /> : null}
+                  <FormattedMessage {...messagesApp.valid} />
+                </Button>
+              </Modal.Footer>
             </form>
           </Modal>
         </div>
       </div>
-          );
+    );
   }
 }
 
 DashBoard.propTypes = {
-            dispatch: PropTypes.func.isRequired,
+  dispatch: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
-            dashboard: makeSelectDashBoard(),
+  dashboard: makeSelectDashBoard(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
-            dispatch,
-          };
+    dispatch,
+  };
 }
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);
 
-const withReducer = injectReducer({key: 'dashBoard', reducer });
-const withSaga = injectSaga({key: 'dashBoard', saga });
+const withReducer = injectReducer({ key: 'dashBoard', reducer });
+const withSaga = injectSaga({ key: 'dashBoard', saga });
 
 export default compose(
   withReducer,

@@ -12,6 +12,9 @@ import {
   ADD_PHOTO_SUCCESS,
   HIDE_MODAL,
   SHOW_MODAL,
+  GET_PHOTOS_SUCCESS,
+  GET_PHOTOS_REQUEST,
+  GET_PHOTOS_ERROR,
   CLEAR_PHOTO_ERROR
 } from './constants';
 import { CLEAR_NOTIFICATION } from '../App/constants';
@@ -21,6 +24,7 @@ const initialState = fromJS({
   loading: false,
   error: null,
   notif_add_photo_ok: false,
+  photos: [],
 });
 
 
@@ -48,7 +52,16 @@ function dashBoardReducer(state = initialState, action) {
     case CLEAR_PHOTO_ERROR:
       return state
         .set("error", null);
-
+    case GET_PHOTOS_REQUEST:
+      return state.set('loading', true)
+        .set('error', null);
+    case GET_PHOTOS_SUCCESS:
+      return state.set('loading', false)
+        .set('photos', action.photos)
+        .set('error', null);
+    case GET_PHOTOS_ERROR:
+      return state.set('loading', false)
+        .set('error', action.error);
     case CLEAR_NOTIFICATION:
       return initialState;
     default:
