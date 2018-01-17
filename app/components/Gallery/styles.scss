@@ -1,22 +1,59 @@
 @import '../../constants';
+.grid {
+    margin: 0 auto;
+}
+
 .grid-item {
-    width: 250px;
+    width: 20%;
     padding: 10px;
-    margin: 10px;
+    margin: 5px auto;
     background-color: whitesmoke;
+    border: 2px solid hsla(0, 0%, 0%, 0.5);
     text-align: center;
 }
 
 .grid-item--width2 {
-    width: 600px;
+    // width: 50%;
+    width: 460px;
 }
 
 .description {
+    width: 95%;
     padding: 10px;
-    margin: 15px 5px 5px 5px;
-    background-color:  rgba(#DFE2DB, 0.99);
+    margin: 10px auto;
+    background-color: rgba(#DFE2DB, 0.99);
 }
+
 img {
-    width: 220px;
+    width: 95%;
     background-image: url("https://media.licdn.com/mpr/mpr/AAEAAQAAAAAAAAjnAAAAJGYwMjI2NWYxLWVjNjYtNDVmMS05MDYyLThkZmY1MWFhMjFjNA.jpg");
+}
+
+@include tablet-only {
+    .grid-item {
+        width: 45%;
+    }
+    .grid-item--width2 {
+        // width: 50%;
+        width: 90%;
+    }
+    img,
+    .description {
+        width: 90%;
+        margin: 5px auto;
+    }
+}
+
+@include mobile-only {
+    .grid-item {
+        width: 100%;
+    }
+    .grid-item--width2 {
+        // width: 50%;
+        width: 100%;
+    }
+    img,
+    .description {
+        width: 300px;
+    }
 }

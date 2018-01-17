@@ -36,7 +36,7 @@ class Gallery extends React.Component { // eslint-disable-line react/prefer-stat
     });
     return (
       <div>
-        <Masonry
+        <Masonry className="grid"
           ref={function (c) { this.masonry = this.masonry || c.masonry; }.bind(this)}
         >
           {childElements}

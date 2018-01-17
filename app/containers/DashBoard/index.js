@@ -24,6 +24,7 @@ import messagesApp from './../App/messages';
 import DefaultImage from 'images/icon-default.png';
 import { SHOW_MODAL, HIDE_MODAL, CLEAR_PHOTO_ERROR } from './constants';
 import { CLEAR_NOTIFICATION } from '../App/constants';
+import Error from 'components/Error';
 import { addPhotoRequest } from './actions';
 import './styles.scss';
 
@@ -69,6 +70,14 @@ export class DashBoard extends React.Component { // eslint-disable-line react/pr
 
   render() {
     //var defaultImage 
+    var errorUrl = null;
+    if (this.props.dashboard.error && this.props.dashboard.error.form) {
+      this.props.dashboard.error.form.forEach(function (error) {
+        if (error.param === "url") {
+          errorUrl = error.msg;
+        }
+      });
+    }
     return (
       <div>
 
@@ -106,50 +115,51 @@ export class DashBoard extends React.Component { // eslint-disable-line react/pr
                   <FormControl type="url" inputRef={(imgUrl) => { this.imgUrl = imgUrl }} required
                     onChange={(event) => { this.setState({ imgUrl: event.target.value }) }}
                     disabled={this.props.dashboard.loading} />
+                  {errorUrl ? <Error> {errorUrl} </Error> : null }
                 </FormGroup>
-                <FormGroup>
-                  <ControlLabel><FormattedMessage {...messages.description} /></ControlLabel>
-                  <FormControl
-                    type="textarea" inputRef={(descriptionInput) => { this.descriptionInput = descriptionInput }} required
-                    onChange={(event) => { this.props.dispatch({ type: CLEAR_PHOTO_ERROR }) }}
-                    disabled={this.props.dashboard.loading} />
-                </FormGroup>
+                    <FormGroup>
+                      <ControlLabel><FormattedMessage {...messages.description} /></ControlLabel>
+                      <FormControl
+                        type="textarea" inputRef={(descriptionInput) => { this.descriptionInput = descriptionInput }} required
+                        onChange={(event) => { this.props.dispatch({ type: CLEAR_PHOTO_ERROR }) }}
+                        disabled={this.props.dashboard.loading} />
+                    </FormGroup>
 
               </Modal.Body>
 
               <Modal.Footer>
-                <Button onClick={this.handleClose} disabled={this.props.dashboard.loading}><FormattedMessage {...messagesApp.cancel} /></Button>
-                <Button bsStyle="primary" type="submit" disabled={this.props.dashboard.loading}>
-                  {this.props.dashboard.loading ? <Spinner /> : null}
-                  <FormattedMessage {...messagesApp.valid} />
-                </Button>
-              </Modal.Footer>
+                    <Button onClick={this.handleClose} disabled={this.props.dashboard.loading}><FormattedMessage {...messagesApp.cancel} /></Button>
+                    <Button bsStyle="primary" type="submit" disabled={this.props.dashboard.loading}>
+                      {this.props.dashboard.loading ? <Spinner /> : null}
+                      <FormattedMessage {...messagesApp.valid} />
+                    </Button>
+                  </Modal.Footer>
             </form>
           </Modal>
         </div>
       </div>
-    );
+          );
   }
 }
 
 DashBoard.propTypes = {
-  dispatch: PropTypes.func.isRequired,
+            dispatch: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
-  dashboard: makeSelectDashBoard(),
+            dashboard: makeSelectDashBoard(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
-    dispatch,
-  };
+            dispatch,
+          };
 }
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);
 
-const withReducer = injectReducer({ key: 'dashBoard', reducer });
-const withSaga = injectSaga({ key: 'dashBoard', saga });
+const withReducer = injectReducer({key: 'dashBoard', reducer });
+const withSaga = injectSaga({key: 'dashBoard', saga });
 
 export default compose(
   withReducer,
