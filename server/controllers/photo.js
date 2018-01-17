@@ -96,7 +96,7 @@ exports.myphoto = (req, res) => {
             });
         }
 
-        Photo.find({owner: existingUser.id}, function (err, photos) {
+        Photo.find({ owner: existingUser.id }).populate('owner', 'email').exec(function (err, photos) {
             if (err) {
                 return res.status(HttpStatus.CONFLICT).send({
                     error: {
@@ -118,7 +118,7 @@ exports.myphoto = (req, res) => {
  */
 exports.get = (req, res) => {
 
-    Photo.find({}, function (err, photos) {
+    Photo.find({}).populate('owner', 'email').exec(function (err, photos) {
         if (err) {
             return res.status(HttpStatus.CONFLICT).send({
                 error: {
@@ -126,6 +126,7 @@ exports.get = (req, res) => {
                 }
             });
         }
+
 
         return res.status(HttpStatus.OK).send({
             photos: photos

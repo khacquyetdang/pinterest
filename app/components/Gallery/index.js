@@ -7,8 +7,9 @@
 import React from 'react';
 // import styled from 'styled-components';
 import Masonry from 'react-masonry-component';
-
+import Gravatar from 'react-gravatar';
 import { FormattedMessage } from 'react-intl';
+import { Button } from 'react-bootstrap';
 import messages from './messages';
 import './styles.scss';
 
@@ -29,8 +30,16 @@ class Gallery extends React.Component { // eslint-disable-line react/prefer-stat
     var childElements = this.props.elements.map(function (element, index) {
       return (
         <div key={index} className="grid-item">
-          <img src={element.url} />
+          <img className="grid-img" src={element.url} />
           <div className="description">{element.description}</div>
+          <div className="toolbarphoto">
+            <Gravatar
+              default="https://abs.twimg.com/sticky/default_profile_images/default_profile_normal.png" className="img-responsive " email={element.owner.email} />
+            <Button bsSize="small">
+              <span className="glyphicon glyphicon-star"> </span>
+              {element.likeCount}
+            </Button>
+          </div>
         </div>
       );
     });

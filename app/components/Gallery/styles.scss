@@ -1,4 +1,7 @@
 @import '../../constants';
+
+$bg-color-item : rgba(#DFE2DB, 0.99);
+
 .grid {
     margin: 0 auto;
 }
@@ -21,12 +24,21 @@
     width: 95%;
     padding: 10px;
     margin: 10px auto;
-    background-color: rgba(#DFE2DB, 0.99);
+    background-color: $bg-color-item;
 }
 
-img {
+.grid-img {
     width: 95%;
     background-image: url("https://media.licdn.com/mpr/mpr/AAEAAQAAAAAAAAjnAAAAJGYwMjI2NWYxLWVjNjYtNDVmMS05MDYyLThkZmY1MWFhMjFjNA.jpg");
+}
+
+.toolbarphoto {
+    display: flex;
+    width: 95%;
+    margin: 10px auto;
+    padding: 5px;
+    background-color: $bg-color-item;
+    justify-content: space-between;
 }
 
 @include tablet-only {
@@ -37,7 +49,7 @@ img {
         // width: 50%;
         width: 90%;
     }
-    img,
+    .grid-img,
     .description {
         width: 90%;
         margin: 5px auto;
@@ -52,7 +64,7 @@ img {
         // width: 50%;
         width: 100%;
     }
-    img,
+    .grid-img,
     .description {
         width: 300px;
     }
