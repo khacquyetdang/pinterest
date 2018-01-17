@@ -72,6 +72,82 @@ exports.add = (req, res) => {
     });
 }
 
+/**
+ * POST /vote
+ * like or un like photos.
+ */
+exports.vote = (req, res) => {
+    var photoId = req.photoId;
+    Photo.findOne({
+        id: photoId
+    }, {
+            "likes": {
+                $elemMatch: { email: req.user.mail }
+            }
+        }, (err, existingPhoto) => {
+            if (err) {
+                return res.status(HttpStatus.CONFLICT).send({
+                    error: {
+                        msg: err
+                    }
+                });
+            }
+            if (!existingPhoto) {
+                return res.status(HttpStatus.CONFLICT).send({
+                    error: {
+                        msg: __("This photo is not existed")
+                    }
+                });
+            }
+            if (existingPhoto.likes.length >= 1) {
+                // unlike
+                Photo.update({
+                    id: photoId,
+                    likes: {
+                        $elemMatch: { email: req.user.mail }
+                    }
+                },
+                    {
+                        $inc: { likeCount: -1 },
+                        $pull: { likes: { email: req.user.mail } }
+                    },
+                    function (err) {
+                        if (err) {
+                            return res.status(HttpStatus.CONFLICT).send({
+                                error: {
+                                    msg: err
+                                }
+                            });
+                        }
+                        return get(req, res);
+                    });
+            }
+            else {
+                // like
+                Photo.update({
+                    id: photoId,
+                    likes: {
+                        email: { $ne: req.user.mail }
+                    }
+                },
+                    {
+                        $inc: { likeCount: 1 },
+                        $push: { "likes": { email: req.user.mail } }
+                    },
+                    function (err) {
+                        return res.status(HttpStatus.CONFLICT).send({
+                            error: {
+                                msg: err
+                            }
+                        });
+                        return get(req, res);
+
+                    }
+                );
+            }
+
+        });
+}
 
 /**
  * GET /add

@@ -23,10 +23,14 @@ import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';
 import { getPhotoRequest } from './actions';
-
+import { votePhotoRequest } from './../App/actions';
 export class HomePage extends React.Component { // eslint-disable-line react/prefer-stateless-function
   componentDidMount() {
     this.props.dispatch(getPhotoRequest(this.props.locale));
+  }
+
+  vote = (photoId) => {
+    this.props.dispatch(votePhotoRequest(photoId));
   }
   render() {
     return (
@@ -36,8 +40,9 @@ export class HomePage extends React.Component { // eslint-disable-line react/pre
           <meta name="description" content="Description of HomePage" />
         </Helmet>
         <div className="container">
-          { this.props.homepage.loading ? <LoadingIndicator /> : null }
-          <Gallery elements={this.props.homepage.photos} />
+          {this.props.homepage.loading ? <LoadingIndicator /> : null}
+          <Gallery elements={this.props.homepage.photos}
+            onVote={this.vote} />
         </div>
       </div>
     );

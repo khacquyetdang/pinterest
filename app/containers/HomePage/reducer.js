@@ -10,7 +10,8 @@ import {
   DEFAULT_ACTION,
   GET_PHOTOS_ERROR,
   GET_PHOTOS_SUCCESS,
-  GET_PHOTOS_REQUEST
+  GET_PHOTOS_REQUEST,
+  SET_PHOTOS
 } from './constants';
 
 const initialState = fromJS({
@@ -33,6 +34,10 @@ function homePageReducer(state = initialState, action) {
     case GET_PHOTOS_ERROR:
       return state.set('loading', false)
         .set('error', action.error);
+    case SET_PHOTOS:
+      return state
+        .set('photos', action.photos)
+
     default:
       return state;
   }

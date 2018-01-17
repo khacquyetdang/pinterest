@@ -18,7 +18,8 @@
 import {
   SET_AUTH,
   LOGOUT_REQUEST,
-  SHOW_NOTIFICATION
+  VOTE_PHOTO_REQUEST,
+  SHOW_NOTIFICATION,
 } from './constants';
 
 
@@ -47,4 +48,9 @@ export function logoutRequest(access_token) {
 export function showNotif (message)
 {
   return {type: SHOW_NOTIFICATION, message: message};  
+}
+
+export function votePhotoRequest(photoId)
+{
+  return {type: VOTE_PHOTO_REQUEST, photoId: photoId };
 }

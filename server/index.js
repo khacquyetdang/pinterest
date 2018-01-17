@@ -152,6 +152,7 @@ app.use(function (err, req, res, next) {
 app.post('/api/signup', userController.postSignup);
 app.post('/api/login', userController.postLogin);
 app.post('/api/photo', jwtCheck, requireScope('full_access'), photoController.add);
+app.post('/api/photo/vote/:photoId', jwtCheck, requireScope('full_access'), photoController.vote);
 app.get('/api/myphoto', jwtCheck, requireScope('full_access'), photoController.myphoto);
 
 app.get('/api/photo', photoController.get);

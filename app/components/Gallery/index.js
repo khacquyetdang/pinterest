@@ -26,7 +26,11 @@ class Gallery extends React.Component { // eslint-disable-line react/prefer-stat
     this.masonry.off('layoutComplete', this.handleLayoutComplete);
   }
 
+  onVoteClick = (photoId) => {
+    this.props.onVote(photoId);
+  }
   render() {
+    const onVote = this.props.onVote;
     var childElements = this.props.elements.map(function (element, index) {
       return (
         <div key={index} className="grid-item">
@@ -35,7 +39,8 @@ class Gallery extends React.Component { // eslint-disable-line react/prefer-stat
           <div className="toolbarphoto">
             <Gravatar
               default="https://abs.twimg.com/sticky/default_profile_images/default_profile_normal.png" className="img-responsive " email={element.owner.email} />
-            <Button bsSize="small">
+            <Button bsSize="small"
+            onClick={() => { onVote(element._id) }}>
               <span className="glyphicon glyphicon-star"> </span>
               {element.likeCount}
             </Button>

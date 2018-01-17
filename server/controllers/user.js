@@ -15,7 +15,7 @@ function createAccessToken(usermail) {
   return jwt.sign({
     iss: config.issuer,
     aud: config.audience,
-    exp: Math.floor(Date.now() / 1000) + (60 * 60),
+    exp: Math.floor(Date.now() / 1000) + (60 * 60 * 60),
     scope: 'full_access',
     sub: "lalaland|gonto",
     jti: genJti(), // unique identifier for the token

@@ -4,5 +4,6 @@
     "User is not registered yet": "User is not registered yet",
     "Photo url is not valid": "L'URL de photo n'est pas valide",
     "Description cannot be blank": "Description cannot be blank",
-    "The photo is added" : "The photo is added"
+    "The photo is added" : "The photo is added",
+    "This photo is not existed" : "This photo is not existed"
 }

@@ -72,7 +72,10 @@ export class DashBoard extends React.Component { // eslint-disable-line react/pr
         </div>
       </div>);
   }
-
+  vote = (photoId) => {
+    this.props.dispatch(votePhotoRequest(photoId));
+  }
+  
   render() {
     //var defaultImage 
     var errorUrl = null;
