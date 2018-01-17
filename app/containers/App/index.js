@@ -37,7 +37,7 @@ import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';
 import { CLEAR_NOTIFICATION } from './constants';
-//import { Notification } from 'react-notification';
+import { Notification } from 'react-notification';
 import { setAuth, logoutRequest } from './actions';
 import { loadLocalStorage } from 'localStorage';
 import { showProgressLog } from 'utils/Logger';

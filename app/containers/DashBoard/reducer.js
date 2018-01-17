@@ -11,7 +11,8 @@ import {
   ADD_PHOTO_REQUEST,
   ADD_PHOTO_SUCCESS,
   HIDE_MODAL,
-  SHOW_MODAL
+  SHOW_MODAL,
+  CLEAR_PHOTO_ERROR
 } from './constants';
 import { CLEAR_NOTIFICATION } from '../App/constants';
 
@@ -44,6 +45,10 @@ function dashBoardReducer(state = initialState, action) {
         .set("error", null)
         .set("notif_add_photo_ok", true)
         .set('showModal', false);
+    case CLEAR_PHOTO_ERROR:
+      return state
+        .set("error", null);
+
     case CLEAR_NOTIFICATION:
       return initialState;
     default:

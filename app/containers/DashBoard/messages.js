@@ -23,6 +23,11 @@ export default defineMessages({
     id: 'app.containers.DashBoard.photoUrl',
     defaultMessage: 'L\'url de la photo',
   },
+  description: {
+    id: 'app.containers.DashBoard.description',
+    defaultMessage: 'Description',
+    
+  }
 
 
 });

@@ -10,7 +10,7 @@ import React from 'react';
 
 function Spinner() {
   return (
-    <i className="fa fa-spinner fa-spin" style={{ "fontSize": "24px" }}></i>
+    <i className="fa fa-spinner fa-spin" style={{ "fontSize": "18px", "marginRight" : "5px", "marginLeft" : "5px" }}></i>
   );
 }
 

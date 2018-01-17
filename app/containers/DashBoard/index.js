@@ -13,6 +13,7 @@ import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import { Row, Col, Button, Modal, FormGroup, ControlLabel, FormControl, Image } from 'react-bootstrap';
 import injectSaga from 'utils/injectSaga';
+import Spinner from 'components/Spinner';
 import injectReducer from 'utils/injectReducer';
 //import Img from 'components/Img';
 import makeSelectDashBoard from './selectors';
@@ -21,7 +22,9 @@ import saga from './saga';
 import messages from './messages';
 import messagesApp from './../App/messages';
 import DefaultImage from 'images/icon-default.png';
-import { SHOW_MODAL, HIDE_MODAL } from './constants';
+import { SHOW_MODAL, HIDE_MODAL, CLEAR_PHOTO_ERROR } from './constants';
+import { CLEAR_NOTIFICATION } from '../App/constants';
+import { addPhotoRequest } from './actions';
 import './styles.scss';
 
 export class DashBoard extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -37,11 +40,14 @@ export class DashBoard extends React.Component { // eslint-disable-line react/pr
   }
 
   handleShow = () => {
+    this.setState({
+      imgUrl: ""
+    });
     this.props.dispatch({ type: SHOW_MODAL });
   }
   onFormSubmit = (event) => {
     if (this.form.checkValidity()) {
-
+      this.props.dispatch(addPhotoRequest(this.imgUrl.value, this.descriptionInput.value));
     }
     event.preventDefault();
   }
@@ -88,7 +94,7 @@ export class DashBoard extends React.Component { // eslint-disable-line react/pr
 
               <Modal.Body>
                 <div className="photoContainer">
-                  <img className="img-responsive" src={this.state.imgUrl} alt="" onError={(error) => {
+                  <img className="center-cropped" src={this.state.imgUrl} alt="" onError={(error) => {
                     console.log("loading image error", error);
                     this.setState({
                       imgUrl: DefaultImage
@@ -98,13 +104,25 @@ export class DashBoard extends React.Component { // eslint-disable-line react/pr
                 <FormGroup required>
                   <ControlLabel><FormattedMessage {...messages.photoUrl} /></ControlLabel>
                   <FormControl type="url" inputRef={(imgUrl) => { this.imgUrl = imgUrl }} required
-                    onChange={(event) => { this.setState({ imgUrl: event.target.value }) }} />
+                    onChange={(event) => { this.setState({ imgUrl: event.target.value }) }}
+                    disabled={this.props.dashboard.loading} />
                 </FormGroup>
+                <FormGroup>
+                  <ControlLabel><FormattedMessage {...messages.description} /></ControlLabel>
+                  <FormControl
+                    type="textarea" inputRef={(descriptionInput) => { this.descriptionInput = descriptionInput }} required
+                    onChange={(event) => { this.props.dispatch({ type: CLEAR_PHOTO_ERROR }) }}
+                    disabled={this.props.dashboard.loading} />
+                </FormGroup>
+
               </Modal.Body>
 
               <Modal.Footer>
-                <Button onClick={this.handleClose}><FormattedMessage {...messagesApp.cancel} /></Button>
-                <Button bsStyle="primary" type="submit"><FormattedMessage {...messagesApp.valid} /></Button>
+                <Button onClick={this.handleClose} disabled={this.props.dashboard.loading}><FormattedMessage {...messagesApp.cancel} /></Button>
+                <Button bsStyle="primary" type="submit" disabled={this.props.dashboard.loading}>
+                  {this.props.dashboard.loading ? <Spinner /> : null}
+                  <FormattedMessage {...messagesApp.valid} />
+                </Button>
               </Modal.Footer>
             </form>
           </Modal>

@@ -15,9 +15,10 @@ export function defaultAction() {
   };
 }
 
-export function addPhotoRequest(url) {
+export function addPhotoRequest(url, description) {
   return {
     type: ADD_PHOTO_REQUEST,
-    url
+    url,
+    description
   }
 };

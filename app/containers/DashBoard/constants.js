@@ -12,3 +12,5 @@ export const HIDE_MODAL = 'pinterest/DashBoard/HIDE_MODAL';
 export const ADD_PHOTO_REQUEST = 'pinterest/DashBoard/ADD_PHOTO_REQUEST'; 
 export const ADD_PHOTO_SUCCESS = 'pinterest/DashBoard/ADD_PHOTO_SUCCESS'; 
 export const ADD_PHOTO_ERROR = 'pinterest/DashBoard/ADD_PHOTO_ERROR'; 
+
+export const CLEAR_PHOTO_ERROR = 'pinterest/DashBoard/CLEAR_PHOTO_ERROR'; 

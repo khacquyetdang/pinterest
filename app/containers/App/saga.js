@@ -2,7 +2,7 @@
  * Gets the repositories of the user from Github
  */
 import { call, takeEvery, takeLatest, take, put } from 'redux-saga/effects';
-import { LOGOUT_REQUEST, LOGOUT_ERROR, LOGOUT_SUCCESS } from './constants';
+import { LOGOUT_REQUEST, LOGOUT_ERROR, LOGOUT_SUCCESS, SHOW_NOTIFICATION } from './constants';
 import request from 'utils/request';
 import { showProgressLog } from 'utils/Logger';
 import { loadLocalStorage, updateLocalStorage } from 'localStorage';
@@ -11,6 +11,7 @@ import { push } from 'react-router-redux';
 import { logoutUrl } from 'config';
 import { setAuth } from './actions';
 import HttpStatus from 'http-status-codes';
+
 export function* fetchLogout(action) {
   // Select username from store
   try {

@@ -17,3 +17,11 @@
     max-height: 100%;
     max-width: 100%;
 }
+
+
+.center-cropped {
+    object-fit: cover; /* Do not scale the image */
+    object-position: center; /* Center the image within the element */
+    min-height: 250px;
+// 3   width: 100px;
+  }
