@@ -77,9 +77,10 @@ exports.add = (req, res) => {
  * like or un like photos.
  */
 exports.vote = (req, res) => {
-    var photoId = req.photoId;
+    var photoId = req.params.photoId;
+
     Photo.findOne({
-        id: photoId
+        _id: photoId
     }, {
             "likes": {
                 $elemMatch: { email: req.user.mail }
@@ -88,7 +89,8 @@ exports.vote = (req, res) => {
             if (err) {
                 return res.status(HttpStatus.CONFLICT).send({
                     error: {
-                        msg: err
+                        msg: err,
+                        case: "err db"
                     }
                 });
             }
@@ -99,10 +101,12 @@ exports.vote = (req, res) => {
                     }
                 });
             }
+
+           
             if (existingPhoto.likes.length >= 1) {
                 // unlike
                 Photo.update({
-                    id: photoId,
+                    _id: photoId,
                     likes: {
                         $elemMatch: { email: req.user.mail }
                     }
@@ -111,36 +115,41 @@ exports.vote = (req, res) => {
                         $inc: { likeCount: -1 },
                         $pull: { likes: { email: req.user.mail } }
                     },
-                    function (err) {
+                    function (err, rawResponse) {
                         if (err) {
                             return res.status(HttpStatus.CONFLICT).send({
                                 error: {
-                                    msg: err
+                                    msg: err,
+                                    case: "unlike"
                                 }
                             });
                         }
-                        return get(req, res);
+                        return getAllPhotos(req, res);
                     });
             }
             else {
                 // like
                 Photo.update({
-                    id: photoId,
-                    likes: {
+                    _id: photoId,
+                    /*likes: {
                         email: { $ne: req.user.mail }
-                    }
+                    }*/
                 },
                     {
                         $inc: { likeCount: 1 },
-                        $push: { "likes": { email: req.user.mail } }
+                        $push: { likes: { email: req.user.mail } }
                     },
-                    function (err) {
-                        return res.status(HttpStatus.CONFLICT).send({
-                            error: {
-                                msg: err
-                            }
-                        });
-                        return get(req, res);
+                    function (err, rawResponse) {
+                        if (err) {
+                            return res.status(HttpStatus.CONFLICT).send({
+                                error: {
+                                    msg: err,
+                                    rawResponse: rawResponse,
+                                    case: "like"
+                                }
+                            });
+                        }
+                        return getAllPhotos(req, res);
 
                     }
                 );
@@ -194,6 +203,10 @@ exports.myphoto = (req, res) => {
  */
 exports.get = (req, res) => {
 
+    getAllPhotos(req, res);
+}
+
+function getAllPhotos(req, res) {
     Photo.find({}).populate('owner', 'email').exec(function (err, photos) {
         if (err) {
             return res.status(HttpStatus.CONFLICT).send({

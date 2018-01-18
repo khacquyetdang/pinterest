@@ -15,9 +15,12 @@ export const LOGOUT_REQUEST = 'pinterest/APP/LOGOUT_REQUEST';
 export const LOGOUT_SUCCESS = 'pinterest/APP/LOGOUT_SUCCESS'; 
 export const LOGOUT_ERROR = 'pinterest/APP/LOGOUT_ERROR'; 
 
+export const VOTE_PHOTO_REQUEST = 'pinterest/APP/VOTE_PHOTO_REQUEST';
+export const VOTE_PHOTO_SUCCESS = 'pinterest/APP/VOTE_PHOTO_SUCCESS'; 
+export const VOTE_PHOTO_ERROR = 'pinterest/APP/VOTE_PHOTO_ERROR'; 
+
+export const TEST_PHOTO_ERROR = 'pinterest/APP/TEST_PHOTO_ERROR'; 
+
 export const SHOW_NOTIFICATION = 'pinterest/APP/SHOW_NOTIFICATION';
 export const CLEAR_NOTIFICATION = 'pinterest/APP/CLEAR_NOTIFICATION';
 
-export const VOTE_PHOTO_REQUEST = 'pinterest/APP/VOTE_PHOTO_REQUEST';
-export const VOTE_PHOTO_SUCCESS = 'pinterest/APP/VOTE_PHOTO_SUCCESS'; 
-export const VOTE_PHOTO_ERROR = 'pinterest/APP/VOTE_PHOTO_SUCCESS'; 

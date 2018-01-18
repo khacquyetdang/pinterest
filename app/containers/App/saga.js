@@ -1,7 +1,7 @@
 /**
  * Gets the repositories of the user from Github
  */
-import { call, takeEvery, takeLatest, take, put } from 'redux-saga/effects';
+import { call, takeEvery, takeLatest, take, put, select } from 'redux-saga/effects';
 import {
   LOGOUT_REQUEST, LOGOUT_ERROR, LOGOUT_SUCCESS, SHOW_NOTIFICATION,
   VOTE_PHOTO_REQUEST, VOTE_PHOTO_ERROR, VOTE_PHOTO_SUCCESS
@@ -63,7 +63,7 @@ export function* fetchVote(action) {
     var access_token = yield select(getToken);
 
     var options = {
-      method: 'GET',
+      method: 'POST',
       headers: {
         'Accept': 'application/json',
         'content-type': 'application/json; charset=utf-8',

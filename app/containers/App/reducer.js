@@ -18,6 +18,10 @@ import {
   LOGOUT_SUCCESS,
   SHOW_NOTIFICATION,
   CLEAR_NOTIFICATION,
+  TEST_PHOTO_ERROR,
+  VOTE_PHOTO_ERROR,
+  VOTE_PHOTO_REQUEST,
+  VOTE_PHOTO_SUCCESS,
   SET_AUTH
 } from './constants';
 
@@ -61,6 +65,8 @@ function appReducer(state = initialState, action) {
         return state.set('shownotif', false)
           .set('notifmessage', '');
       }
+    case VOTE_PHOTO_SUCCESS:
+      return state;
     default:
       return state;
   }
