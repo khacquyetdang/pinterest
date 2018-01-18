@@ -76,6 +76,27 @@ exports.add = (req, res) => {
  * POST /vote
  * like or un like photos.
  */
+exports.delete = (req, res) => {
+    var photoId = req.params.photoId;
+
+    Photo.remove({
+        _id: photoId
+    }, (err) => {
+        if (err) {
+            return res.status(HttpStatus.CONFLICT).send({
+                error: {
+                    msg: err,
+                }
+            });
+        }
+        return getAllPhotos(req, res);
+    });
+}
+
+/**
+ * POST /vote
+ * like or un like photos.
+ */
 exports.vote = (req, res) => {
     var photoId = req.params.photoId;
 
@@ -102,7 +123,7 @@ exports.vote = (req, res) => {
                 });
             }
 
-           
+
             if (existingPhoto.likes.length >= 1) {
                 // unlike
                 Photo.update({

@@ -6,5 +6,5 @@ export function getToken(state) {
 
 export function getLocale(state) {
     console.log("Gettoken");
-    return state.get('locale');
+    return state.get('language').get('locale') || state.get('locale');
 }    

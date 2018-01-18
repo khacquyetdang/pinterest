@@ -6,5 +6,6 @@
 	"Description cannot be blank": "La description ne peut pas être vide",
     "User is registered, treating the message": "User is registered, treating the message",
 	"The photo is added" : "La photo est bien ajoutée",
-	"This photo is not existed" : "La photo n'existe pas"
+	"This photo is not existed" : "La photo n'existe pas",
+	"This photo is deleted" : "La photo a été supprimée"
 }

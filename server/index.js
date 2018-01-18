@@ -20,6 +20,8 @@ const expressStatusMonitor = require('express-status-monitor');
 //const sass = require('node-sass-middleware');
 const multer = require('multer');
 const jwtconfig = require('./controllers/config.json');
+const utils = require('./utils/index');
+const User = require('./models/User');
 
 /**
  * Load environment variables from .env file, where API keys and passwords are configured.
@@ -110,6 +112,7 @@ var jwtCheck = jwt({
 });
 
 // Check for scope
+// @TODO check why requireScope is not work
 function requireScope(scope) {
   return function (err, req, res, next) {
     if (err.name === 'UnauthorizedError') {
@@ -121,8 +124,10 @@ function requireScope(scope) {
         });
     }
 
+    var userid = req.user.userid;
     var has_scopes = req.user.scope === scope;
-    if (!has_scopes) {
+    var access_token = utils.getTokenFromReq(req);
+   //if (!has_scopes) {
       res.status(HttpStatus.UNAUTHORIZED)
         .send({
           error: {
@@ -130,13 +135,28 @@ function requireScope(scope) {
           }
         });
       return;
-    }
-    next();
+    //}
+    User.findOne({
+      _id: userid
+    }, function (err, existingUser) {
+      if (err) {
+        utils.handleError(res, err, HttpStatus.CONFLICT);
+        return;
+      }
+      if (!existingUser) {
+        utils.handleError(res, __("Authentication needed, please login to access to this page"), HttpStatus.CONFLICT);
+        return;
+      }
+      utils.handleError(res, __("Authentication needed, please login to access to this page"), HttpStatus.CONFLICT);
+ 
+      //next();
+    });
   };
 }
 
 app.use(function (err, req, res, next) {
   if (err.name === 'UnauthorizedError') {
+    //utils.errorHandler
     res.status(HttpStatus.UNAUTHORIZED)
       .send({
         error: {
@@ -152,6 +172,8 @@ app.use(function (err, req, res, next) {
 app.post('/api/signup', userController.postSignup);
 app.post('/api/login', userController.postLogin);
 app.post('/api/photo', jwtCheck, requireScope('full_access'), photoController.add);
+app.delete('/api/photo/:photoId', jwtCheck, requireScope('full_access'), photoController.delete);
+
 app.post('/api/photo/vote/:photoId', jwtCheck, requireScope('full_access'), photoController.vote);
 app.get('/api/myphoto', jwtCheck, requireScope('full_access'), photoController.myphoto);
 

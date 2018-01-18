@@ -11,7 +11,7 @@ function createIdToken(user) {
   return jwt.sign(_.omit(user, 'password'), config.secret, { expiresIn: 60 * 60 * 5 });
 }
 
-function createAccessToken(usermail) {
+function createAccessToken(usermail, userid) {
   return jwt.sign({
     iss: config.issuer,
     aud: config.audience,
@@ -20,7 +20,8 @@ function createAccessToken(usermail) {
     sub: "lalaland|gonto",
     jti: genJti(), // unique identifier for the token
     alg: 'HS256',
-    mail: usermail
+    mail: usermail,
+    userid : userid
   }, config.secret);
 }
 
@@ -81,7 +82,7 @@ exports.postLogin = (req, res, next) => {
         }
         if (isMatch) {
 
-          var access_token = createAccessToken(existingUser.email);
+          var access_token = createAccessToken(existingUser.email, existingUser._id);
           var id_token = createIdToken({
             email: existingUser.email
           });

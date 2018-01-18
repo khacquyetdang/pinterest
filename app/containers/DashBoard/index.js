@@ -25,7 +25,7 @@ import DefaultImage from 'images/icon-default.png';
 import { SHOW_MODAL, HIDE_MODAL, CLEAR_PHOTO_ERROR, GET_PHOTOS_REQUEST } from './constants';
 import { CLEAR_NOTIFICATION } from '../App/constants';
 import Error from 'components/Error';
-import { addPhotoRequest } from './actions';
+import { addPhotoRequest, deletePhotoRequest } from './actions';
 import LoadingIndicator from 'components/LoadingIndicator';
 import Gallery from 'components/Gallery';
 import './styles.scss';
@@ -75,7 +75,11 @@ export class DashBoard extends React.Component { // eslint-disable-line react/pr
   vote = (photoId) => {
     this.props.dispatch(votePhotoRequest(photoId));
   }
-  
+
+  delete = (photoId) => {
+    this.props.dispatch(deletePhotoRequest(photoId));
+  }
+
   render() {
     //var defaultImage 
     var errorUrl = null;
@@ -103,7 +107,8 @@ export class DashBoard extends React.Component { // eslint-disable-line react/pr
           </Row>
           <br />
           {this.props.dashboard.loading ? <LoadingIndicator /> : null}
-          <Gallery elements={this.props.dashboard.photos} />
+          <Gallery elements={this.props.dashboard.photos}
+            onVote={this.vote} onDelete={this.delete} />
 
           <Modal show={this.props.dashboard.showModal} onHide={this.handleClose}>
             <form ref={(form) => { this.form = form }}

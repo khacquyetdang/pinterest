@@ -18,3 +18,9 @@ export const CLEAR_PHOTO_ERROR = 'pinterest/DashBoard/CLEAR_PHOTO_ERROR';
 export const GET_PHOTOS_REQUEST = 'pinterest/DashBoard/GET_PHOTOS_REQUEST';
 export const GET_PHOTOS_SUCCESS = 'pinterest/DashBoard/GET_PHOTOS_SUCCESS'; 
 export const GET_PHOTOS_ERROR = 'pinterest/DashBoard/GET_PHOTOS_ERROR'; 
+
+
+
+export const DELETE_PHOTOS_REQUEST = 'pinterest/DashBoard/DELETE_PHOTOS_REQUEST';
+export const DELETE_PHOTOS_SUCCESS = 'pinterest/DashBoard/DELETE_PHOTOS_SUCCESS'; 
+export const DELETE_PHOTOS_ERROR = 'pinterest/DashBoard/DELETE_PHOTOS_ERROR'; 
