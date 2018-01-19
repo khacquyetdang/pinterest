@@ -25,12 +25,12 @@ import Spinner from 'components/Spinner';
 import LoadingIndicator from 'components/LoadingIndicator';
 import SmallLoadingIndicator from 'components/SmallLoadingIndicator';
 import { loginRequest } from './actions';
-import { LOGIN_RESET } from './constants';
+import { LOGIN_RESET, LOGIN_FACEBOOK_REQUEST } from './constants';
 import Error from 'components/Error';
 import makeSelectApp from '../App/selectors';
 import { Redirect } from 'react-router-dom';
-
 //import Modal from 'react-modal';
+import FacebookLogin from 'react-facebook-login';
 
 
 export class LoginPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -39,6 +39,15 @@ export class LoginPage extends React.Component { // eslint-disable-line react/pr
     this.props.dispatch({
       type: LOGIN_RESET
     });
+  }
+  responseFacebook = (response) => {
+    console.log(response);
+    if (response.accessToken) {
+      this.props.dispatch({ type: LOGIN_FACEBOOK_REQUEST, access_token: response.accessToken });
+    }
+  }
+
+  loginWithFaceBookClick = () => {
   }
 
   handleSubmit = (event) => {
@@ -55,9 +64,8 @@ export class LoginPage extends React.Component { // eslint-disable-line react/pr
 
   render() {
 
-    if (this.props.app.access_token)
-    {
-      return <Redirect to={{pathname: '/', state: {from: this.props.location}}} />;
+    if (this.props.app.access_token) {
+      return <Redirect to={{ pathname: '/', state: { from: this.props.location } }} />;
     }
     const { formatMessage } = this.props.intl;
 
@@ -132,7 +140,8 @@ export class LoginPage extends React.Component { // eslint-disable-line react/pr
                               block><FormattedMessage {...messagesApp.forgotpassword} /></Button>
                           </Col>
                         </Row>
-                        { errorLabel ? <Error>  {errorLabel}  </Error> : null}
+
+                        {errorLabel ? <Error>  {errorLabel}  </Error> : null}
 
                       </div>
                     </div>
@@ -155,6 +164,20 @@ export class LoginPage extends React.Component { // eslint-disable-line react/pr
                 </Col>
               </Row>
             </form>
+            <Row>
+              <Col>
+                <FacebookLogin
+                  appId="1962217017377151"
+                  autoLoad={false}
+                  fields="name,email,picture"
+                  callback={this.responseFacebook}
+                  textButton="Facebook"
+                  cssClass="btn-lg btn-block btn-social btn-facebook mt-3"
+                  icon="fa-facebook"
+                />
+              </Col>
+            </Row>
+
           </div>
         </div>
       </div>
@@ -168,7 +191,7 @@ LoginPage.propTypes = {
 
 const mapStateToProps = createStructuredSelector({
   loginpage: makeSelectLoginPage(),
-  app : makeSelectApp(),
+  app: makeSelectApp(),
 });
 
 function mapDispatchToProps(dispatch) {

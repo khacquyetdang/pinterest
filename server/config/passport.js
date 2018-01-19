@@ -3,6 +3,7 @@ const request = require('request');
 const InstagramStrategy = require('passport-instagram').Strategy;
 const LocalStrategy = require('passport-local').Strategy;
 const FacebookStrategy = require('passport-facebook').Strategy;
+const FacebookTokenStrategy = require('passport-facebook-token');
 const TwitterStrategy = require('passport-twitter').Strategy;
 const GitHubStrategy = require('passport-github').Strategy;
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
@@ -57,13 +58,62 @@ passport.use(new LocalStrategy({ usernameField: 'email' }, (email, password, don
  *       - Else create a new account.
  */
 
+ /**
+ * Sign in with Facebook Token.
+ */
+/**
+* Sign in with Facebook Token.
+*/
+passport.use(new FacebookTokenStrategy({
+  clientID: process.env.FACEBOOK_ID,
+  clientSecret: process.env.FACEBOOK_SECRET
+}, function (accessToken, refreshToken, profile, done) {
+  console.log("FacebookTokenStrategy");
+  console.log("profile", profile);
+  User.findOne({ facebook: profile.id }, (err, existingUser) => {
+    console.log("err", err);
+    console.log("existing user", existingUser);
+    if (err) { return done(err); }
+    if (existingUser) {
+      return done(null, existingUser);
+    }
+    User.findOne({ email: profile._json.email }, (err, existingEmailUser) => {
+      if (err) { return done(err); }
+      if (existingEmailUser) {
+        //req.flash('errors', { msg: 'There is already an account using this email address. Sign in to that account and link it with Facebook manually from Account Settings.' });
+        console.log("existingEmailUser ");
+        existingEmailUser.facebook = profile.id;
+        existingEmailUser.tokens.push({ kind: 'facebook', accessToken });
+        existingEmailUser.profile.name = `${profile.name.givenName} ${profile.name.familyName}`;
+        existingEmailUser.profile.gender = profile._json.gender;
+        existingEmailUser.profile.picture = `https://graph.facebook.com/${profile.id}/picture?type=large`;
+        existingEmailUser.profile.location = (profile._json.location) ? profile._json.location.name : '';
+
+        done(err, existingEmailUser);
+      } else {
+        const user = new User();
+        user.email = profile._json.email;
+        user.facebook = profile.id;
+        user.tokens.push({ kind: 'facebook', accessToken });
+        user.profile.name = `${profile.name.givenName} ${profile.name.familyName}`;
+        user.profile.gender = profile._json.gender;
+        user.profile.picture = `https://graph.facebook.com/${profile.id}/picture?type=large`;
+        user.profile.location = (profile._json.location) ? profile._json.location.name : '';
+        user.save((err) => {
+          done(err, user);
+        });
+      }
+    });
+  });
+}
+));
 /**
  * Sign in with Facebook.
  */
 passport.use(new FacebookStrategy({
   clientID: process.env.FACEBOOK_ID,
   clientSecret: process.env.FACEBOOK_SECRET,
-  callbackURL: '/auth/facebook/callback',
+  callbackURL: '/api/auth/facebook/callback',
   profileFields: ['name', 'email', 'link', 'locale', 'timezone', 'gender'],
   passReqToCallback: true
 }, (req, accessToken, refreshToken, profile, done) => {
@@ -71,7 +121,7 @@ passport.use(new FacebookStrategy({
     User.findOne({ facebook: profile.id }, (err, existingUser) => {
       if (err) { return done(err); }
       if (existingUser) {
-        req.flash('errors', { msg: 'There is already a Facebook account that belongs to you. Sign in with that account or delete it, then link it with your current account.' });
+        //req.flash('errors', { msg: 'There is already a Facebook account that belongs to you. Sign in with that account or delete it, then link it with your current account.' });
         done(err);
       } else {
         User.findById(req.user.id, (err, user) => {
@@ -82,7 +132,7 @@ passport.use(new FacebookStrategy({
           user.profile.gender = user.profile.gender || profile._json.gender;
           user.profile.picture = user.profile.picture || `https://graph.facebook.com/${profile.id}/picture?type=large`;
           user.save((err) => {
-            req.flash('info', { msg: 'Facebook account has been linked.' });
+            //req.flash('info', { msg: 'Facebook account has been linked.' });
             done(err, user);
           });
         });
@@ -510,6 +560,8 @@ passport.use('pinterest', new OAuth2Strategy({
  * Login Required middleware.
  */
 exports.isAuthenticated = (req, res, next) => {
+  console.log("isAuthenticated: ", req.isAuthenticated());
+ 
   if (req.isAuthenticated()) {
     return next();
   }
@@ -522,6 +574,8 @@ exports.isAuthenticated = (req, res, next) => {
 exports.isAuthorized = (req, res, next) => {
   const provider = req.path.split('/').slice(-1)[0];
   const token = req.user.tokens.find(token => token.kind === provider);
+  console.log("isAuthorized");
+  console.log("token ", token);
   if (token) {
     next();
   } else {

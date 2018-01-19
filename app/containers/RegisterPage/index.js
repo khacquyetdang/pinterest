@@ -28,6 +28,7 @@ import SmallLoadingIndicator from 'components/SmallLoadingIndicator';
 import { registerRequest } from './actions';
 import { REGISTER_RESET } from './constants';
 import Error from 'components/Error';
+import FacebookLogin from 'react-facebook-login';
 
 const RowWrapper = styled.div`
   padding: 4em;
@@ -64,7 +65,7 @@ export class RegisterPage extends React.Component { // eslint-disable-line react
       email: this.email.value,
     }));
   }
-  
+
   onInputChange = () => {
     this.props.dispatch({
       type: REGISTER_RESET
@@ -72,6 +73,9 @@ export class RegisterPage extends React.Component { // eslint-disable-line react
     this.setState({ passwordnotmatch: false });
   }
 
+  responseFacebook = (response) => {
+    console.log(response);
+  }
   renderCreateAccountOk = () => {
     const { formatMessage } = this.props.intl;
 
@@ -106,8 +110,7 @@ export class RegisterPage extends React.Component { // eslint-disable-line react
         errorLabel = error.msg;
       }
     }
-    if (this.props.registerpage.accountCreated)
-    {
+    if (this.props.registerpage.accountCreated) {
       return this.renderCreateAccountOk();
     }
 
@@ -160,7 +163,7 @@ export class RegisterPage extends React.Component { // eslint-disable-line react
                   </InputGroup>
                 </FormGroup>
                 {this.state.passwordnotmatch ? <Error> <FormattedMessage {...messages.passwordnotmatch} /> </Error> : null}
-                { errorLabel ? <Error>  {errorLabel}  </Error> : null}
+                {errorLabel ? <Error>  {errorLabel}  </Error> : null}
                 <Button bsSize="large" block type="submit"
                   disabled={currentlySending}>
                   {formatMessage(messagesApp.createaccount)}
@@ -168,11 +171,21 @@ export class RegisterPage extends React.Component { // eslint-disable-line react
                 <br />
                 <Row>
                   <Col md={6}>
+                    <FacebookLogin
+                      appId="1962217017377151"
+                      autoLoad={false}
+                      fields="name,email,picture"
+                      callback={this.responseFacebook}
+                      textButton="Facebook"
+                      cssClass="btn-lg btn-block btn-social btn-facebook mt-3"
+                      icon="fa-facebook"
+                    />
+                    {/*
                     <button className="btn-lg btn-block btn-social btn-facebook mt-3"
                       disabled={currentlySending}>
                       <span className="fa fa-facebook"></span>
                       Facebook
-                    </button>
+                    </button>*/ }
                   </Col>
                   <Col md={6}>
                     <button className="btn-social btn-lg btn-twitter btn-block mt-3"

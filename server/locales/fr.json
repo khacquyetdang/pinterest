@@ -2,6 +2,7 @@
 	"Hello": "Bonjour",
 	"User is not registered yet": "L'utilisateur n'est pas encore enregistré",
 	"Authentication needed, please login to access to this page": "Authentification nécessaire, veuillez vous connecter pour accéder à cette page",
+	"Authentication Ok": "Authentication Ok",
 	"Photo url is not valid": "L'URL de photo n'est pas valide",
 	"Description cannot be blank": "La description ne peut pas être vide",
     "User is registered, treating the message": "User is registered, treating the message",

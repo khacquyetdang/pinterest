@@ -6,7 +6,7 @@ import { ADD_PHOTO_REQUEST, ADD_PHOTO_ERROR, ADD_PHOTO_SUCCESS,
 GET_PHOTOS_ERROR, GET_PHOTOS_REQUEST, GET_PHOTOS_SUCCESS,
 DELETE_PHOTOS_ERROR, DELETE_PHOTOS_REQUEST, DELETE_PHOTOS_SUCCESS } from './constants';
 import { SHOW_NOTIFICATION } from '../App/constants';
-import request from 'utils/request';
+import request,  { requestText } from 'utils/request';
 import { showProgressLog } from 'utils/Logger';
 import { getToken, getLocale } from 'utils/store';
 import { loadLocalStorage, updateLocalStorage } from 'localStorage';
@@ -32,8 +32,8 @@ export function* fetchPhotos(action) {
       },
       mode: 'cors',
     }
-    var url = myphotoUrl + "?" + action.locale;
-    const response = yield call(request, url, options);
+    var url = myphotoUrl + "?" + locale;
+    const response = yield call(requestText, url, options);
     showProgressLog(url, response, "photos");
     if (!response) {
       yield put({ type: GET_PHOTOS_ERROR, error: "Unknow error" });
