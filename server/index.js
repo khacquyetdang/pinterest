@@ -20,7 +20,7 @@ const expressValidator = require('express-validator');
 const expressStatusMonitor = require('express-status-monitor');
 //const sass = require('node-sass-middleware');
 const multer = require('multer');
-const jwtconfig = require('./controllers/config.json');
+const jwtconfig = require('./config/config.json');
 const utils = require('./utils/index');
 const User = require('./models/User');
 
@@ -88,7 +88,7 @@ app.use(session({
 
 if (process.env.NODE_ENV === 'development') {
   //app.use(logger('dev'));
-  app.use(errorHandler())
+  //app.use(errorHandler())
 }
 
 
@@ -155,28 +155,32 @@ var jwtCheck = jwt({
   };
 }*/
 
+/*
 app.get('/api/auth/facebook', passport.authenticate('facebook', { scope: ['email', 'public_profile'] }));
 app.get('/api/auth/facebook/callback', passport.authenticate('facebook', { failureRedirect: '/login' }), (req, res) => {
   res.redirect(req.session.returnTo || '/');
-});
+});*/
 
 app.get('/api/auth/facebook/token',
   (req, res) => {
-    passport.authenticate('facebook-token', { session: false },
+    passport.authenticate('facebook-token',
       function (err, user, info) {        // do something with req.user
         console.log('insde endpoint');
-        console.log("user" , user);
+        console.log("user", user);
         console.log("err ", err);
         console.log("info ", info);
-        if (user) {
-          res.status(HttpStatus.OK).send(
+
+        if (err) {
+          return res.status(HttpStatus.CONFLICT).send(
             {
-              msg : __("Authentication Ok")
+              error: {
+                msg: err
+              }
             }
           );
         }
-        else {
-          res.status(HttpStatus.UNAUTHORIZED).send(
+        if (!user) {
+          return res.status(HttpStatus.UNAUTHORIZED).send(
             {
               error: {
                 msg: __("Authentication needed, please login to access to this page")
@@ -184,54 +188,65 @@ app.get('/api/auth/facebook/token',
             }
           );
         }
+        else {
+          return res.status(HttpStatus.OK).send(
+            {
+              msg: __("Authentication Ok"),
+              access_token: info.access_token
+            }
+          );
+        }
       })(req, res);
   });
 
-function requireScope(err, req, res, next) {
+
+/**
+ * custome middle where to check jwt
+ */
+const isAuthenticatedWithJwtToken = (req, res, next) => {
   //res.sendStatus(401);
-  if (err.name === 'UnauthorizedError') {
-    return res.status(HttpStatus.UNAUTHORIZED)
-      .send({
-        error: {
-          msg: __("Authentication needed, please login to access to this page")
-        }
-      });
-  }
 
   var userid = req.user.userid;
-  var has_scopes = req.user.scope === scope;
   var access_token = utils.getTokenFromReq(req);
-  //if (!has_scopes) {
-  return res//.status(HttpStatus.UNAUTHORIZED)
-    .end({
-      error: {
-        msg: __("Authentication needed, please login to access to this page")
+  User.findOne(
+    { _id: userid },
+    {
+      "jwttokens": {
+        $elemMatch:
+          {
+            access_token: access_token, enabled: true
+          }
       }
-    });
-  return;
-  //}
-  User.findOne({
-    _id: userid
-  }, function (err, existingUser) {
-    if (err) {
-      utils.handleError(res, err, HttpStatus.CONFLICT);
-      return;
-    }
-    if (!existingUser) {
-      utils.handleError(res, __("Authentication needed, please login to access to this page"), HttpStatus.CONFLICT);
-      return;
-    }
-    utils.handleError(res, __("Authentication needed, please login to access to this page"), HttpStatus.CONFLICT);
+    }, function (err, existingUser) {
+      console.log("check jwt token with db");
 
-    //next();
-  });
+      if (err) {
+        utils.handleError(res, err, HttpStatus.CONFLICT);
+        return;
+      }
+
+      if (!existingUser) {
+        utils.handleError(res, __("Authentication needed, please login to access to this page"), HttpStatus.CONFLICT);
+        return;
+      }
+
+      if (existingUser.jwttokens.length >= 1) {
+        next();
+      }
+      else {
+        utils.handleError(res, __("Authentication needed, please login to access to this page"), HttpStatus.CONFLICT);
+        return;
+      }
+
+    });
 }
 
 app.use(function (err, req, res, next) {
-  if (err.name === 'UnauthorizedError'
+  console.log("app use");
+  if (err.name.startsWith('UnauthorizedError')
     || err.name.startsWith("Malformed access token")) {
     //utils.errorHandler
-    res.status(HttpStatus.UNAUTHORIZED)
+    return res.status(HttpStatus.UNAUTHORIZED)
       .send({
         error: {
           msg: __("Authentication needed, please login to access to this page")
@@ -247,6 +262,7 @@ app.use(function (err, req, res, next) {
 
 app.post('/api/signup', userController.postSignup);
 app.post('/api/login', userController.postLogin);
+
 // app.post('/api/photo', jwtCheck, requireScope('full_access'), photoController.add);
 //app.post('/api/photo', photoController.add);
 app.post('/api/photo', function (req, res) {
@@ -256,7 +272,7 @@ app.post('/api/photo', function (req, res) {
 app.delete('/api/photo/:photoId', photoController.delete);
 
 //app.post('/api/photo/vote/:photoId', jwtCheck, requireScope('full_access'), photoController.vote);
-app.get('/api/myphoto', passportConfig.isAuthenticated, passportConfig.isAuthorized, photoController.myphoto);
+app.get('/api/myphoto', [jwtCheck, isAuthenticatedWithJwtToken], photoController.myphoto);
 
 app.get('/api/photo', photoController.get);
 

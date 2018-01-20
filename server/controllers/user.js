@@ -3,37 +3,10 @@ const crypto = bluebird.promisifyAll(require('crypto'));
 const nodemailer = require('nodemailer');
 const passport = require('passport');
 const User = require('../models/User');
-const config = require('./config.json');
+//const config = require('./config.json');
 const HttpStatus = require('http-status-codes');
-var jwt = require('jsonwebtoken');
-const _ = require('lodash');
-function createIdToken(user) {
-  return jwt.sign(_.omit(user, 'password'), config.secret, { expiresIn: 60 * 60 * 5 });
-}
+const utils = require('../utils/index');
 
-function createAccessToken(usermail, userid) {
-  return jwt.sign({
-    iss: config.issuer,
-    aud: config.audience,
-    exp: Math.floor(Date.now() / 1000) + (60 * 60 * 60),
-    scope: 'full_access',
-    sub: "lalaland|gonto",
-    jti: genJti(), // unique identifier for the token
-    alg: 'HS256',
-    mail: usermail,
-    userid : userid
-  }, config.secret);
-}
-
-// Generate Unique Identifier for the access token 
-function genJti() {
-  var jti = '';
-  var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  for (var i = 0; i < 16; i++) {
-    jti += possible.charAt(Math.floor(Math.random() * possible.length));
-  }
-  return jti;
-}
 
 /**
  * POST /login
@@ -81,9 +54,8 @@ exports.postLogin = (req, res, next) => {
           });
         }
         if (isMatch) {
-
-          var access_token = createAccessToken(existingUser.email, existingUser._id);
-          var id_token = createIdToken({
+          var access_token = utils.createAccessToken(existingUser.email, existingUser._id);
+          var id_token = utils.createIdToken({
             email: existingUser.email
           });
           existingUser.jwttokens.push({

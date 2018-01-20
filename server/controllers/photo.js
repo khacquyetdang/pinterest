@@ -5,7 +5,6 @@ const passport = require('passport');
 const User = require('../models/User');
 const Photo = require('../models/Photo');
 
-const config = require('./config.json');
 const HttpStatus = require('http-status-codes');
 var jwt = require('jsonwebtoken');
 const _ = require('lodash');

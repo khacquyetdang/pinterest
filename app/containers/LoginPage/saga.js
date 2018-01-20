@@ -67,14 +67,14 @@ export function* fetchLoginFacebook(action) {
 
     const response = yield call(request, authWithFaceBookTokenUrl, options);
     showProgressLog(authWithFaceBookTokenUrl, response, "loginFacebookSaga");
-    if (response && response.status === 200) {
+    if (response && response.status === 200 && response.access_token) {
       updateLocalStorage(
         {
-          access_token: action.access_token
+          access_token: response.access_token
         }
       );
       yield put({ type: LOGIN_SUCCESS });
-      yield put(setAuth(action.access_token));
+      yield put(setAuth(response.access_token));
     }
     else {
       yield put({ type: LOGIN_ERROR, error: response.error || 'Erreur' });

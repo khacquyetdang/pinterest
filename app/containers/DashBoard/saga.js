@@ -33,7 +33,7 @@ export function* fetchPhotos(action) {
       mode: 'cors',
     }
     var url = myphotoUrl + "?" + locale;
-    const response = yield call(requestText, url, options);
+    const response = yield call(request, url, options);
     showProgressLog(url, response, "photos");
     if (!response) {
       yield put({ type: GET_PHOTOS_ERROR, error: "Unknow error" });

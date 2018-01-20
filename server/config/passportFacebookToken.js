@@ -11,6 +11,7 @@ const LinkedInStrategy = require('passport-linkedin-oauth2').Strategy;
 const OpenIDStrategy = require('passport-openid').Strategy;
 const OAuthStrategy = require('passport-oauth').OAuthStrategy;
 const OAuth2Strategy = require('passport-oauth').OAuth2Strategy;
+const HttpStatus = require('http-status-codes');
 
 const User = require('../models/User');
 
@@ -86,14 +87,27 @@ passport.use(new FacebookTokenStrategy({
   });
 }
 ));
+
+function handlerUnauthorized(res) {
+  return res.status(HttpStatus.UNAUTHORIZED)
+    .send({
+      error: {
+        msg: __("Authentication needed, please login to access to this page")
+      }
+    });
+
+}
 /**
  * Login Required middleware.
  */
 exports.isAuthenticated = (req, res, next) => {
+  console.log("isAuthenticated req: ", req);
+
+  console.log("isAuthenticated req user: ", req.user);
   if (req.isAuthenticated()) {
     return next();
   }
-  res.redirect('/login');
+  handlerUnauthorized(res);
 };
 
 /**
@@ -105,6 +119,6 @@ exports.isAuthorized = (req, res, next) => {
   if (token) {
     next();
   } else {
-    res.redirect(`/auth/${provider}`);
+    handlerUnauthorized(res);
   }
 };
