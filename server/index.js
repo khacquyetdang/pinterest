@@ -1,6 +1,7 @@
 /* eslint consistent-return:0 */
 
 const express = require('express');
+var cors = require('cors')
 var i18n = require("i18n");
 const logger = require('./logger');
 var jwt = require('express-jwt');
@@ -20,6 +21,7 @@ const expressValidator = require('express-validator');
 const expressStatusMonitor = require('express-status-monitor');
 //const sass = require('node-sass-middleware');
 const multer = require('multer');
+const configCors = require('./config/cors');
 const jwtconfig = require('./config/config.json');
 const utils = require('./utils/index');
 const User = require('./models/User');
@@ -75,6 +77,8 @@ app.use(compression());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(expressValidator());
+app.use(cors())
+
 app.use(session({
   resave: true,
   saveUninitialized: true,
@@ -94,6 +98,7 @@ if (process.env.NODE_ENV === 'development') {
 
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(cors(configCors.corsOptions));
 /*
 app.use(lusca.xframe('SAMEORIGIN'));
 app.use(lusca.xssProtection(true));
@@ -160,6 +165,37 @@ app.get('/api/auth/facebook', passport.authenticate('facebook', { scope: ['email
 app.get('/api/auth/facebook/callback', passport.authenticate('facebook', { failureRedirect: '/login' }), (req, res) => {
   res.redirect(req.session.returnTo || '/');
 });*/
+
+app.post('/auth/twitter/token',
+  passport.authenticate('twitter-token'),
+  function (req, res) {
+    // do something with req.user
+    res.send(req.user ? 200 : 401);
+  }
+);
+
+app.post('/api/auth/twitter/reverse', function(req, res) {
+  var self = this;
+
+  request.post({
+    url: 'https://api.twitter.com/oauth/request_token',
+    oauth: {
+      consumer_key: process.env.TWITTER_KEY,
+      consumer_secret: process.env.TWITTER_SECRET
+    },
+    form: { x_auth_mode: 'reverse_auth' }
+  }, function (err, r, body) {
+    if (err) {
+      return res.send(500, { message: e.message });
+    }
+
+    if (body.indexOf('OAuth') !== 0) {
+      return res.send(500, { message: 'Malformed response from Twitter' });
+    }
+
+    res.send({ x_reverse_auth_parameters: body });
+  });
+});
 
 app.get('/api/auth/facebook/token',
   (req, res) => {

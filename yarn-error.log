@@ -1,8 +1,8 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Users\Tran\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js add passport-facebook-token
+  C:\Program Files\nodejs\node.exe C:\Users\Tran\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js add cors
 
 PATH: 
-  C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\bin;C:\Users\Tran\bin;C:\ProgramData\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0;C:\Program Files (x86)\QuickTime\QTSystem;C:\Program Files (x86)\Common Files\Adobe\AGL;C:\Users\Tran\AppData\Local\Android\sdk\platform-tools;C:\Users\Tran\.dnx\bin;C:\Program Files\Microsoft DNX\Dnvm;C:\Program Files\Microsoft SQL Server\130\Tools\Binn;C:\Program Files (x86)\PuTTY;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\Git\cmd;C:\Program Files (x86)\Skype\Phone;C:\wamp64\bin\php\php7.1.10;C:\Program Files (x86)\Windows Kits\8.1\Windows Performance Toolkit;C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0;C:\Program Files\nodejs;C:\Program Files\MongoDB\Server\3.4\bin;F:\pear;C:\bin;C:\Python27\Scripts;C:\Python27;C:\Users\Tran\AppData\Local\Microsoft\WindowsApps;C:\Users\Tran\AppData\Local\atom\bin;C:\Users\Tran\AppData\Local\Microsoft\WindowsApps;C:\Program Files\Git\usr\bin;C:\Program Files\Heroku\bin;C:\Program Files\Java\jdk1.8.0_73\bin;C:\Users\Tran\AppData\Local\.meteor;C:\Program Files\Microsoft VS Code\bin;C:\Users\Tran\AppData\Roaming\npm;C:\wamp64\bin\php;C:\wamp64\bin\mysql\mysql5.7.14\bin
+  C:\Users\Tran\bin;C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\local\bin;C:\Program Files\Git\usr\bin;C:\Program Files\Git\usr\bin;C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\bin;C:\Users\Tran\bin;C:\ProgramData\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0;C:\Program Files (x86)\QuickTime\QTSystem;C:\Program Files (x86)\Common Files\Adobe\AGL;C:\Users\Tran\AppData\Local\Android\sdk\platform-tools;C:\Users\Tran\.dnx\bin;C:\Program Files\Microsoft DNX\Dnvm;C:\Program Files\Microsoft SQL Server\130\Tools\Binn;C:\Program Files (x86)\PuTTY;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\Git\cmd;C:\Program Files (x86)\Skype\Phone;C:\wamp64\bin\php\php7.1.10;C:\Program Files (x86)\Windows Kits\8.1\Windows Performance Toolkit;C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0;C:\Program Files\nodejs;C:\Program Files\MongoDB\Server\3.4\bin;F:\pear;C:\bin;C:\Python27\Scripts;C:\Python27;C:\Users\Tran\AppData\Local\Microsoft\WindowsApps;C:\Users\Tran\AppData\Local\atom\bin;C:\Users\Tran\AppData\Local\Microsoft\WindowsApps;C:\Program Files\Git\usr\bin;C:\Program Files\Heroku\bin;C:\Program Files\Java\jdk1.8.0_73\bin;C:\Users\Tran\AppData\Local\.meteor;C:\Program Files\Microsoft VS Code\bin;C:\Users\Tran\AppData\Roaming\npm;C:\wamp64\bin\php;C:\wamp64\bin\mysql\mysql5.7.14\bin;C:\Users\Tran\AppData\Local\Yarn\config\global\node_modules\.bin;C:\Program Files\Git\usr\bin\vendor_perl;C:\Program Files\Git\usr\bin\core_perl
 
 Yarn version: 
   1.3.2
@@ -279,6 +279,7 @@ npm manifest:
       "nodemon": "^1.14.11",
       "passport": "^0.4.0",
       "passport-facebook": "^2.1.1",
+      "passport-facebook-token": "^3.3.0",
       "passport-github": "^1.1.0",
       "passport-google-oauth": "^1.0.0",
       "passport-instagram": "^1.0.0",
@@ -7687,6 +7688,12 @@ Lockfile:
     version "0.1.1"
     resolved "https://registry.yarnpkg.com/pascalcase/-/pascalcase-0.1.1.tgz#b363e55e8006ca6fe21784d2db22bd15d7917f14"
   
+  passport-facebook-token@^3.3.0:
+    version "3.3.0"
+    resolved "https://registry.yarnpkg.com/passport-facebook-token/-/passport-facebook-token-3.3.0.tgz#7404ca6fdd3790e11060cc60c562b21f0d0481ee"
+    dependencies:
+      passport-oauth "1.0.0"
+  
   passport-facebook@^2.1.1:
     version "2.1.1"
     resolved "https://registry.yarnpkg.com/passport-facebook/-/passport-facebook-2.1.1.tgz#c39d0b52ae4d59163245a4e21a7b9b6321303311"
@@ -7754,7 +7761,7 @@ Lockfile:
       uid2 "0.0.x"
       utils-merge "1.x.x"
   
-  passport-oauth@^1.0.0:
+  passport-oauth@1.0.0, passport-oauth@^1.0.0:
     version "1.0.0"
     resolved "https://registry.yarnpkg.com/passport-oauth/-/passport-oauth-1.0.0.tgz#90aff63387540f02089af28cdad39ea7f80d77df"
     dependencies:
@@ -10765,4 +10772,4 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/yeast/-/yeast-0.1.2.tgz#008e06d8094320c372dbc2f8ed76a0ca6c8ac419"
 
 Trace: 
-  Error: EPERM: operation not permitted, unlink 'F:\freeCodeCampWorkSpace\pinterest\node_modules\acorn-globals\node_modules\.bin'
+  Error: EPERM: operation not permitted, unlink 'F:\freeCodeCampWorkSpace\pinterest\node_modules\bin-wrapper\node_modules\.bin'

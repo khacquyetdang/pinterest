@@ -31,7 +31,9 @@ import makeSelectApp from '../App/selectors';
 import { Redirect } from 'react-router-dom';
 //import Modal from 'react-modal';
 import FacebookLogin from 'react-facebook-login';
-
+import TwitterLogin from 'react-twitter-auth';
+import 'bootstrap-social/bootstrap-social.css';
+import { getTwitterTokenUrl, authWithTwitterTokenUrl } from './../../config';
 
 export class LoginPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
@@ -84,6 +86,8 @@ export class LoginPage extends React.Component { // eslint-disable-line react/pr
         errorLabel = error.msg;
       }
     }
+
+
 
     return (
       <div>
@@ -141,6 +145,29 @@ export class LoginPage extends React.Component { // eslint-disable-line react/pr
                           </Col>
                         </Row>
 
+                        <Row>
+                          <Col sm={6} >
+                            <FacebookLogin
+                              appId="1962217017377151"
+                              autoLoad={false}
+                              fields="name,email,picture"
+                              callback={this.responseFacebook}
+                              textButton="Facebook"
+                              cssClass="btn btn-block btn-social btn-facebook mt-3"
+                              icon="fa-facebook"
+                            />
+                          </Col>
+                          <Col sm={6}>
+                            <TwitterLogin loginUrl={authWithTwitterTokenUrl}
+                              onFailure={this.onFailed} onSuccess={this.onSuccess}
+                              requestTokenUrl={getTwitterTokenUrl}
+                              tag="button"
+                              text="Twitter"
+                              showIcon={true}>
+                            </TwitterLogin>
+                          </Col>
+                        </Row>
+
                         {errorLabel ? <Error>  {errorLabel}  </Error> : null}
 
                       </div>
@@ -166,15 +193,8 @@ export class LoginPage extends React.Component { // eslint-disable-line react/pr
             </form>
             <Row>
               <Col>
-                <FacebookLogin
-                  appId="1962217017377151"
-                  autoLoad={false}
-                  fields="name,email,picture"
-                  callback={this.responseFacebook}
-                  textButton="Facebook"
-                  cssClass="btn-lg btn-block btn-social btn-facebook mt-3"
-                  icon="fa-facebook"
-                />
+
+
               </Col>
             </Row>
 

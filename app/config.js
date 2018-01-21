@@ -4,6 +4,9 @@ export const loginUrl = apiBaseUrl + "login";
 export const authWithFaceBookUrl = apiBaseUrl + "auth/facebook";
 export const authWithFaceBookTokenUrl = apiBaseUrl + "auth/facebook/token";
 
+export const authWithTwitterTokenUrl = apiBaseUrl + "auth/twitter/token";
+export const getTwitterTokenUrl = apiBaseUrl + "auth/twitter/reverse";
+
 export const logoutUrl = apiBaseUrl + "logout";
 export const photoUrl = apiBaseUrl + "photo";
 export const myphotoUrl = apiBaseUrl + "myphoto";
