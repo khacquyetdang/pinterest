@@ -174,28 +174,25 @@ app.post('/auth/twitter/token',
   }
 );
 
-app.post('/api/auth/twitter/reverse', function(req, res) {
-  var self = this;
 
-  request.post({
-    url: 'https://api.twitter.com/oauth/request_token',
-    oauth: {
-      consumer_key: process.env.TWITTER_KEY,
-      consumer_secret: process.env.TWITTER_SECRET
-    },
-    form: { x_auth_mode: 'reverse_auth' }
-  }, function (err, r, body) {
-    if (err) {
-      return res.send(500, { message: e.message });
-    }
+router.route('/api/auth/twitter/reverse')
+  .post(function (req, res) {
+    request.post({
+      url: 'https://api.twitter.com/oauth/request_token',
+      oauth: {
+        oauth_callback: "http%3A%2F%2Flocalhost%3A3000%2Ftwitter-callback",
+        consumer_key: process.env.TWITTER_KEY,
+        consumer_secret: process.env.TWITTER_SECRET
+      }, function(err, r, body) {
+        if (err) {
+          return res.send(500, { message: e.message });
+        }
 
-    if (body.indexOf('OAuth') !== 0) {
-      return res.send(500, { message: 'Malformed response from Twitter' });
-    }
-
-    res.send({ x_reverse_auth_parameters: body });
+        var jsonStr = '{ "' + body.replace(/&/g, '", "').replace(/=/g, '": "') + '"}';
+        res.send(JSON.parse(jsonStr));
+      });
   });
-});
+
 
 app.get('/api/auth/facebook/token',
   (req, res) => {

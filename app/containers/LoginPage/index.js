@@ -49,9 +49,13 @@ export class LoginPage extends React.Component { // eslint-disable-line react/pr
     }
   }
 
-  loginWithFaceBookClick = () => {
+  onTwitterSuccess = (response) => {
+    console.log("onTwitterSuccess: ", response);
   }
 
+  onTwitterFailed = (error) => {
+    console.log("onTwitterFailed: ", error);
+  }
   handleSubmit = (event) => {
     event.preventDefault();
     console.log("password ", this.password.value);
@@ -145,28 +149,6 @@ export class LoginPage extends React.Component { // eslint-disable-line react/pr
                           </Col>
                         </Row>
 
-                        <Row>
-                          <Col sm={6} >
-                            <FacebookLogin
-                              appId="1962217017377151"
-                              autoLoad={false}
-                              fields="name,email,picture"
-                              callback={this.responseFacebook}
-                              textButton="Facebook"
-                              cssClass="btn btn-block btn-social btn-facebook mt-3"
-                              icon="fa-facebook"
-                            />
-                          </Col>
-                          <Col sm={6}>
-                            <TwitterLogin loginUrl={authWithTwitterTokenUrl}
-                              onFailure={this.onFailed} onSuccess={this.onSuccess}
-                              requestTokenUrl={getTwitterTokenUrl}
-                              tag="button"
-                              text="Twitter"
-                              showIcon={true}>
-                            </TwitterLogin>
-                          </Col>
-                        </Row>
 
                         {errorLabel ? <Error>  {errorLabel}  </Error> : null}
 
@@ -192,9 +174,25 @@ export class LoginPage extends React.Component { // eslint-disable-line react/pr
               </Row>
             </form>
             <Row>
-              <Col>
-
-
+              <Col sm={6} >
+                <FacebookLogin
+                  appId="1962217017377151"
+                  autoLoad={false}
+                  fields="name,email,picture"
+                  callback={this.responseFacebook}
+                  textButton="Facebook"
+                  cssClass="btn btn-block btn-social btn-facebook mt-3"
+                  icon="fa-facebook"
+                />
+              </Col>
+              <Col sm={6}>
+                <TwitterLogin loginUrl={authWithTwitterTokenUrl}
+                  onFailure={this.onTwitterFailed} onSuccess={this.onTwitterSuccess}
+                  requestTokenUrl={getTwitterTokenUrl}
+                  tag="button"
+                  text="Twitter"
+                  showIcon={true}>
+                </TwitterLogin>
               </Col>
             </Row>
 
