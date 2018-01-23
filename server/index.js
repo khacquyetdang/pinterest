@@ -25,11 +25,12 @@ const configCors = require('./config/cors');
 const jwtconfig = require('./config/config.json');
 const utils = require('./utils/index');
 const User = require('./models/User');
+request = require('request'),
 
-/**
- * Load environment variables from .env file, where API keys and passwords are configured.
- */
-dotenv.load({ path: '.env.developpement' });
+  /**
+   * Load environment variables from .env file, where API keys and passwords are configured.
+   */
+  dotenv.load({ path: '.env.developpement' });
 
 const userController = require('./controllers/user');
 const photoController = require('./controllers/photo');
@@ -166,31 +167,88 @@ app.get('/api/auth/facebook/callback', passport.authenticate('facebook', { failu
   res.redirect(req.session.returnTo || '/');
 });*/
 
-app.post('/auth/twitter/token',
-  passport.authenticate('twitter-token'),
+app.post('/api/auth/twitter/token',
+  function (req, res, next) {
+    request.post({
+      url: `https://api.twitter.com/oauth/access_token?oauth_verifier`,
+      oauth: {
+        consumer_key: process.env.TWITTER_KEY,
+        consumer_secret: process.env.TWITTER_SECRET,
+        token: req.query.oauth_token
+      },
+      form: { oauth_verifier: req.query.oauth_verifier }
+    }, function (err, r, body) {
+      if (err) {
+        return res.send(HttpStatus.INTERNAL_SERVER_ERROR, { msg: err.message });
+      }
+
+      const bodyString = '{ "' + body.replace(/&/g, '", "').replace(/=/g, '": "') + '"}';
+      const parsedBody = JSON.parse(bodyString);
+
+      req.body['oauth_token'] = parsedBody.oauth_token;
+      req.body['oauth_token_secret'] = parsedBody.oauth_token_secret;
+      req.body['user_id'] = parsedBody.user_id;
+
+      next();
+    });
+  },
   function (req, res) {
-    // do something with req.user
-    res.send(req.user ? 200 : 401);
+    passport.authenticate('twitter-token',
+      function (err, user, info) {        // do something with req.user
+        console.log('inside twitter-token endpoint');
+        console.log("user", user);
+        console.log("err ", err);
+        console.log("info ", info);
+
+        if (err) {
+          return res.status(HttpStatus.CONFLICT).send(
+            {
+              error: {
+                msg: err
+              }
+            }
+          );
+        }
+        if (!user) {
+          return res.status(HttpStatus.UNAUTHORIZED).send(
+            {
+              error: {
+                msg: __("Authentication needed, please login to access to this page")
+              }
+            }
+          );
+        }
+        else {
+          return res.status(HttpStatus.OK).send(
+            {
+              msg: __("Authentication Ok"),
+              access_token: info.access_token
+            }
+          );
+        }
+      })(req, res);
   }
 );
 
-
-router.route('/api/auth/twitter/reverse')
-  .post(function (req, res) {
+// this route is for request token on server side
+app.post('/api/auth/twitter/reverse',
+  function (req, res) {
     request.post({
       url: 'https://api.twitter.com/oauth/request_token',
       oauth: {
         oauth_callback: "http%3A%2F%2Flocalhost%3A3000%2Ftwitter-callback",
         consumer_key: process.env.TWITTER_KEY,
         consumer_secret: process.env.TWITTER_SECRET
-      }, function(err, r, body) {
-        if (err) {
-          return res.send(500, { message: e.message });
-        }
+      }
+    }, function (err, r, body) {
 
-        var jsonStr = '{ "' + body.replace(/&/g, '", "').replace(/=/g, '": "') + '"}';
-        res.send(JSON.parse(jsonStr));
-      });
+      if (err) {
+        return res.send(500, { message: e.message });
+      }
+
+      var jsonStr = '{ "' + body.replace(/&/g, '", "').replace(/=/g, '": "') + '"}';
+      res.send(JSON.parse(jsonStr));
+    });
   });
 
 

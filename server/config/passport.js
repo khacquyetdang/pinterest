@@ -142,62 +142,101 @@ passport.use(new TwitterTokenStrategy({
   consumerKey: process.env.TWITTER_KEY,
   consumerSecret: process.env.TWITTER_SECRET
 }, function (token, tokenSecret, profile, done) {
-  console.log("FacebookTokenStrategy");
-  console.log("profile", profile);
-  User.findOne({ facebook: profile.id }, (err, existingUser) => {
+  console.log("TwitterTokenStrategy");
+  console.log("twitter profile", profile);
+  User.findOne({ twitter: profile.id }, (err, existingUser) => {
     console.log("err", err);
     //console.log("existing user", existingUser);
-
-    var access_token = utils.createAccessToken(existingUser.email, existingUser._id);
-    var id_token = utils.createIdToken({
-      email: existingUser.email
-    });
-    var info = { access_token: access_token };
-    var jwtToken = {
-      id_token: id_token,
-      access_token: access_token,
-      enabled: true
-    };
-
     if (err) { return done(err); }
+
+
+
     if (existingUser) {
+      var access_token = utils.createAccessToken(existingUser.email, existingUser._id);
+      var id_token = utils.createIdToken({
+        email: existingUser.email
+      });
+      var info = { access_token: access_token };
+      var jwtToken = {
+        id_token: id_token,
+        access_token: access_token,
+        enabled: true
+      };
       existingUser.jwttokens.push(jwtToken);
       return existingUser.save((err) => {
         done(err, existingUser, info);
       });
     }
-    User.findOne({ email: profile._json.email }, (err, existingEmailUser) => {
-      if (err) { return done(err); }
-      if (existingEmailUser) {
-        //req.flash('errors', { msg: 'There is already an account using this email address. Sign in to that account and link it with Facebook manually from Account Settings.' });
-        console.log("existingEmailUser ");
-        existingEmailUser.facebook = profile.id;
+    var twitterMail = profile.emails[0].value;
+    if (twitterMail) { // twitterMail is defined, public
+      User.findOne({ email: twitterMail }, (err, existingEmailUser) => {
+        if (err) { return done(err); }
+        if (existingEmailUser) {
 
-        existingEmailUser.tokens.push({ kind: 'facebook', accessToken });
-        existingEmailUser.jwttokens.push(jwtToken);
-        existingEmailUser.profile.name = `${profile.name.givenName} ${profile.name.familyName}`;
-        existingEmailUser.profile.gender = profile._json.gender;
-        existingEmailUser.profile.picture = `https://graph.facebook.com/${profile.id}/picture?type=large`;
-        existingEmailUser.profile.location = (profile._json.location) ? profile._json.location.name : '';
-        existingEmailUser.save((err) => {
-          done(err, existingEmailUser, info);
-        });
+          var access_token = utils.createAccessToken(existingUser.email, existingUser._id);
+          var id_token = utils.createIdToken({
+            email: existingUser.email
+          });
+          var info = { access_token: access_token };
+          var jwtToken = {
+            id_token: id_token,
+            access_token: access_token,
+            enabled: true
+          };
 
+          //req.flash('errors', { msg: 'There is already an account using this email address. Sign in to that account and link it with Facebook manually from Account Settings.' });
+          console.log("existingEmailUser ");
+          existingEmailUser.twitter = profile.id;
+
+          existingEmailUser.tokens.push({ kind: 'twitter', accessToken });
+          existingEmailUser.jwttokens.push(jwtToken);
+          if (profile.name.givenName === '' && profile.name.familyName === '' && profile.name.middleName === '') {
+            user.profile.name = profile.name.displayName;
+          } else {
+            user.profile.name = `${profile.name.givenName} ${profile.name.familyName}`;
+          }
+          user.profile.picture = profile._json.profile_image_url;
+          user.profile.location = (profile._json.location) ? profile._json.location : '';
+          existingEmailUser.save((err) => {
+            done(err, existingEmailUser, info);
+          });
+
+        } else {
+          const user = new User();
+          user.email = twitterMail;
+          user.twitter = profile.id;
+          user.tokens.push({ kind: 'twitter', accessToken });
+          user.jwttokens.push(jwtToken);
+          if (profile.name.givenName === '' && profile.name.familyName === '' && profile.name.middleName === '') {
+            user.profile.name = profile.name.displayName;
+          } else {
+            user.profile.name = `${profile.name.givenName} ${profile.name.familyName}`;
+          }
+          user.profile.picture = profile._json.profile_image_url;
+          user.profile.location = (profile._json.location) ? profile._json.location : '';
+          user.save((err) => {
+            done(err, user, info);
+          });
+        }
+      });
+    } else {
+      const user = new User();
+      user.twitter = profile.id;
+      user.tokens.push({ kind: 'twitter', accessToken });
+      if (profile.name.givenName === '' && profile.name.familyName === '' && profile.name.middleName === '') {
+        user.profile.name = profile.name.displayName;
       } else {
-        const user = new User();
-        user.email = profile._json.email;
-        user.facebook = profile.id;
-        user.tokens.push({ kind: 'facebook', accessToken });
-        user.jwttokens.push(jwtToken);
         user.profile.name = `${profile.name.givenName} ${profile.name.familyName}`;
-        user.profile.gender = profile._json.gender;
-        user.profile.picture = `https://graph.facebook.com/${profile.id}/picture?type=large`;
-        user.profile.location = (profile._json.location) ? profile._json.location.name : '';
-        user.save((err) => {
-          done(err, user, info);
-        });
       }
-    });
+      user.profile.picture = profile._json.profile_image_url;
+      user.profile.location = (profile._json.location) ? profile._json.location : '';
+      user.save((err) => {
+
+        
+        done(err, user, info);
+      });
+
+    }
   });
 }
 ));
