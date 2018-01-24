@@ -25,5 +25,9 @@ export default defineMessages({
   register_now: {
     id: 'app.containers.LoginPage.register_now',
     defaultMessage: "S'inscrire maintenant"
+  },
+  connexion_ok: {
+    id: 'app.containers.LoginPage.connexion_ok',
+    defaultMessage: "Vous êtes maitenant connecté"    
   }
 });

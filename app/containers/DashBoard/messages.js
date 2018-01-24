@@ -14,6 +14,10 @@ export default defineMessages({
     id: 'app.containers.DashBoard.addPhoto',
     defaultMessage: 'Ajouter une photo',
   },
+  userHaveNoPhoto: {
+    id: 'app.containers.DashBoard.userHaveNoPhoto',
+    defaultMessage: 'Vous n\'avez pas encore créé de photo',    
+  },
   addPhotoTitle: {
     id: 'app.containers.DashBoard.addPhotoTitle',
     defaultMessage: 'Ajout de photo',

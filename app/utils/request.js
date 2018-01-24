@@ -7,7 +7,7 @@ import 'whatwg-fetch';
  *
  * @return {object}          The parsed JSON, status from the response
  */
-function parseJSON(response) {
+export function parseJSON(response) {
   return new Promise((resolve) => response.json()
     .then(function (json) {
       json.status = response.status;

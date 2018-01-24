@@ -107,9 +107,11 @@ export class DashBoard extends React.Component { // eslint-disable-line react/pr
           </Row>
           <br />
           {this.props.dashboard.loading ? <LoadingIndicator /> : null}
-          <Gallery elements={this.props.dashboard.photos}
-            onVote={this.vote} onDelete={this.delete} />
-
+          {
+            this.props.dashboard.photos.length === 0 ? <h1 className="text-center"><FormattedMessage {...messages.userHaveNoPhoto} /></h1> :
+              <Gallery elements={this.props.dashboard.photos}
+                onVote={this.vote} onDelete={this.delete} />
+          }
           <Modal show={this.props.dashboard.showModal} onHide={this.handleClose}>
             <form ref={(form) => { this.form = form }}
               onSubmit={this.onFormSubmit}>

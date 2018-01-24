@@ -194,12 +194,11 @@ app.post('/api/auth/twitter/token',
   },
   function (req, res) {
     passport.authenticate('twitter-token',
-      function (err, user, info) {        // do something with req.user
+      function (err, user, info) {       
         console.log('inside twitter-token endpoint');
         console.log("user", user);
         console.log("err ", err);
         console.log("info ", info);
-
         if (err) {
           return res.status(HttpStatus.CONFLICT).send(
             {
@@ -367,7 +366,7 @@ app.get('/api/myphoto', [jwtCheck, isAuthenticatedWithJwtToken], photoController
 
 app.get('/api/photo', photoController.get);
 
-//app.get('/api/logout', jwtCheck, requireScope('full_access'), userController.logout);
+app.get('/api/logout', [jwtCheck, isAuthenticatedWithJwtToken], userController.logout);
 /*app.post('/api/signup', function (req, res, next) {
   res.send('hello postvcefd');
 });*/

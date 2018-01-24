@@ -25,7 +25,7 @@ import Spinner from 'components/Spinner';
 import LoadingIndicator from 'components/LoadingIndicator';
 import SmallLoadingIndicator from 'components/SmallLoadingIndicator';
 import { loginRequest } from './actions';
-import { LOGIN_RESET, LOGIN_FACEBOOK_REQUEST } from './constants';
+import { LOGIN_RESET, LOGIN_FACEBOOK_REQUEST, LOGIN_ERROR } from './constants';
 import Error from 'components/Error';
 import makeSelectApp from '../App/selectors';
 import { Redirect } from 'react-router-dom';
@@ -34,6 +34,9 @@ import FacebookLogin from 'react-facebook-login';
 import TwitterLogin from 'react-twitter-auth';
 import 'bootstrap-social/bootstrap-social.css';
 import { getTwitterTokenUrl, authWithTwitterTokenUrl } from './../../config';
+import { parseJSON } from 'utils/request';
+import { setAuth, showNotif } from './../App/actions';
+import { updateLocalStorage } from 'localStorage';
 
 export class LoginPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
@@ -51,10 +54,45 @@ export class LoginPage extends React.Component { // eslint-disable-line react/pr
 
   onTwitterSuccess = (response) => {
     console.log("onTwitterSuccess: ", response);
+    const { formatMessage } = this.props.intl;
+
+    try {
+      parseJSON(response).then((responseJson) => {
+        console.log("onTwitterSuccess json: ", responseJson);
+        if (responseJson.status === 200) {
+          var access_token = responseJson.access_token;
+          updateLocalStorage(
+            {
+              access_token: access_token
+            }
+          );
+          this.props.dispatch(setAuth(access_token));
+          this.props.dispatch(showNotif(formatMessage(messages.connexion_ok)));
+        }
+        else {
+          //      yield put({ type: LOGIN_ERROR, error: response.error || 'Erreur' });
+          this.props.dispatch({
+            type: LOGIN_ERROR,
+            error: response.error || 'Erreur'
+          });
+        }
+      });
+    } catch (error) {
+      console.log("onTwitterSuccess error response", error);
+      this.props.dispatch({
+        type: LOGIN_ERROR,
+        error: response.error || 'Erreur'
+      });
+
+    }
   }
 
   onTwitterFailed = (error) => {
     console.log("onTwitterFailed: ", error);
+    this.props.dispatch({
+      type: LOGIN_ERROR,
+      error: error || 'Erreur'
+    });
   }
   handleSubmit = (event) => {
     event.preventDefault();
@@ -135,7 +173,7 @@ export class LoginPage extends React.Component { // eslint-disable-line react/pr
                         </InputGroup>
                         <Row>
                           <Col sm={6} >
-                            <Button bsStyle="primary" className="mt-3" block
+                            <Button bsStyle="primary" className="btn-md mt-3" block
                               type="submit"
                               disabled={isDisable}>
                               {this.props.loginpage.currentlySending ? <Spinner /> : null}
@@ -149,6 +187,35 @@ export class LoginPage extends React.Component { // eslint-disable-line react/pr
                           </Col>
                         </Row>
 
+                        <Row>
+                          <Col sm={6} >
+                            <FacebookLogin
+                              appId="1962217017377151"
+                              autoLoad={false}
+                              fields="name,email,picture"
+                              callback={this.responseFacebook}
+                              textButton="Facebook"
+                              type="button"
+                              cssClass="btn btn-md btn-block btn-social btn-facebook mt-3"
+                              icon="fa-facebook"
+                            />
+                          </Col>
+                          <Col sm={6}>
+                            <TwitterLogin loginUrl={authWithTwitterTokenUrl}
+                              onFailure={this.onTwitterFailed} onSuccess={this.onTwitterSuccess}
+                              requestTokenUrl={getTwitterTokenUrl}
+                              className="btn-block"
+                              tag="div"
+                              showIcon={false}>
+                              <button className="btn btn-md btn-social btn-twitter btn-block mt-3"
+                              >
+                                <span className="fa fa-twitter"></span>
+                                Twitter
+                  </button>
+
+                            </TwitterLogin>
+                          </Col>
+                        </Row>
 
                         {errorLabel ? <Error>  {errorLabel}  </Error> : null}
 
@@ -173,28 +240,7 @@ export class LoginPage extends React.Component { // eslint-disable-line react/pr
                 </Col>
               </Row>
             </form>
-            <Row>
-              <Col sm={6} >
-                <FacebookLogin
-                  appId="1962217017377151"
-                  autoLoad={false}
-                  fields="name,email,picture"
-                  callback={this.responseFacebook}
-                  textButton="Facebook"
-                  cssClass="btn btn-block btn-social btn-facebook mt-3"
-                  icon="fa-facebook"
-                />
-              </Col>
-              <Col sm={6}>
-                <TwitterLogin loginUrl={authWithTwitterTokenUrl}
-                  onFailure={this.onTwitterFailed} onSuccess={this.onTwitterSuccess}
-                  requestTokenUrl={getTwitterTokenUrl}
-                  tag="button"
-                  text="Twitter"
-                  showIcon={true}>
-                </TwitterLogin>
-              </Col>
-            </Row>
+
 
           </div>
         </div>

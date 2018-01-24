@@ -148,95 +148,8 @@ passport.use(new TwitterTokenStrategy({
     console.log("err", err);
     //console.log("existing user", existingUser);
     if (err) { return done(err); }
-
-
-
-    if (existingUser) {
-      var access_token = utils.createAccessToken(existingUser.email, existingUser._id);
-      var id_token = utils.createIdToken({
-        email: existingUser.email
-      });
-      var info = { access_token: access_token };
-      var jwtToken = {
-        id_token: id_token,
-        access_token: access_token,
-        enabled: true
-      };
-      existingUser.jwttokens.push(jwtToken);
-      return existingUser.save((err) => {
-        done(err, existingUser, info);
-      });
-    }
-    var twitterMail = profile.emails[0].value;
-    if (twitterMail) { // twitterMail is defined, public
-      User.findOne({ email: twitterMail }, (err, existingEmailUser) => {
-        if (err) { return done(err); }
-        if (existingEmailUser) {
-
-          var access_token = utils.createAccessToken(existingUser.email, existingUser._id);
-          var id_token = utils.createIdToken({
-            email: existingUser.email
-          });
-          var info = { access_token: access_token };
-          var jwtToken = {
-            id_token: id_token,
-            access_token: access_token,
-            enabled: true
-          };
-
-          //req.flash('errors', { msg: 'There is already an account using this email address. Sign in to that account and link it with Facebook manually from Account Settings.' });
-          console.log("existingEmailUser ");
-          existingEmailUser.twitter = profile.id;
-
-          existingEmailUser.tokens.push({ kind: 'twitter', accessToken });
-          existingEmailUser.jwttokens.push(jwtToken);
-          if (profile.name.givenName === '' && profile.name.familyName === '' && profile.name.middleName === '') {
-            user.profile.name = profile.name.displayName;
-          } else {
-            user.profile.name = `${profile.name.givenName} ${profile.name.familyName}`;
-          }
-          user.profile.picture = profile._json.profile_image_url;
-          user.profile.location = (profile._json.location) ? profile._json.location : '';
-          existingEmailUser.save((err) => {
-            done(err, existingEmailUser, info);
-          });
-
-        } else {
-          const user = new User();
-          user.email = twitterMail;
-          user.twitter = profile.id;
-          user.tokens.push({ kind: 'twitter', accessToken });
-          user.jwttokens.push(jwtToken);
-          if (profile.name.givenName === '' && profile.name.familyName === '' && profile.name.middleName === '') {
-            user.profile.name = profile.name.displayName;
-          } else {
-            user.profile.name = `${profile.name.givenName} ${profile.name.familyName}`;
-          }
-          user.profile.picture = profile._json.profile_image_url;
-          user.profile.location = (profile._json.location) ? profile._json.location : '';
-          user.save((err) => {
-            done(err, user, info);
-          });
-        }
-      });
-    } else {
-      const user = new User();
-      user.twitter = profile.id;
-      user.tokens.push({ kind: 'twitter', accessToken });
-      if (profile.name.givenName === '' && profile.name.familyName === '' && profile.name.middleName === '') {
-        user.profile.name = profile.name.displayName;
-      } else {
-        user.profile.name = `${profile.name.givenName} ${profile.name.familyName}`;
-      }
-      user.profile.picture = profile._json.profile_image_url;
-      user.profile.location = (profile._json.location) ? profile._json.location : '';
-      user.save((err) => {
-
-        
-        done(err, user, info);
-      });
-
-    }
+    var twitterToken = { kind: 'twitter', accessToken : token, tokenSecret : tokenSecret };
+    return createTwitterUser(existingUser, profile, twitterToken, done);
   });
 }
 ));
@@ -361,6 +274,37 @@ passport.use(new GitHubStrategy({
   }
 }));
 
+
+function createTwitterUser(user, profile, twitterToken, done) {
+  if (!user) {
+    user = new User();
+    // Twitter will not provide an email address.  Period.
+    // But a person’s twitter username is guaranteed to be unique
+    // so we can "fake" a twitter email address as follows:
+    user.email = `${profile.username}@twitter.com`;
+    user.twitter = profile.id;
+    user.profile.name = profile.displayName;
+    user.profile.location = profile._json.location;
+    user.profile.picture = profile._json.profile_image_url_https;
+  }
+
+  user.tokens.push(twitterToken);
+  var jwt_access_token = utils.createAccessToken(user.email, user._id);
+  var id_jwt_token = utils.createIdToken({
+    email: user.email
+  });
+  var info = { access_token: jwt_access_token };
+  var jwtToken = {
+    id_token: id_jwt_token,
+    access_token: jwt_access_token,
+    enabled: true
+  };
+  user.jwttokens.push(jwtToken);
+
+  user.save((err) => {
+    done(err, user, info);
+  });
+}
 // Sign in with Twitter.
 
 passport.use(new TwitterStrategy({
@@ -397,19 +341,7 @@ passport.use(new TwitterStrategy({
       if (existingUser) {
         return done(null, existingUser);
       }
-      const user = new User();
-      // Twitter will not provide an email address.  Period.
-      // But a person’s twitter username is guaranteed to be unique
-      // so we can "fake" a twitter email address as follows:
-      user.email = `${profile.username}@twitter.com`;
-      user.twitter = profile.id;
-      user.tokens.push({ kind: 'twitter', accessToken, tokenSecret });
-      user.profile.name = profile.displayName;
-      user.profile.location = profile._json.location;
-      user.profile.picture = profile._json.profile_image_url_https;
-      user.save((err) => {
-        done(err, user);
-      });
+      return createTwitterUser(null, profile, done);
     });
   }
 }));
