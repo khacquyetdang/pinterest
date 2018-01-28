@@ -8,9 +8,9 @@ import {
 } from './constants';
 import { SET_PHOTOS } from './../HomePage/constants';
 import request from 'utils/request';
-import { showProgressLog } from 'utils/Logger';
+import { showProgressLog } from 'utils/logger';
 import { loadLocalStorage, updateLocalStorage } from 'localStorage';
-//import auth from 'utils/auth';
+//import auth from 'utils/auth'app;
 import { push } from 'react-router-redux';
 import { logoutUrl, voteUrl } from 'config';
 import { setAuth } from './actions';

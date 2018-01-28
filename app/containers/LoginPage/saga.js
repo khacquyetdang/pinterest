@@ -4,7 +4,7 @@
 import { call, takeEvery, takeLatest, take, put } from 'redux-saga/effects';
 import { LOGIN_REQUEST, LOGIN_ERROR, LOGIN_SUCCESS, LOGIN_RESET, LOGIN_FACEBOOK_REQUEST } from './constants';
 import request,  { requestText } from 'utils/request';
-import { showProgressLog } from 'utils/Logger';
+import { showProgressLog } from 'utils/logger';
 import { loadLocalStorage, updateLocalStorage } from 'localStorage';
 //import auth from 'utils/auth';
 import { push } from 'react-router-redux';

@@ -7,7 +7,7 @@ GET_PHOTOS_ERROR, GET_PHOTOS_REQUEST, GET_PHOTOS_SUCCESS,
 DELETE_PHOTOS_ERROR, DELETE_PHOTOS_REQUEST, DELETE_PHOTOS_SUCCESS } from './constants';
 import { SHOW_NOTIFICATION } from '../App/constants';
 import request,  { requestText } from 'utils/request';
-import { showProgressLog } from 'utils/Logger';
+import { showProgressLog } from 'utils/logger';
 import { getToken, getLocale } from 'utils/store';
 import { loadLocalStorage, updateLocalStorage } from 'localStorage';
 //import auth from 'utils/auth';

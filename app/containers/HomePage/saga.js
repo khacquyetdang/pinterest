@@ -4,7 +4,7 @@
 import { call, takeEvery, takeLatest, take, put } from 'redux-saga/effects';
 import { GET_PHOTOS_ERROR, GET_PHOTOS_REQUEST, GET_PHOTOS_SUCCESS } from './constants';
 import request from 'utils/request';
-import { showProgressLog } from 'utils/Logger';
+import { showProgressLog } from 'utils/logger';
 import { loadLocalStorage, updateLocalStorage } from 'localStorage';
 //import auth from 'utils/auth';
 import { push } from 'react-router-redux';
