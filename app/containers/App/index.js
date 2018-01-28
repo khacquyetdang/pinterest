@@ -40,7 +40,7 @@ import { CLEAR_NOTIFICATION } from './constants';
 import { Notification } from 'react-notification';
 import { setAuth, logoutRequest } from './actions';
 import { loadLocalStorage } from 'localStorage';
-import { showProgressLog } from 'utils/Logger';
+import { showProgressLog } from 'utils/logger';
 
 export class App extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
