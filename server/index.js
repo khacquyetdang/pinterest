@@ -30,7 +30,7 @@ request = require('request'),
   /**
    * Load environment variables from .env file, where API keys and passwords are configured.
    */
-  dotenv.load({ path: '.env.developpement' });
+  dotenv.load({ path: '.env.' + process.env.NODE_ENV });
 
 const userController = require('./controllers/user');
 const photoController = require('./controllers/photo');
