@@ -26,6 +26,7 @@ import { getPhotoRequest } from './actions';
 import { votePhotoRequest } from './../App/actions';
 export class HomePage extends React.Component { // eslint-disable-line react/prefer-stateless-function
   componentDidMount() {
+    console.log("HomePage did mount");
     this.props.dispatch(getPhotoRequest(this.props.locale));
   }
 
@@ -36,7 +37,7 @@ export class HomePage extends React.Component { // eslint-disable-line react/pre
     return (
       <div>
         <Helmet>
-          <title>HomePage</title>
+          <title>HomePagechange</title>
           <meta name="description" content="Description of HomePage" />
         </Helmet>
         <div className="container">
