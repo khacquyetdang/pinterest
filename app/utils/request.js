@@ -8,6 +8,9 @@ import 'whatwg-fetch';
  * @return {object}          The parsed JSON, status from the response
  */
 export function parseJSON(response) {
+  //return null;
+  console.log("parjson");
+  try {
   return new Promise((resolve) => response.json()
     .then(function (json) {
       json.status = response.status;
@@ -15,6 +18,11 @@ export function parseJSON(response) {
         json
       )
     }));
+  }
+  catch (e){
+    return null;
+  }
+
 }
 
 

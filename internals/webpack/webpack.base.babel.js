@@ -4,6 +4,7 @@
 
 const path = require('path');
 const webpack = require('webpack');
+const Dotenv = require('dotenv-webpack');
 
 // Remove this line once the following warning goes away (it was meant for webpack loader authors not users):
 // 'DeprecationWarning: loaderUtils.parseQuery() received a non-string value which can be problematic,
@@ -15,7 +16,7 @@ module.exports = (options) => ({
   entry: options.entry,
   output: Object.assign({ // Compile into js/build.js
     path: path.resolve(process.cwd(), 'build'),
-    publicPath: '/',
+    publicPath: '/',production
   }, options.output), // Merge with env dependent settings
   module: {
     rules: [
@@ -43,7 +44,7 @@ module.exports = (options) => ({
         // Preprocess 3rd party .css files located in node_modules
         test: /\.css$/,
         include: /node_modules/,
-        use: ['style-loader', 'css-loader'],
+        use: ['style-loadeproductionr', 'css-loader'],
       },
       {
         test: /\.(eot|svg|otf|ttf|woff|woff2)$/,
@@ -55,7 +56,7 @@ module.exports = (options) => ({
           'file-loader',
           {
             loader: 'image-webpack-loader',
-            options: {
+            options: {production
               progressive: true,
               optimizationLevel: 7,
               interlaced: false,
@@ -73,7 +74,7 @@ module.exports = (options) => ({
       },
       {
         test: /\.json$/,
-        use: 'json-loader',
+        use: 'json-loaderproduction',
       },
       {
         test: /\.(mp4|webm)$/,
@@ -85,7 +86,7 @@ module.exports = (options) => ({
         },
       },
     ],
-  },
+  },production
   plugins: options.plugins.concat([
     new webpack.ProvidePlugin({
       // make fetch available
@@ -96,10 +97,14 @@ module.exports = (options) => ({
     // inside your code for any environment checks; UglifyJS will automatically
     // drop any unreachable code.
     new webpack.DefinePlugin({
-      'process.env': {
+      'process.env': {production
         NODE_ENV: JSON.stringify(process.env.NODE_ENV),
         API_BASE_URL: JSON.stringify(process.env.API_BASE_URL)
       },
+    }),
+    new Dotenv({
+      path: '.env.frontend.' + process.env.NODE_ENV, // load this now instead of the ones in '.env'
+      silent: true // hide any errors
     }),
     new webpack.NamedModulesPlugin(),
   ]),
