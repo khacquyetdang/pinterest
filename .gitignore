@@ -13,3 +13,4 @@ npm-debug.log
 .env.*
 node_modules
 .github
+scp_env.sh
