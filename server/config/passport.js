@@ -77,19 +77,21 @@ passport.use(new FacebookTokenStrategy({
     console.log("err", err);
     //console.log("existing user", existingUser);
 
-    var access_token = utils.createAccessToken(existingUser.email, existingUser._id);
-    var id_token = utils.createIdToken({
-      email: existingUser.email
-    });
-    var info = { access_token: access_token };
-    var jwtToken = {
-      id_token: id_token,
-      access_token: access_token,
-      enabled: true
-    };
 
     if (err) { return done(err); }
     if (existingUser) {
+
+      var access_token = utils.createAccessToken(existingUser.email, existingUser._id);
+      var id_token = utils.createIdToken({
+        email: existingUser.email
+      });
+      var info = { access_token: access_token };
+      var jwtToken = {
+        id_token: id_token,
+        access_token: access_token,
+        enabled: true
+      };
+
       existingUser.jwttokens.push(jwtToken);
       return existingUser.save((err) => {
         done(err, existingUser, info);
@@ -100,6 +102,18 @@ passport.use(new FacebookTokenStrategy({
       if (existingEmailUser) {
         //req.flash('errors', { msg: 'There is already an account using this email address. Sign in to that account and link it with Facebook manually from Account Settings.' });
         console.log("existingEmailUser ");
+
+        var access_token = utils.createAccessToken(existingEmailUser.email, existingEmailUser._id);
+        var id_token = utils.createIdToken({
+          email: existingUser.email
+        });
+        var info = { access_token: access_token };
+        var jwtToken = {
+          id_token: id_token,
+          access_token: access_token,
+          enabled: true
+        };
+
         existingEmailUser.facebook = profile.id;
 
         existingEmailUser.tokens.push({ kind: 'facebook', accessToken });
@@ -114,6 +128,19 @@ passport.use(new FacebookTokenStrategy({
 
       } else {
         const user = new User();
+
+        var access_token = utils.createAccessToken(profile._json.email, user._id);
+        var id_token = utils.createIdToken({
+          email: profile._json.email
+        });
+        var info = { access_token: access_token };
+        var jwtToken = {
+          id_token: id_token,
+          access_token: access_token,
+          enabled: true
+        };
+
+
         user.email = profile._json.email;
         user.facebook = profile.id;
         user.tokens.push({ kind: 'facebook', accessToken });
