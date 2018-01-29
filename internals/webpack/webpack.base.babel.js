@@ -98,7 +98,8 @@ module.exports = (options) => ({
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV),
-        API_BASE_URL: JSON.stringify(process.env.API_BASE_URL)
+        API_BASE_URL: JSON.stringify(process.env.API_BASE_URL),
+        FACEBOOK_ID: JSON.stringify(process.env.FACEBOOK_ID),
       },
     }),
     new webpack.NamedModulesPlugin(),

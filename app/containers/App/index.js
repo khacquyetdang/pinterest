@@ -41,6 +41,8 @@ import { Notification } from 'react-notification';
 import { setAuth, logoutRequest } from './actions';
 import { loadLocalStorage } from 'localStorage';
 import { showProgressLog } from 'utils/logger';
+import 'bootstrap-social/bootstrap-social.css';
+
 
 export class App extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
@@ -68,7 +70,7 @@ export class App extends React.Component { // eslint-disable-line react/prefer-s
     if (this.props.app.shownotif) {
       return <Notification
         isActive={this.props.app.shownotif}
-        activeBarStyle={{ left: "50%" }}
+        activeBarStyle={{ left: "50%", zIndex : 1000 }}
         message={this.props.app.notifmessage}
         action={formatMessage(messages.dissmiss)}
         autoDismiss={5}

@@ -28,10 +28,10 @@ const User = require('./models/User');
 request = require('request'),
 
   /**
-   * Load environment variables from .env file, where API keys and passwords are configured.
-   */
+  * Load environment variables from .env file, where API keys and passwords are configured.
+  */
   console.log("node env : ", process.env.NODE_ENV);
-  dotenv.load({ path: '.env.' + process.env.NODE_ENV });
+dotenv.load({ path: '.env.' + process.env.NODE_ENV });
 console.log("api base url", process.env.API_BASE_URL);
 const userController = require('./controllers/user');
 const photoController = require('./controllers/photo');
@@ -195,7 +195,7 @@ app.post('/api/auth/twitter/token',
   },
   function (req, res) {
     passport.authenticate('twitter-token',
-      function (err, user, info) {       
+      function (err, user, info) {
         console.log('inside twitter-token endpoint');
         console.log("user", user);
         console.log("err ", err);

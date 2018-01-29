@@ -65,7 +65,10 @@ export default defineMessages({
     id: 'app.containers.App.cancel',
     defaultMessage: 'Annuler',
   },
-
+  connexion_ok: {
+    id: 'app.containers.App.connexion_ok',
+    defaultMessage: "Vous êtes maitenant connecté"    
+  },
   dissmiss: {
     id: 'app.containers.App.dissmiss',
     defaultMessage: 'Ok',    
