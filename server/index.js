@@ -27,11 +27,13 @@ const utils = require('./utils/index');
 const User = require('./models/User');
 request = require('request'),
 
-  /**
+/**
   * Load environment variables from .env file, where API keys and passwords are configured.
   */
-  console.log("node env : ", process.env.NODE_ENV);
-dotenv.load({ path: '.env.' + process.env.NODE_ENV });
+console.log("node env : ", process.env.NODE_ENV);
+dotenv.load({
+  path: '.env.' + process.env.NODE_ENV
+});
 console.log("api base url", process.env.API_BASE_URL);
 const userController = require('./controllers/user');
 const photoController = require('./controllers/photo');
@@ -41,12 +43,13 @@ const photoController = require('./controllers/photo');
  */
 const passportConfig = require('./config/passport');
 
-
 const argv = require('./argv');
 const port = require('./port');
 const setup = require('./middlewares/frontendMiddleware');
 const isDev = process.env.NODE_ENV !== 'production';
-const ngrok = (isDev && process.env.ENABLE_TUNNEL) || argv.tunnel ? require('ngrok') : false;
+const ngrok = (isDev && process.env.ENABLE_TUNNEL) || argv.tunnel
+  ? require('ngrok')
+  : false;
 const resolve = require('path').resolve;
 const app = express();
 
@@ -55,17 +58,20 @@ const app = express();
  */
 mongoose.Promise = global.Promise;
 console.log("env MONGODB_URI", process.env.MONGODB_URI);
-mongoose.connect(process.env.MONGODB_URI || process.env.MONGOLAB_URI, { useMongoClient: true });
-mongoose.connection.on('error', (err) => {
-  console.error(err);
-  console.log('%s MongoDB connection error. Please make sure MongoDB is running.', chalk.red('✗'));
-  process.exit();
-});
-
+mongoose.connect(process.env.MONGODB_URI || process.env.MONGOLAB_URI, {useMongoClient: true});
+mongoose
+  .connection
+  .on('error', (err) => {
+    console.error(err);
+    console.log('%s MongoDB connection error. Please make sure MongoDB is running.', chalk.red('✗'));
+    process.exit();
+  });
 
 // minimal config
 i18n.configure({
-  locales: ['en', 'fr'],
+  locales: [
+    'en', 'fr'
+  ],
   directory: __dirname + '/locales',
   defaultLocale: 'fr',
   autoReload: true,
@@ -77,7 +83,7 @@ i18n.configure({
 app.use(compression());
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(expressValidator());
 app.use(cors())
 
@@ -93,10 +99,8 @@ app.use(session({
 }));
 
 if (process.env.NODE_ENV === 'development') {
-  //app.use(logger('dev'));
-  //app.use(errorHandler())
+  //app.use(logger('dev')); app.use(errorHandler())
 }
-
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -109,18 +113,12 @@ app.use((req, res, next) => {
   next();
 });*/
 
-// routing 
+// routing
 app.use(i18n.init);
 
-var jwtCheck = jwt({
-  secret: jwtconfig.secret,
-  audience: jwtconfig.audience,
-  issuer: jwtconfig.issuer,
-  errorOnFailedAuth: false
-});
+var jwtCheck = jwt({secret: jwtconfig.secret, audience: jwtconfig.audience, issuer: jwtconfig.issuer, errorOnFailedAuth: false});
 
-// Check for scope
-// @TODO check why requireScope is not work
+// Check for scope @TODO check why requireScope is not work
 /*function requireScope(scope) {
   return function (err, req, res, next) {
     if (err.name === 'UnauthorizedError') {
@@ -168,22 +166,26 @@ app.get('/api/auth/facebook/callback', passport.authenticate('facebook', { failu
   res.redirect(req.session.returnTo || '/');
 });*/
 
-app.post('/api/auth/twitter/token',
-  function (req, res, next) {
-    request.post({
+app.post('/api/auth/twitter/token', function (req, res, next) {
+  request
+    .post({
       url: `https://api.twitter.com/oauth/access_token?oauth_verifier`,
       oauth: {
         consumer_key: process.env.TWITTER_KEY,
         consumer_secret: process.env.TWITTER_SECRET,
         token: req.query.oauth_token
       },
-      form: { oauth_verifier: req.query.oauth_verifier }
+      form: {
+        oauth_verifier: req.query.oauth_verifier
+      }
     }, function (err, r, body) {
       if (err) {
-        return res.send(HttpStatus.INTERNAL_SERVER_ERROR, { msg: err.message });
+        return res.send(HttpStatus.INTERNAL_SERVER_ERROR, {msg: err.message});
       }
 
-      const bodyString = '{ "' + body.replace(/&/g, '", "').replace(/=/g, '": "') + '"}';
+      const bodyString = '{ "' + body
+        .replace(/&/g, '", "')
+        .replace(/=/g, '": "') + '"}';
       const parsedBody = JSON.parse(bodyString);
 
       req.body['oauth_token'] = parsedBody.oauth_token;
@@ -192,48 +194,42 @@ app.post('/api/auth/twitter/token',
 
       next();
     });
-  },
-  function (req, res) {
-    passport.authenticate('twitter-token',
-      function (err, user, info) {
-        console.log('inside twitter-token endpoint');
-        console.log("user", user);
-        console.log("err ", err);
-        console.log("info ", info);
-        if (err) {
-          return res.status(HttpStatus.CONFLICT).send(
-            {
-              error: {
-                msg: err
-              }
+}, function (req, res) {
+  passport
+    .authenticate('twitter-token', function (err, user, info) {
+      console.log('inside twitter-token endpoint');
+      console.log("user", user);
+      console.log("err ", err);
+      console.log("info ", info);
+      if (err) {
+        return res
+          .status(HttpStatus.CONFLICT)
+          .send({
+            error: {
+              msg: err
             }
-          );
-        }
-        if (!user) {
-          return res.status(HttpStatus.UNAUTHORIZED).send(
-            {
-              error: {
-                msg: __("Authentication needed, please login to access to this page")
-              }
+          });
+      }
+      if (!user) {
+        return res
+          .status(HttpStatus.UNAUTHORIZED)
+          .send({
+            error: {
+              msg: __("Authentication needed, please login to access to this page")
             }
-          );
-        }
-        else {
-          return res.status(HttpStatus.OK).send(
-            {
-              msg: __("Authentication Ok"),
-              access_token: info.access_token
-            }
-          );
-        }
-      })(req, res);
-  }
-);
+          });
+      } else {
+        return res
+          .status(HttpStatus.OK)
+          .send({msg: __("Authentication Ok"), access_token: info.access_token});
+      }
+    })(req, res);
+});
 
 // this route is for request token on server side
-app.post('/api/auth/twitter/reverse',
-  function (req, res) {
-    request.post({
+app.post('/api/auth/twitter/reverse', function (req, res) {
+  request
+    .post({
       url: 'https://api.twitter.com/oauth/request_token',
       oauth: {
         oauth_callback: "http%3A%2F%2Flocalhost%3A3000%2Ftwitter-callback",
@@ -243,53 +239,48 @@ app.post('/api/auth/twitter/reverse',
     }, function (err, r, body) {
 
       if (err) {
-        return res.send(500, { message: e.message });
+        return res.send(500, {message: e.message});
       }
 
-      var jsonStr = '{ "' + body.replace(/&/g, '", "').replace(/=/g, '": "') + '"}';
+      var jsonStr = '{ "' + body
+        .replace(/&/g, '", "')
+        .replace(/=/g, '": "') + '"}';
       res.send(JSON.parse(jsonStr));
     });
-  });
+});
 
+app.get('/api/auth/facebook/token', (req, res) => {
+  passport
+    .authenticate('facebook-token', function (err, user, info) { // do something with req.user
+      console.log('insde endpoint');
+      console.log("user", user);
+      console.log("err ", err);
+      console.log("info ", info);
 
-app.get('/api/auth/facebook/token',
-  (req, res) => {
-    passport.authenticate('facebook-token',
-      function (err, user, info) {        // do something with req.user
-        console.log('insde endpoint');
-        console.log("user", user);
-        console.log("err ", err);
-        console.log("info ", info);
-
-        if (err) {
-          return res.status(HttpStatus.CONFLICT).send(
-            {
-              error: {
-                msg: err
-              }
+      if (err) {
+        return res
+          .status(HttpStatus.CONFLICT)
+          .send({
+            error: {
+              msg: err
             }
-          );
-        }
-        if (!user) {
-          return res.status(HttpStatus.UNAUTHORIZED).send(
-            {
-              error: {
-                msg: __("Authentication needed, please login to access to this page")
-              }
+          });
+      }
+      if (!user) {
+        return res
+          .status(HttpStatus.UNAUTHORIZED)
+          .send({
+            error: {
+              msg: __("Authentication needed, please login to access to this page")
             }
-          );
-        }
-        else {
-          return res.status(HttpStatus.OK).send(
-            {
-              msg: __("Authentication Ok"),
-              access_token: info.access_token
-            }
-          );
-        }
-      })(req, res);
-  });
-
+          });
+      } else {
+        return res
+          .status(HttpStatus.OK)
+          .send({msg: __("Authentication Ok"), access_token: info.access_token});
+      }
+    })(req, res);
+});
 
 /**
  * custome middle where to check jwt
@@ -299,75 +290,77 @@ const isAuthenticatedWithJwtToken = (req, res, next) => {
 
   var userid = req.user.userid;
   var access_token = utils.getTokenFromReq(req);
-  User.findOne(
-    { _id: userid },
-    {
-      "jwttokens": {
-        $elemMatch:
-          {
-            access_token: access_token, enabled: true
-          }
+  User.findOne({
+    _id: userid
+  }, {
+    "jwttokens": {
+      $elemMatch: {
+        access_token: access_token,
+        enabled: true
       }
-    }, function (err, existingUser) {
-      console.log("check jwt token with db");
+    }
+  }, function (err, existingUser) {
+    console.log("check jwt token with db");
 
-      if (err) {
-        utils.handleError(res, err, HttpStatus.CONFLICT);
-        return;
-      }
+    if (err) {
+      utils.handleError(res, err, HttpStatus.CONFLICT);
+      return;
+    }
 
-      if (!existingUser) {
-        utils.handleError(res, __("Authentication needed, please login to access to this page"), HttpStatus.CONFLICT);
-        return;
-      }
+    if (!existingUser) {
+      utils.handleError(res, __("Authentication needed, please login to access to this page"), HttpStatus.CONFLICT);
+      return;
+    }
 
-      if (existingUser.jwttokens.length >= 1) {
-        next();
-      }
-      else {
-        utils.handleError(res, __("Authentication needed, please login to access to this page"), HttpStatus.CONFLICT);
-        return;
-      }
+    if (existingUser.jwttokens.length >= 1) {
+      next();
+    } else {
+      utils.handleError(res, __("Authentication needed, please login to access to this page"), HttpStatus.CONFLICT);
+      return;
+    }
 
-    });
+  });
 }
 
-app.use(function (err, req, res, next) {
-  console.log("app use");
-  if (err.name.startsWith('UnauthorizedError')
-    || err.name.startsWith("Malformed access token")) {
-    //utils.errorHandler
-    return res.status(HttpStatus.UNAUTHORIZED)
-      .send({
-        error: {
-          msg: __("Authentication needed, please login to access to this page")
-        }
-      });
-  }
-});
+app
+  .use(function (err, req, res, next) {
+    console.log("app use");
+    if (err.name.startsWith('UnauthorizedError') || err.name.startsWith("Malformed access token")) {
+      //utils.errorHandler
+      return res
+        .status(HttpStatus.UNAUTHORIZED)
+        .send({
+          error: {
+            msg: __("Authentication needed, please login to access to this page")
+          }
+        });
+    }
+  });
 
-//app.post('/api/photo', jwtCheck);
-//app.post('/api/photo', requireScope);
-
-
+//app.post('/api/photo', jwtCheck); app.post('/api/photo', requireScope);
 
 app.post('/api/signup', userController.postSignup);
 app.post('/api/login', userController.postLogin);
 
-// app.post('/api/photo', jwtCheck, requireScope('full_access'), photoController.add);
-//app.post('/api/photo', photoController.add);
+// app.post('/api/photo', jwtCheck, requireScope('full_access'),
+// photoController.add); app.post('/api/photo', photoController.add);
 app.post('/api/photo', function (req, res) {
   res.send("J'enlve tout");
 });
 
 app.delete('/api/photo/:photoId', photoController.delete);
 
-//app.post('/api/photo/vote/:photoId', jwtCheck, requireScope('full_access'), photoController.vote);
-app.get('/api/myphoto', [jwtCheck, isAuthenticatedWithJwtToken], photoController.myphoto);
+// app.post('/api/photo/vote/:photoId', jwtCheck, requireScope('full_access'),
+// photoController.vote);
+app.get('/api/myphoto', [
+  jwtCheck, isAuthenticatedWithJwtToken
+], photoController.myphoto);
 
 app.get('/api/photo', photoController.get);
 
-app.get('/api/logout', [jwtCheck, isAuthenticatedWithJwtToken], userController.logout);
+app.get('/api/logout', [
+  jwtCheck, isAuthenticatedWithJwtToken
+], userController.logout);
 /*app.post('/api/signup', function (req, res, next) {
   res.send('hello postvcefd');
 });*/
@@ -375,15 +368,15 @@ app.get('/api/logout', [jwtCheck, isAuthenticatedWithJwtToken], userController.l
 /**
  * Error Handler.
  */
-//app.use(errorHandler());
-
-// In production we need to pass these values in instead of relying on webpack
+// app.use(errorHandler()); In production we need to pass these values in instead
+// of relying on webpack
 setup(app, {
   outputPath: resolve(process.cwd(), 'build'),
-  publicPath: '/',
+  publicPath: '/'
 });
 
-// get the intended host and port number, use localhost and port 3000 if not provided
+// get the intended host and port number, use localhost and port 3000 if not
+// provided
 const customHost = argv.host || process.env.HOST;
 const host = customHost || null; // Let http.Server use its default IPv6/4 host
 const prettyHost = customHost || 'localhost';
