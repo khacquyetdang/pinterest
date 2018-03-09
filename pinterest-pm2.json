@@ -1,0 +1,9 @@
+{
+    "apps": [
+        {
+            "name": "pinterest",
+            "script": "yarn",
+            "args" : "start:prod"
+        }
+    ]
+}
