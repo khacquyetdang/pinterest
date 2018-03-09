@@ -344,11 +344,13 @@ app.post('/api/login', userController.postLogin);
 
 // app.post('/api/photo', jwtCheck, requireScope('full_access'),
 // photoController.add); app.post('/api/photo', photoController.add);
-app.post('/api/photo', function (req, res) {
-  res.send("J'enlve tout");
-});
+app.post('/api/photo', [
+  jwtCheck, isAuthenticatedWithJwtToken
+], photoController.add);
 
-app.delete('/api/photo/:photoId', photoController.delete);
+app.delete('/api/photo/:photoId', [
+  jwtCheck, isAuthenticatedWithJwtToken
+],photoController.delete);
 
 // app.post('/api/photo/vote/:photoId', jwtCheck, requireScope('full_access'),
 // photoController.vote);
