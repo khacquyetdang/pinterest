@@ -31,7 +31,9 @@ const ReactBoilerplate = {
         'fs',
         'osenv',
         'tls',
-        'net'
+        'net',
+        'fsevents',
+        'dotenv-webpack'
       ],
 
       /**
