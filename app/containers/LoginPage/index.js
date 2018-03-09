@@ -120,6 +120,13 @@ export class LoginPage extends React.Component { // eslint-disable-line react/pr
         .dispatch(loginRequest({email: this.email.value, password: this.password.value}));
     }
   }
+
+  onRegisterClick = () => {
+    this
+      .props
+      .history
+      .push('/register');
+  }
   render() {
 
     if (this.props.app.access_token) {
@@ -264,8 +271,12 @@ export class LoginPage extends React.Component { // eslint-disable-line react/pr
                             <h3>
                               <p><FormattedMessage {...messages.not_register_yet}/></p>
                             </h3>
-                            <Button disabled={isDisable} bsStyle="primary" className="active mt-3"><FormattedMessage {...messages.register_now}/>
-                              !</Button>
+                            <Button
+                              disabled={isDisable}
+                              bsStyle="primary"
+                              className="active mt-3"
+                              onClick={this.onRegisterClick}><FormattedMessage {...messages.register_now}/> {" !"}
+                            </Button>
                           </div>
                         </div>
                       </div>
