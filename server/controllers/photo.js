@@ -62,10 +62,20 @@ exports.add = (req, res) => {
                     }
                 });
             }
-            return res.status(HttpStatus.OK).send({
-                msg: __("The photo is added")
+            return Photo.find({ owner: existingUser.id }).populate('owner', 'email').exec(function (err, photos) {
+                if (err) {
+                    return res.status(HttpStatus.CONFLICT).send({
+                        error: {
+                            msg: err
+                        }
+                    });
+                }
+    
+                return res.status(HttpStatus.OK).send({
+                    msg: __("The photo is added"),
+                    photos: photos
+                });    
             });
-
         });
 
     });
@@ -88,7 +98,7 @@ exports.delete = (req, res) => {
                 }
             });
         }
-        return getAllPhotos(req, res);
+        return getAllPhotos(req, res, null);
     });
 }
 
@@ -144,7 +154,7 @@ exports.vote = (req, res) => {
                                 }
                             });
                         }
-                        return getAllPhotos(req, res);
+                        return getAllPhotos(req, res, null);
                     });
             }
             else {
@@ -169,7 +179,7 @@ exports.vote = (req, res) => {
                                 }
                             });
                         }
-                        return getAllPhotos(req, res);
+                        return getAllPhotos(req, res, null);
 
                     }
                 );
@@ -223,10 +233,10 @@ exports.myphoto = (req, res) => {
  */
 exports.get = (req, res) => {
 
-    getAllPhotos(req, res);
+    getAllPhotos(req, res, null);
 }
 
-function getAllPhotos(req, res) {
+function getAllPhotos(req, res, msg) {
     Photo.find({}).populate('owner', 'email').exec(function (err, photos) {
         if (err) {
             return res.status(HttpStatus.CONFLICT).send({
@@ -236,9 +246,9 @@ function getAllPhotos(req, res) {
             });
         }
 
-
         return res.status(HttpStatus.OK).send({
-            photos: photos
+            photos: photos,
+            msg : msg
         });
 
     });

@@ -142,7 +142,7 @@ export function* fetchAddPhoto(action) {
       yield put({ type: ADD_PHOTO_ERROR, error: response.error });
     }
     else {
-      yield put({ type: ADD_PHOTO_SUCCESS });
+      yield put({ type: ADD_PHOTO_SUCCESS, photos: response.photos });
       yield put({ type: SHOW_NOTIFICATION, message: response.msg });
 
     }

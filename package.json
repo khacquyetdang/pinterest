@@ -294,6 +294,7 @@
     "react-twitter-auth": "^0.0.10",
     "redux": "3.6.0",
     "redux-immutable": "4.0.0",
+    "redux-logger": "^3.0.6",
     "redux-saga": "0.15.3",
     "request": "^2.83.0",
     "reselect": "3.0.1",

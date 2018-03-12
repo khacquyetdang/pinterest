@@ -33,7 +33,7 @@ const ReactBoilerplate = {
         'tls',
         'net',
         'fsevents',
-        'dotenv-webpack'
+        'dotenv-webpack',
       ],
 
       /**

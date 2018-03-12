@@ -48,6 +48,7 @@ function dashBoardReducer(state = initialState, action) {
       return state.set("loading", false)
         .set("error", null)
         .set("notif_add_photo_ok", true)
+        .set("photos", action.photos)      
         .set('showModal', false);
     case CLEAR_PHOTO_ERROR:
       return state
@@ -63,7 +64,7 @@ function dashBoardReducer(state = initialState, action) {
       return state.set('loading', false)
         .set('error', action.error);
     case CLEAR_NOTIFICATION:
-      return initialState;
+      return state.set('notif_add_photo_ok', false);
     default:
       return state;
   }
