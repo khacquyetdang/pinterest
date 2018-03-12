@@ -287,7 +287,7 @@ app.get('/api/auth/facebook/token', (req, res) => {
  */
 const isAuthenticatedWithJwtToken = (req, res, next) => {
   //res.sendStatus(401);
-
+  console.log('isAuthenticatedWithJwtToken');
   var userid = req.user.userid;
   var access_token = utils.getTokenFromReq(req);
   User.findOne({
@@ -322,20 +322,6 @@ const isAuthenticatedWithJwtToken = (req, res, next) => {
   });
 }
 
-app
-  .use(function (err, req, res, next) {
-    console.log("app use");
-    if (err.name.startsWith('UnauthorizedError') || err.name.startsWith("Malformed access token")) {
-      //utils.errorHandler
-      return res
-        .status(HttpStatus.UNAUTHORIZED)
-        .send({
-          error: {
-            msg: __("Authentication needed, please login to access to this page")
-          }
-        });
-    }
-  });
 
 //app.post('/api/photo', jwtCheck); app.post('/api/photo', requireScope);
 
@@ -366,6 +352,25 @@ app.get('/api/logout', [
 /*app.post('/api/signup', function (req, res, next) {
   res.send('hello postvcefd');
 });*/
+
+app
+  .use(function (err, req, res, next) {
+    console.log("app use");
+    if (err) {
+      console.log("app err: ", err);      
+    }
+    if (err.name.startsWith('UnauthorizedError') || err.name.startsWith("Malformed access token")) {
+      //utils.errorHandler
+      return res
+        .status(HttpStatus.UNAUTHORIZED)
+        .send({
+          error: {
+            msg: __("Authentication needed, please login to access to this page")
+          }
+        });
+    }
+  });
+
 
 /**
  * Error Handler.

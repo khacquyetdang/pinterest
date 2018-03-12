@@ -92,7 +92,7 @@ export function* fetchDelete(action) {
       yield put({ type: SET_PHOTOS, photos: response.photos });
     }
   } catch (err) {
-    yield put({ type: VOTE_PHOTO_ERROR, error: { msg: err } });
+    yield put({ type: DELETE_PHOTOS_ERROR, error: { msg: err } });
     yield put({ type: SHOW_NOTIFICATION, message: err });
     //showProgressLog(err);
   }
