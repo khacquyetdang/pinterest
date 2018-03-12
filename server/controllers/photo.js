@@ -87,7 +87,8 @@ exports.add = (req, res) => {
  */
 exports.delete = (req, res) => {
     var photoId = req.params.photoId;
-
+    var userid = req.user.userid;
+ 
     Photo.remove({
         _id: photoId
     }, (err) => {
@@ -98,7 +99,21 @@ exports.delete = (req, res) => {
                 }
             });
         }
-        return getAllPhotos(req, res, null);
+        return Photo.find({ owner: userid }).populate('owner', 'email').exec(function (err, photos) {
+            if (err) {
+                return res.status(HttpStatus.CONFLICT).send({
+                    error: {
+                        msg: err
+                    }
+                });
+            }
+
+            return res.status(HttpStatus.OK).send({
+                photos: photos,
+                msg: __("This photo is deleted")
+            });
+
+        });
     });
 }
 

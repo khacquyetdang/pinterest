@@ -88,8 +88,8 @@ export function* fetchDelete(action) {
     }
 
     if (response.photos) {
-      yield put({ type: DELETE_PHOTOS_SUCCESS });
-      yield put({ type: SET_PHOTOS, photos: response.photos });
+      yield put({ type: DELETE_PHOTOS_SUCCESS, photos: response.photos });
+      yield put({ type: SHOW_NOTIFICATION, message: response.msg });
     }
   } catch (err) {
     yield put({ type: DELETE_PHOTOS_ERROR, error: { msg: err } });
