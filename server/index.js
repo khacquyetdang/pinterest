@@ -221,7 +221,9 @@ app.post('/api/auth/twitter/token', function (req, res, next) {
       } else {
         return res
           .status(HttpStatus.OK)
-          .send({msg: __("Authentication Ok"), access_token: info.access_token});
+          .send({msg: __("Authentication Ok"), 
+          user_id: user.id,
+          access_token: info.access_token});
       }
     })(req, res);
 });
@@ -277,7 +279,7 @@ app.get('/api/auth/facebook/token', (req, res) => {
       } else {
         return res
           .status(HttpStatus.OK)
-          .send({msg: __("Authentication Ok"), access_token: info.access_token});
+          .send({msg: __("Authentication Ok"), user_id: user.id, access_token: info.access_token});
       }
     })(req, res);
 });
@@ -322,7 +324,6 @@ const isAuthenticatedWithJwtToken = (req, res, next) => {
   });
 }
 
-
 //app.post('/api/photo', jwtCheck); app.post('/api/photo', requireScope);
 
 app.post('/api/signup', userController.postSignup);
@@ -336,7 +337,7 @@ app.post('/api/photo', [
 
 app.delete('/api/photo/:photoId', [
   jwtCheck, isAuthenticatedWithJwtToken
-],photoController.delete);
+], photoController.delete);
 
 // app.post('/api/photo/vote/:photoId', jwtCheck, requireScope('full_access'),
 // photoController.vote);
@@ -353,30 +354,28 @@ app.get('/api/logout', [
   res.send('hello postvcefd');
 });*/
 
-app
-  .use(function (err, req, res, next) {
-    console.log("app use");
-    if (err) {
-      console.log("app err: ", err);      
-    }
-    if (err.name.startsWith('UnauthorizedError') || err.name.startsWith("Malformed access token")) {
-      //utils.errorHandler
-      return res
-        .status(HttpStatus.UNAUTHORIZED)
-        .send({
-          error: {
-            msg: __("Authentication needed, please login to access to this page")
-          }
-        });
-    }
-  });
-
+app.use(function (err, req, res, next) {
+  console.log("app use");
+  if (err) {
+    console.log("app err: ", err);
+  }
+  if (err.name.startsWith('UnauthorizedError') || err.name.startsWith("Malformed access token")) {
+    //utils.errorHandler
+    return res
+      .status(HttpStatus.UNAUTHORIZED)
+      .send({
+        error: {
+          msg: __("Authentication needed, please login to access to this page")
+        }
+      });
+  }
+});
 
 /**
  * Error Handler.
  */
-// app.use(errorHandler()); In production we need to pass these values in instead
-// of relying on webpack
+// app.use(errorHandler()); In production we need to pass these values in
+// instead of relying on webpack
 setup(app, {
   outputPath: resolve(process.cwd(), 'build'),
   publicPath: '/'

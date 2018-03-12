@@ -122,10 +122,11 @@ export class RegisterPage extends React.Component { // eslint-disable-line react
         console.log("onTwitterSuccess json: ", responseJson);
         if (responseJson.status === 200) {
           var access_token = responseJson.access_token;
+          var id_user = this.responseJson.id_user;
           updateLocalStorage({access_token: access_token});
           this
             .props
-            .dispatch(setAuth(access_token));
+            .dispatch(setAuth(access_token, id_user));
           this
             .props
             .dispatch(showNotif(formatMessage(messagesApp.connexion_ok)));

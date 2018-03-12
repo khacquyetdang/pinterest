@@ -64,12 +64,13 @@ export function* fetchRegisterFacebook(action) {
     if (response && response.status === 200 && response.access_token) {
       updateLocalStorage(
         {
-          access_token: response.access_token
+          access_token: response.access_token,
+          id_user : response.id_user,
         }
       );
       yield put({ type: REGISTER_SUCCESS });
       //yield put(showNotif(formatMessage(messages.connexion_ok)));
-      yield put(setAuth(response.access_token));
+      yield put(setAuth(response.access_token, response.id_user));
     }
     else {
       yield put({ type: REGISTER_ERROR, error: response.error || 'Erreur' });

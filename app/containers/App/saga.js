@@ -110,7 +110,7 @@ export function* logout() {
     }
   );
   yield put({ type: LOGOUT_SUCCESS });
-  yield put(setAuth(null));
+  yield put(setAuth(null, null));
   yield put({
     type: SHOW_NOTIFICATION
     , message: "Vous êtes déconnecté du site"

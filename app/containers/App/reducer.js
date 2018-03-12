@@ -10,7 +10,7 @@
  *   return state.set('yourStateVariable', true);
  */
 
-import { fromJS } from 'immutable';
+import {fromJS} from 'immutable';
 
 import {
   LOGOUT_ERROR,
@@ -28,6 +28,7 @@ import {
 // The initial state of the App
 const initialState = fromJS({
   access_token: null,
+  id_user: null,
   loading: false,
   loading_logout: false,
   shownotif: false,
@@ -35,15 +36,14 @@ const initialState = fromJS({
   error: false,
   currentUser: false,
   userData: {
-    repositories: false,
-  },
+    repositories: false
+  }
 });
 
 function appReducer(state = initialState, action) {
   switch (action.type) {
     case LOGOUT_REQUEST:
-      return state
-        .set('loading_logout', true);
+      return state.set('loading_logout', true);
     case LOGOUT_SUCCESS:
       return state
         .set('error', null)
@@ -54,15 +54,18 @@ function appReducer(state = initialState, action) {
         .set('loading_logout', false);
     case SET_AUTH:
       return state
-        .set('access_token', action.access_token);
+        .set('access_token', action.access_token)
+        .set('id_user', action.id_user);
     case SHOW_NOTIFICATION:
       {
-        return state.set('shownotif', true)
+        return state
+          .set('shownotif', true)
           .set('notifmessage', action.message);
       }
     case CLEAR_NOTIFICATION:
       {
-        return state.set('shownotif', false)
+        return state
+          .set('shownotif', false)
           .set('notifmessage', '');
       }
     case VOTE_PHOTO_SUCCESS:

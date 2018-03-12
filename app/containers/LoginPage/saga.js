@@ -32,11 +32,12 @@ export function* fetchLogin(action) {
     if (response && response.access_token) {
       updateLocalStorage(
         {
-          access_token: response.access_token
+          access_token: response.access_token,
+          id_user : response.id_user,
         }
       );
       yield put({ type: LOGIN_SUCCESS });
-      yield put(setAuth(response.access_token));
+      yield put(setAuth(response.access_token, response.id_user));
     }
     else {
       yield put({ type: LOGIN_ERROR, error: response.error || 'Erreur' });
@@ -70,11 +71,12 @@ export function* fetchLoginFacebook(action) {
     if (response && response.status === 200 && response.access_token) {
       updateLocalStorage(
         {
-          access_token: response.access_token
+          access_token: response.access_token,
+          id_user : response.id_user,
         }
       );
       yield put({ type: LOGIN_SUCCESS });
-      yield put(setAuth(response.access_token));
+      yield put(setAuth(response.access_token, response.id_user));
     }
     else {
       yield put({ type: LOGIN_ERROR, error: response.error || 'Erreur' });

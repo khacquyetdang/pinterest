@@ -31,10 +31,11 @@ import {
  *
  * @return {object}      An action object with a type of LOAD_REPOS_SUCCESS passing the repos
  */
-export function setAuth(access_token) {
+export function setAuth(access_token, id_user) {
   return {
     type: SET_AUTH,
     access_token,
+    id_user,
   };
 }
 

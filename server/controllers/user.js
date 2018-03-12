@@ -73,7 +73,9 @@ exports.postLogin = (req, res, next) => {
             }
             return res.status(HttpStatus.OK).send({
               id_token: id_token,
-              access_token: access_token
+              id_user: existingUser.id,
+              access_token: access_token,
+              email: existingUser.email
             });
           });
         }

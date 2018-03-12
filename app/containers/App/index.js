@@ -49,7 +49,8 @@ export class App extends React.Component { // eslint-disable-line react/prefer-s
   componentDidMount() {
     const cacheState = loadLocalStorage();
     const access_token = cacheState.access_token || this.props.app.access_token;
-    this.props.dispatch(setAuth(access_token));
+    const id_user = cacheState.id_user || this.props.app.id_user;
+    this.props.dispatch(setAuth(access_token, id_user));
   }
   checkPrivateRoute = () => {
     return this.props.app.access_token ? true : false;
