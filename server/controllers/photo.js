@@ -123,6 +123,8 @@ exports.delete = (req, res) => {
  */
 exports.vote = (req, res) => {
     var photoId = req.params.photoId;
+    var userid = req.user.userid;
+
 
     Photo.findOne({
         _id: photoId

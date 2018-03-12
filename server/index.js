@@ -339,8 +339,9 @@ app.delete('/api/photo/:photoId', [
   jwtCheck, isAuthenticatedWithJwtToken
 ], photoController.delete);
 
-// app.post('/api/photo/vote/:photoId', jwtCheck, requireScope('full_access'),
-// photoController.vote);
+app.post('/api/photo/vote/:photoId', [
+  jwtCheck, isAuthenticatedWithJwtToken
+], photoController.vote);
 app.get('/api/myphoto', [
   jwtCheck, isAuthenticatedWithJwtToken
 ], photoController.myphoto);

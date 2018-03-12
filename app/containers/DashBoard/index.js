@@ -22,13 +22,16 @@ import saga from './saga';
 import messages from './messages';
 import messagesApp from './../App/messages';
 import DefaultImage from 'images/icon-default.png';
-import { SHOW_MODAL, HIDE_MODAL, CLEAR_PHOTO_ERROR, GET_PHOTOS_REQUEST } from './constants';
+import { SHOW_MODAL, HIDE_MODAL, CLEAR_PHOTO_ERROR, GET_PHOTOS_REQUEST, SET_ID_USER } from './constants';
 import { CLEAR_NOTIFICATION } from '../App/constants';
 import Error from 'components/Error';
 import { addPhotoRequest, deletePhotoRequest } from './actions';
+import { votePhotoRequest } from '../App/actions';
 import LoadingIndicator from 'components/LoadingIndicator';
 import Gallery from 'components/Gallery';
 import './styles.scss';
+import { loadLocalStorage } from 'localStorage';
+
 
 export class DashBoard extends React.Component { // eslint-disable-line react/prefer-stateless-function
   constructor(...args) {
@@ -38,6 +41,10 @@ export class DashBoard extends React.Component { // eslint-disable-line react/pr
     };
   }
   componentDidMount() {
+    const cacheState = loadLocalStorage();
+    const id_user = cacheState.id_user;
+    this.props.dispatch({type: SET_ID_USER, id_user});
+
     this.props.dispatch({ type: GET_PHOTOS_REQUEST });
   }
   handleClose = () => {

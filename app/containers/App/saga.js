@@ -92,7 +92,7 @@ export function* fetchVote(action) {
     }
 
     if (response.photos) {
-      yield put({ type: VOTE_PHOTO_SUCCESS });
+      yield put({ type: VOTE_PHOTO_SUCCESS, photos: response.photos });
       yield put({ type: SET_PHOTOS, photos: response.photos });
     }
   } catch (err) {
