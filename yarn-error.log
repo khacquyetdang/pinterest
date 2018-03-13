@@ -1,17 +1,17 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Users\Tran\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js add cors
+  /home/dang/.nvm/versions/node/v8.9.4/bin/node /home/dang/.nvm/versions/node/v8.9.4/bin/yarn install
 
 PATH: 
-  C:\Users\Tran\bin;C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\local\bin;C:\Program Files\Git\usr\bin;C:\Program Files\Git\usr\bin;C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\bin;C:\Users\Tran\bin;C:\ProgramData\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0;C:\Program Files (x86)\QuickTime\QTSystem;C:\Program Files (x86)\Common Files\Adobe\AGL;C:\Users\Tran\AppData\Local\Android\sdk\platform-tools;C:\Users\Tran\.dnx\bin;C:\Program Files\Microsoft DNX\Dnvm;C:\Program Files\Microsoft SQL Server\130\Tools\Binn;C:\Program Files (x86)\PuTTY;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\Git\cmd;C:\Program Files (x86)\Skype\Phone;C:\wamp64\bin\php\php7.1.10;C:\Program Files (x86)\Windows Kits\8.1\Windows Performance Toolkit;C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0;C:\Program Files\nodejs;C:\Program Files\MongoDB\Server\3.4\bin;F:\pear;C:\bin;C:\Python27\Scripts;C:\Python27;C:\Users\Tran\AppData\Local\Microsoft\WindowsApps;C:\Users\Tran\AppData\Local\atom\bin;C:\Users\Tran\AppData\Local\Microsoft\WindowsApps;C:\Program Files\Git\usr\bin;C:\Program Files\Heroku\bin;C:\Program Files\Java\jdk1.8.0_73\bin;C:\Users\Tran\AppData\Local\.meteor;C:\Program Files\Microsoft VS Code\bin;C:\Users\Tran\AppData\Roaming\npm;C:\wamp64\bin\php;C:\wamp64\bin\mysql\mysql5.7.14\bin;C:\Users\Tran\AppData\Local\Yarn\config\global\node_modules\.bin;C:\Program Files\Git\usr\bin\vendor_perl;C:\Program Files\Git\usr\bin\core_perl
+  /home/dang/bin:/home/dang/.local/bin:/home/dang/.nvm/versions/node/v8.9.4/bin:/home/dang/bin:/home/dang/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
 
 Yarn version: 
   1.3.2
 
 Node version: 
-  8.8.1
+  8.9.4
 
 Platform: 
-  win32 x64
+  linux x64
 
 npm manifest: 
   {
@@ -202,7 +202,8 @@ npm manifest:
         "bcrypt-nodejs",
         "connect-mongo",
         "express-validator",
-        "express-status-monitor"
+        "express-status-monitor",
+        "dotenv-webpack",
       ],
       "include": [
         "core-js",
@@ -247,9 +248,11 @@ npm manifest:
       "chalk": "^2.3.0",
       "compression": "^1.7.1",
       "connect-mongo": "^2.0.1",
+      "cors": "^2.8.4",
       "cross-env": "5.0.0",
       "crypto": "^1.0.1",
       "dotenv": "^4.0.0",
+      "dotenv-webpack": "^1.5.4",
       "errorhandler": "^1.5.0",
       "express": "4.15.3",
       "express-flash": "^0.0.2",
@@ -288,6 +291,7 @@ npm manifest:
       "passport-oauth": "^1.0.0",
       "passport-openid": "^0.4.0",
       "passport-twitter": "^1.0.4",
+      "passport-twitter-token": "^1.3.0",
       "prop-types": "15.5.10",
       "react": "15.6.1",
       "react-bootstrap": "^0.32.0",
@@ -304,8 +308,11 @@ npm manifest:
       "react-router-bootstrap": "^0.24.4",
       "react-router-dom": "4.1.1",
       "react-router-redux": "5.0.0-alpha.6",
+      "react-twitter-auth": "^0.0.10",
+      "react-viewer": "^2.3.5",
       "redux": "3.6.0",
       "redux-immutable": "4.0.0",
+      "redux-logger": "^3.0.6",
       "redux-saga": "0.15.3",
       "request": "^2.83.0",
       "reselect": "3.0.1",
@@ -2620,6 +2627,13 @@ Lockfile:
     version "1.0.2"
     resolved "https://registry.yarnpkg.com/core-util-is/-/core-util-is-1.0.2.tgz#b5fd54220aa2bc5ab57aab7140c940754503c1a7"
   
+  cors@^2.8.4:
+    version "2.8.4"
+    resolved "https://registry.yarnpkg.com/cors/-/cors-2.8.4.tgz#2bd381f2eb201020105cd50ea59da63090694686"
+    dependencies:
+      object-assign "^4"
+      vary "^1"
+  
   cosmiconfig@^1.1.0:
     version "1.1.0"
     resolved "https://registry.yarnpkg.com/cosmiconfig/-/cosmiconfig-1.1.0.tgz#0dea0f9804efdfb929fbb1b188e25553ea053d37"
@@ -3015,6 +3029,10 @@ Lockfile:
       vinyl-assign "^1.0.1"
       vinyl-fs "^2.2.0"
   
+  deep-diff@^0.3.5:
+    version "0.3.8"
+    resolved "https://registry.yarnpkg.com/deep-diff/-/deep-diff-0.3.8.tgz#c01de63efb0eec9798801d40c7e0dae25b582c84"
+  
   deep-equal@^1.0.1, deep-equal@~1.0.1:
     version "1.0.1"
     resolved "https://registry.yarnpkg.com/deep-equal/-/deep-equal-1.0.1.tgz#f5d260292b660e084eff4cdbc9f08ad3247448b5"
@@ -3212,6 +3230,12 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/dot-prop/-/dot-prop-4.2.0.tgz#1f19e0c2e1aa0e32797c49799f2837ac6af69c57"
     dependencies:
       is-obj "^1.0.0"
+  
+  dotenv-webpack@^1.5.4:
+    version "1.5.4"
+    resolved "https://registry.yarnpkg.com/dotenv-webpack/-/dotenv-webpack-1.5.4.tgz#9c92e46e412a1cfbc60217ed33d69d2bbfddbf9f"
+    dependencies:
+      dotenv "^4.0.0"
   
   dotenv@^4.0.0:
     version "4.0.0"
@@ -7356,7 +7380,7 @@ Lockfile:
     version "3.0.0"
     resolved "https://registry.yarnpkg.com/object-assign/-/object-assign-3.0.0.tgz#9bedd5ca0897949bca47e7ff408062d549f587f2"
   
-  object-assign@^4.0.0, object-assign@^4.0.1, object-assign@^4.1.0, object-assign@^4.1.1:
+  object-assign@^4, object-assign@^4.0.0, object-assign@^4.0.1, object-assign@^4.1.0, object-assign@^4.1.1:
     version "4.1.1"
     resolved "https://registry.yarnpkg.com/object-assign/-/object-assign-4.1.1.tgz#2109adc7965887cfc05cbbd442cac8bfbb360863"
   
@@ -7778,6 +7802,12 @@ Lockfile:
   passport-strategy@1.x.x:
     version "1.0.0"
     resolved "https://registry.yarnpkg.com/passport-strategy/-/passport-strategy-1.0.0.tgz#b5539aa8fc225a3d1ad179476ddf236b440f52e4"
+  
+  passport-twitter-token@^1.3.0:
+    version "1.3.0"
+    resolved "https://registry.yarnpkg.com/passport-twitter-token/-/passport-twitter-token-1.3.0.tgz#d2e0b23370ec89a2982f7d59d4e02da6e6466e29"
+    dependencies:
+      passport-oauth "1.0.0"
   
   passport-twitter@^1.0.4:
     version "1.0.4"
@@ -8454,6 +8484,16 @@ Lockfile:
       prop-types "^15.5.4"
       react-side-effect "^1.1.0"
   
+  react-icon-base@2.1.0:
+    version "2.1.0"
+    resolved "https://registry.yarnpkg.com/react-icon-base/-/react-icon-base-2.1.0.tgz#a196e33fdf1e7aaa1fda3aefbb68bdad9e82a79d"
+  
+  react-icons@^2.2.5:
+    version "2.2.7"
+    resolved "https://registry.yarnpkg.com/react-icons/-/react-icons-2.2.7.tgz#d7860826b258557510dac10680abea5ca23cf650"
+    dependencies:
+      react-icon-base "2.1.0"
+  
   react-intl@2.3.0:
     version "2.3.0"
     resolved "https://registry.yarnpkg.com/react-intl/-/react-intl-2.3.0.tgz#e1df6af5667fdf01cbe4aab20e137251e2ae5142"
@@ -8584,6 +8624,20 @@ Lockfile:
       loose-envify "^1.3.1"
       prop-types "^15.5.8"
       warning "^3.0.0"
+  
+  react-twitter-auth@^0.0.10:
+    version "0.0.10"
+    resolved "https://registry.yarnpkg.com/react-twitter-auth/-/react-twitter-auth-0.0.10.tgz#6da3dfc097242dc77b97cb5445ac8bc1e8857c73"
+    dependencies:
+      react-icons "^2.2.5"
+      url-search-params-polyfill "^2.0.0"
+      whatwg-fetch "2.0.3"
+  
+  react-viewer@^2.3.5:
+    version "2.3.5"
+    resolved "https://registry.yarnpkg.com/react-viewer/-/react-viewer-2.3.5.tgz#c1883d2e5dc5990cc34157e70c15e1de7b024529"
+    dependencies:
+      classnames "^2.2.5"
   
   react@15.6.1:
     version "15.6.1"
@@ -8730,6 +8784,12 @@ Lockfile:
   redux-immutable@4.0.0:
     version "4.0.0"
     resolved "https://registry.yarnpkg.com/redux-immutable/-/redux-immutable-4.0.0.tgz#3a1a32df66366462b63691f0e1dc35e472bbc9f3"
+  
+  redux-logger@^3.0.6:
+    version "3.0.6"
+    resolved "https://registry.yarnpkg.com/redux-logger/-/redux-logger-3.0.6.tgz#f7555966f3098f3c88604c449cf0baf5778274bf"
+    dependencies:
+      deep-diff "^0.3.5"
   
   redux-saga@0.15.3:
     version "0.15.3"
@@ -10267,6 +10327,10 @@ Lockfile:
     dependencies:
       ip-regex "^1.0.1"
   
+  url-search-params-polyfill@^2.0.0:
+    version "2.0.2"
+    resolved "https://registry.yarnpkg.com/url-search-params-polyfill/-/url-search-params-polyfill-2.0.2.tgz#45361092f511ae88a19dee3e7b0964634b756fb3"
+  
   url@^0.11.0:
     version "0.11.0"
     resolved "https://registry.yarnpkg.com/url/-/url-0.11.0.tgz#3838e97cfc60521eb73c525a8e55bfdd9e2e28f1"
@@ -10359,13 +10423,13 @@ Lockfile:
     version "0.4.0"
     resolved "https://registry.yarnpkg.com/value-equal/-/value-equal-0.4.0.tgz#c5bdd2f54ee093c04839d71ce2e4758a6890abc7"
   
+  vary@^1, vary@~1.1.2:
+    version "1.1.2"
+    resolved "https://registry.yarnpkg.com/vary/-/vary-1.1.2.tgz#2299f02c6ded30d4a5961b0b9f74524a18f634fc"
+  
   vary@~1.1.1:
     version "1.1.1"
     resolved "https://registry.yarnpkg.com/vary/-/vary-1.1.1.tgz#67535ebb694c1d52257457984665323f587e8d37"
-  
-  vary@~1.1.2:
-    version "1.1.2"
-    resolved "https://registry.yarnpkg.com/vary/-/vary-1.1.2.tgz#2299f02c6ded30d4a5961b0b9f74524a18f634fc"
   
   vendors@^1.0.0:
     version "1.0.1"
@@ -10772,4 +10836,10 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/yeast/-/yeast-0.1.2.tgz#008e06d8094320c372dbc2f8ed76a0ca6c8ac419"
 
 Trace: 
-  Error: EPERM: operation not permitted, unlink 'F:\freeCodeCampWorkSpace\pinterest\node_modules\bin-wrapper\node_modules\.bin'
+  SyntaxError: /home/dang/workspace/pinterest/package.json: Unexpected token ] in JSON at position 5541
+      at JSON.parse (<anonymous>)
+      at /home/dang/.nvm/versions/node/v8.9.4/lib/node_modules/yarn/lib/cli.js:770:59
+      at Generator.next (<anonymous>)
+      at step (/home/dang/.nvm/versions/node/v8.9.4/lib/node_modules/yarn/lib/cli.js:92:30)
+      at /home/dang/.nvm/versions/node/v8.9.4/lib/node_modules/yarn/lib/cli.js:103:13
+      at <anonymous>

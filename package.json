@@ -186,7 +186,9 @@
       "bcrypt-nodejs",
       "connect-mongo",
       "express-validator",
-      "express-status-monitor"
+      "express-status-monitor",
+      "nodemon",
+      "dotenv-webpack"
     ],
     "include": [
       "core-js",
@@ -292,6 +294,7 @@
     "react-router-dom": "4.1.1",
     "react-router-redux": "5.0.0-alpha.6",
     "react-twitter-auth": "^0.0.10",
+    "react-viewer": "^2.3.5",
     "redux": "3.6.0",
     "redux-immutable": "4.0.0",
     "redux-logger": "^3.0.6",

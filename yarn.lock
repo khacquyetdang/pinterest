@@ -8249,6 +8249,12 @@ react-twitter-auth@^0.0.10:
     url-search-params-polyfill "^2.0.0"
     whatwg-fetch "2.0.3"
 
+react-viewer@^2.3.5:
+  version "2.3.5"
+  resolved "https://registry.yarnpkg.com/react-viewer/-/react-viewer-2.3.5.tgz#c1883d2e5dc5990cc34157e70c15e1de7b024529"
+  dependencies:
+    classnames "^2.2.5"
+
 react@15.6.1:
   version "15.6.1"
   resolved "https://registry.yarnpkg.com/react/-/react-15.6.1.tgz#baa8434ec6780bde997cdc380b79cd33b96393df"
