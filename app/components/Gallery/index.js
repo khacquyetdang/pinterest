@@ -20,12 +20,19 @@ class Gallery extends React.Component { // eslint-disable-line react/prefer-stat
   constructor(props) {
     super(props);
 
+    var images = props
+      .elements
+      .map((element, index) => {
+        return {src: element.url, alt: element.description, id: element._id}
+      });
+
     this.state = {
       deleteId: "",
       viewerVisible: false,
       activeIndex: 0,
-      images: []
+      images: images
     };
+
   }
   handleLayoutComplete = () => {}
 
@@ -34,16 +41,14 @@ class Gallery extends React.Component { // eslint-disable-line react/prefer-stat
       .masonry
       .on('layoutComplete', this.handleLayoutComplete);
   };
-  componentWillReceiveProps(nextProps){
+  componentWillReceiveProps(nextProps) {
     var images = nextProps
       .elements
       .map((element, index) => {
         return {src: element.url, alt: element.description, id: element._id}
       });
 
-    this.setState({
-      images : images
-    });
+    this.setState({images: images});
   }
   componentWillUnmount = () => {
     this
@@ -71,10 +76,11 @@ class Gallery extends React.Component { // eslint-disable-line react/prefer-stat
   }
   handleClick = (imgId) => {
     console.log("mansory item click ", imgId);
-    const activeIndex = this.state.images.findIndex(img => img.id === imgId);
-    this.setState({viewerVisible: true,
-      activeIndex : activeIndex
-    });
+    const activeIndex = this
+      .state
+      .images
+      .findIndex(img => img.id === imgId);
+    this.setState({viewerVisible: true, activeIndex: activeIndex});
   };
   render() {
     const onVote = this.props.onVote;
