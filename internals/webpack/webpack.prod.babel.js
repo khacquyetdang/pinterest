@@ -72,6 +72,11 @@ module.exports = require('./webpack.base.babel')({
 
       AppCache: false,
     }),
+    new Dotenv({
+      path: process.DOT_ENV ? '.env.' + process.DOT_ENV : '.env.' + process.NODE_ENV, // load this now instead of the ones in '.env'
+      silent: true // hide any errors
+    }),
+
   ],
 
   performance: {
